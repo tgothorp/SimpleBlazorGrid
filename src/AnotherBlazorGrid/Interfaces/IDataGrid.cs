@@ -1,7 +1,7 @@
 namespace AnotherBlazorGrid.Interfaces
 {
-    public interface IDataGrid
+    public interface IDataGrid<T>
     {
-        void AddColumn(IColumn column);
+        void AddColumn(IColumn<T> column);
     }
 }

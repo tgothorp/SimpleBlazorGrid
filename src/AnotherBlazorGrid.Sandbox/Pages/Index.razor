@@ -7,9 +7,13 @@
 <PageTitle>Another Blazor DataGrid</PageTitle>
 
 <ABDataGrid TType="Product" DataSource="@(new DataGridEnumerableSource<Product>(Products))">
-    <ABColumn Property="@(nameof(Product.Id))" />
-    <ABColumn Property="@(nameof(Product.Name))" />
-    <ABColumn Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" />
+    <ABColumn  TType="Product" Property="@(nameof(Product.Id))" />
+    <ABColumn  TType="Product" Property="@(nameof(Product.Name))" />
+    <ABColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)">
+        <ABColumnFormat Context="item">
+            @item.CostInGbp.ToString("C")
+        </ABColumnFormat>
+    </ABColumn>
 </ABDataGrid>
 
 @code {

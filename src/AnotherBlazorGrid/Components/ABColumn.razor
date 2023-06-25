@@ -3,17 +3,22 @@
 
 @using AnotherBlazorGrid.Interfaces
 
-@implements AnotherBlazorGrid.Interfaces.IColumn
+@typeparam TType
+
+@implements AnotherBlazorGrid.Interfaces.IColumn<TType>
 
 @code {
     [CascadingParameter]
-    public IDataGrid DataGrid { get; set; }
+    public IDataGrid<TType> DataGrid { get; set; }
 
     [Parameter]
     public string Property { get; set; }
 
     [Parameter]
     public string Heading { get; set; }
+    
+    [Parameter]
+    public RenderFragment<TType> ABColumnFormat { get; set; }
 
     protected override void OnInitialized()
     {

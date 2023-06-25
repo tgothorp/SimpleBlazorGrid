@@ -1,4 +1,5 @@
 using System.Globalization;
+using AnotherBlazorGrid.Extensions;
 using AnotherBlazorGrid.Sandbox.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<ProductRepo>();
+
+builder.Services.AddSimpleBlazorGrid(config =>
+{
+    config.CurrencySymbol = "$";
+});
 
 var app = builder.Build();
 

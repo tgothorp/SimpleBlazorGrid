@@ -3,7 +3,7 @@
 
 @using AnotherBlazorGrid.Interfaces
 
-@implements IDataGrid
+@implements IDataGrid<TType>
 
 @typeparam TType
 
@@ -24,7 +24,7 @@
             <tbody>
                 @foreach (var item in DataSource.Items())
                 {
-                    <DefaultRow TType="TType" Object="item" Columns="DataGridColumns" />
+                    <DefaultRow TType="TType" Data="item" Columns="DataGridColumns" />
                 }
             </tbody>
         </table>
@@ -39,9 +39,9 @@
     [Parameter]
     public IDataGridSource<TType> DataSource { get; set; }
 
-    private List<IColumn> DataGridColumns { get; set; } = new();
+    private List<IColumn<TType>> DataGridColumns { get; set; } = new();
 
-    public void AddColumn(IColumn column)
+    public void AddColumn(IColumn<TType> column)
     {
         DataGridColumns.Add(column);
         StateHasChanged();

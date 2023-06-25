@@ -3,6 +3,7 @@
 
 @using AnotherBlazorGrid.Interfaces
 @using AnotherBlazorGrid.Extensions
+@using AnotherBlazorGrid.Helpers
 
 @typeparam TType
 
@@ -10,21 +11,33 @@
     @foreach (var column in Columns)
     {
         <td>
-            @GetRowDataForColumn(column)
+            @if (column.ABColumnFormat is not null)
+            {
+                @column.ABColumnFormat(Data)
+            }
+            else
+            {
+                @GetRowDataForColumn(column)
+            }
         </td>
     }
 </tr>
 
 @code {
     [Parameter]
-    public List<IColumn> Columns { get; set; }
+    public List<IColumn<TType>> Columns { get; set; }
 
     [Parameter]
-    public TType Object { get; set; }
+    public TType Data { get; set; }
 
-    private string GetRowDataForColumn(IColumn column)
+    private string GetRowDataForColumn(IColumn<TType> column)
     {
-        var item = Object.GetPropertyValue(Object.GetType(), column.Property);
-        return item == null ? "null" : item.ToString();
+        var property = ExpressionHelper.GetPropertyByName(Data.GetType(), Data, column.Property);
+        var target = property.DynamicInvoke(Data);
+
+        return target.ToString();
+
+        // var item = Object.GetPropertyValue(Object.GetType(), column.Property);
+        // return item == null ? "null" : item.ToString();
     }
 }
