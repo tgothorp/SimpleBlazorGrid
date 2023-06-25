@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid", "SimpleBlazorGrid\SimpleBlazorGrid.csproj", "{CE489940-B2B1-41E0-B464-72D0438E205D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Sandbox", "SimpleBlazorGrid.Sandbox\SimpleBlazorGrid.Sandbox.csproj", "{0BCF045D-AAB5-407A-B28A-29E9EF53631C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BCF045D-AAB5-407A-B28A-29E9EF53631C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BCF045D-AAB5-407A-B28A-29E9EF53631C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BCF045D-AAB5-407A-B28A-29E9EF53631C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BCF045D-AAB5-407A-B28A-29E9EF53631C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

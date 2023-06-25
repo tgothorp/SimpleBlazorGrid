@@ -1,0 +1,34 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using SimpleBlazorGrid.Interfaces
+
+@typeparam TType
+
+@implements SimpleBlazorGrid.Interfaces.IColumn<TType>
+
+@code {
+    [CascadingParameter]
+    public IDataGrid<TType> DataGrid { get; set; }
+
+    [Parameter]
+    public string Property { get; set; }
+
+    [Parameter]
+    public string Heading { get; set; }
+    
+    [Parameter]
+    public RenderFragment<TType> SimpleColumnTemplate { get; set; }
+
+    protected override void OnInitialized()
+    {
+        DataGrid.AddColumn(this);
+        base.OnInitialized();
+    }
+
+    protected override void OnParametersSet()
+    {
+        Heading ??= Property;
+        base.OnParametersSet();
+    }
+}

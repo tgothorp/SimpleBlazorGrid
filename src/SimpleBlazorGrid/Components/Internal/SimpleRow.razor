@@ -1,0 +1,43 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using SimpleBlazorGrid.Interfaces
+@using SimpleBlazorGrid.Extensions
+@using SimpleBlazorGrid.Helpers
+
+@typeparam TType
+
+<tr>
+    @foreach (var column in Columns)
+    {
+        <td>
+            @if (column.SimpleColumnTemplate is not null)
+            {
+                @column.SimpleColumnTemplate(Data)
+            }
+            else
+            {
+                @GetRowDataForColumn(column)
+            }
+        </td>
+    }
+</tr>
+
+@code {
+    [Parameter]
+    public List<IColumn<TType>> Columns { get; set; }
+
+    [Parameter]
+    public TType Data { get; set; }
+
+    private string GetRowDataForColumn(IColumn<TType> column)
+    {
+        var property = ExpressionHelper.GetPropertyByName(Data.GetType(), Data, column.Property);
+        var target = property.DynamicInvoke(Data);
+
+        return target.ToString();
+
+        // var item = Object.GetPropertyValue(Object.GetType(), column.Property);
+        // return item == null ? "null" : item.ToString();
+    }
+}
