@@ -1,0 +1,49 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace AnotherBlazorGrid
+
+@using AnotherBlazorGrid.Interfaces
+
+@implements IDataGrid
+
+@typeparam TType
+
+<CascadingValue Value="this">
+    @ChildContent
+
+    @if (DataGridColumns.Any())
+    {
+        <table>
+            <thead>
+            <tr>
+                @foreach (var column in DataGridColumns)
+                {
+                    <th>@column.Heading</th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in DataSource.Items())
+                {
+                    <DefaultRow TType="TType" Object="item" Columns="DataGridColumns" />
+                }
+            </tbody>
+        </table>
+    }
+</CascadingValue>
+
+@code {
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public IDataGridSource<TType> DataSource { get; set; }
+
+    private List<IColumn> DataGridColumns { get; set; } = new();
+
+    public void AddColumn(IColumn column)
+    {
+        DataGridColumns.Add(column);
+        StateHasChanged();
+    }
+}

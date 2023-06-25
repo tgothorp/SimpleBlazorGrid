@@ -1,33 +1,16 @@
 ﻿@page "/"
 @using AnotherBlazorGrid.Sandbox.Data
+@using AnotherBlazorGrid.Interfaces
 
 @inject ProductRepo ProductRepo
 
 <PageTitle>Another Blazor DataGrid</PageTitle>
 
-<table>
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Price (GBP)</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var product in Products)
-    {
-        <tr>
-            <td>@product.Id</td>
-            <td>
-                @product.Name
-                <br/>
-                <small>Product Code: @product.Code</small>
-            </td>
-            <td>@product.CostInGbp.ToString("C")</td>
-        </tr>
-    }
-    </tbody>
-</table>
+<ABDataGrid TType="Product" DataSource="@(new DataGridEnumerableSource<Product>(Products))">
+    <ABColumn Property="@(nameof(Product.Id))" />
+    <ABColumn Property="@(nameof(Product.Name))" />
+    <ABColumn Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" />
+</ABDataGrid>
 
 @code {
 

@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherBlazorGrid.Sandbox", "AnotherBlazorGrid.Sandbox\AnotherBlazorGrid.Sandbox.csproj", "{A46C65A5-0AEE-4CD2-B6F7-5A80A7ECA864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherBlazorGrid", "AnotherBlazorGrid\AnotherBlazorGrid.csproj", "{CE489940-B2B1-41E0-B464-72D0438E205D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{A46C65A5-0AEE-4CD2-B6F7-5A80A7ECA864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A46C65A5-0AEE-4CD2-B6F7-5A80A7ECA864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A46C65A5-0AEE-4CD2-B6F7-5A80A7ECA864}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE489940-B2B1-41E0-B464-72D0438E205D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
