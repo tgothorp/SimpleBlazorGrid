@@ -7,11 +7,13 @@
 
 <PageTitle>Another Blazor DataGrid</PageTitle>
 
-<SimpleDataGrid TType="Product" DataSource="@(new DataGridEnumerableSource<Product>(Products))">
-    <SimpleColumn TType="Product" Property="@(nameof(Product.Id))"/>
-    <SimpleColumn TType="Product" Property="@(nameof(Product.Name))"/>
-    <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" Format="Format.Money" />
-</SimpleDataGrid>
+<div style="width: 250px">
+    <SimpleDataGrid TType="Product" DataSource="@(new DataGridEnumerableSource<Product>(Products))">
+        <SimpleColumn TType="Product" Property="@(nameof(Product.Id))"/>
+        <SimpleColumn TType="Product" Property="@(nameof(Product.Name))"/>
+        <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" Format="Format.Money"/>
+    </SimpleDataGrid>
+</div>
 
 @code {
 
