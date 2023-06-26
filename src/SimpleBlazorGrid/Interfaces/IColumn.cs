@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using SimpleBlazorGrid.Enums;
 
 namespace SimpleBlazorGrid.Interfaces
 {
@@ -6,6 +7,7 @@ namespace SimpleBlazorGrid.Interfaces
     {
         public string Property { get; set; }
         public string Heading { get; set; }
+        public Format Format { get; set; }
         public RenderFragment<TType> SimpleColumnTemplate { get; set; }
     }
 }

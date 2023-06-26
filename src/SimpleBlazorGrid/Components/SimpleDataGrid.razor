@@ -12,22 +12,27 @@
 
     @if (DataGridColumns.Any())
     {
-        <table>
-            <thead>
-            <tr>
-                @foreach (var column in DataGridColumns)
-                {
-                    <th>@column.Heading</th>
-                }
-            </tr>
-            </thead>
-            <tbody>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    @foreach (var column in DataGridColumns)
+                    {
+                        <th>@column.Heading</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
                 @foreach (var item in DataSource.Items())
                 {
-                    <SimpleRow TType="TType" Data="item" Columns="DataGridColumns" />
+                    <DataGridRow TType="TType" Data="item" Columns="DataGridColumns"/>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <DataGridPagingControls PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged" />
+        </div>
     }
 </CascadingValue>
 
@@ -39,11 +44,26 @@
     [Parameter]
     public IDataGridSource<TType> DataSource { get; set; }
 
+    [Parameter]
+    public int ItemsPerPage { get; set; } = 5;
+
     private List<IColumn<TType>> DataGridColumns { get; set; } = new();
+
+    protected override void OnParametersSet()
+    {
+        DataSource.PageOptions.ItemsPerPage = ItemsPerPage;
+        base.OnParametersSet();
+    }
 
     public void AddColumn(IColumn<TType> column)
     {
         DataGridColumns.Add(column);
+        StateHasChanged();
+    }
+
+    private void OnPageChanged(int newPage)
+    {
+        DataSource.PageOptions.CurrentPage = newPage;
         StateHasChanged();
     }
 }

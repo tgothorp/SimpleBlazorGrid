@@ -1,0 +1,34 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using SimpleBlazorGrid.Options
+
+@for (var i = 0; i < PageOptions.MaxPage; i++)
+{
+    var pageIndex = i;
+    if (PageOptions.CurrentPage == i)
+    {
+        <p @onclick="@(async () => await ChangePage(pageIndex))"><strong>@(i + 1)</strong></p>
+    }
+    else
+    {
+        <p @onclick="@(async () => await ChangePage(pageIndex))">@(i + 1)</p>
+    }
+}
+
+<div>
+    Page: @(PageOptions.CurrentPage + 1) / @PageOptions.MaxPage | Total: @PageOptions.TotalItemCount
+</div>
+
+@code {
+    [Parameter]
+    public PageOptions PageOptions { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageChanged { get; set; }
+
+    private async Task ChangePage(int newPage)
+    {
+        await PageChanged.InvokeAsync(newPage);
+    }
+}

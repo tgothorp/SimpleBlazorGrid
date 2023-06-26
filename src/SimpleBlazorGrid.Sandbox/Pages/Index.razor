@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using SimpleBlazorGrid.Sandbox.Data
 @using SimpleBlazorGrid.Interfaces
+@using SimpleBlazorGrid.Enums
 
 @inject ProductRepo ProductRepo
 
@@ -9,11 +10,7 @@
 <SimpleDataGrid TType="Product" DataSource="@(new DataGridEnumerableSource<Product>(Products))">
     <SimpleColumn TType="Product" Property="@(nameof(Product.Id))"/>
     <SimpleColumn TType="Product" Property="@(nameof(Product.Name))"/>
-    <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)">
-        <SimpleColumnTemplate Context="item">
-            @item.CostInGbp.ToString("C")
-        </SimpleColumnTemplate>
-    </SimpleColumn>
+    <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" Format="Format.Money" />
 </SimpleDataGrid>
 
 @code {

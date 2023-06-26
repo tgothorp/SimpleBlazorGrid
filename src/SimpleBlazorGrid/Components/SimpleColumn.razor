@@ -2,6 +2,7 @@
 @namespace SimpleBlazorGrid
 
 @using SimpleBlazorGrid.Interfaces
+@using SimpleBlazorGrid.Enums
 
 @typeparam TType
 
@@ -16,6 +17,9 @@
 
     [Parameter]
     public string Heading { get; set; }
+
+    [Parameter]
+    public Format Format { get; set; } = Format.None;
     
     [Parameter]
     public RenderFragment<TType> SimpleColumnTemplate { get; set; }

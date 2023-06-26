@@ -4,6 +4,9 @@
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Helpers
+@using SimpleBlazorGrid.Services
+
+@inject FormattingService FormattingService
 
 @typeparam TType
 
@@ -35,9 +38,6 @@
         var property = ExpressionHelper.GetPropertyByName(Data.GetType(), Data, column.Property);
         var target = property.DynamicInvoke(Data);
 
-        return target.ToString();
-
-        // var item = Object.GetPropertyValue(Object.GetType(), column.Property);
-        // return item == null ? "null" : item.ToString();
+        return FormattingService.FormatProperty(target, column.Format);
     }
 }
