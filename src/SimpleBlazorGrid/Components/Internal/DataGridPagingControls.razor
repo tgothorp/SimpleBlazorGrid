@@ -3,6 +3,11 @@
 
 @using SimpleBlazorGrid.Options
 
+<div style="width: 50%">
+    <small>Displaying Page: @(PageOptions.CurrentPage + 1) of @PageOptions.MaxPage (@PageOptions.TotalItemCount total records)</small>
+</div>
+
+<div style="width: 50%">
 @for (var i = 0; i < PageOptions.MaxPage; i++)
 {
     var pageIndex = i;
@@ -15,9 +20,6 @@
         <p @onclick="@(async () => await ChangePage(pageIndex))">@(i + 1)</p>
     }
 }
-
-<div>
-    Page: @(PageOptions.CurrentPage + 1) / @PageOptions.MaxPage | Total: @PageOptions.TotalItemCount
 </div>
 
 @code {

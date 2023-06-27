@@ -32,18 +32,15 @@
                 }
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td colspan="@DataGridColumns.Count">
-                            <div>
-                                <p>Footer</p>
-                            </div>
-                        </td>
-                    </tr>
+                <tr>
+                    <td colspan="@DataGridColumns.Count">
+                        <div style="display: flex">
+                            <DataGridPagingControls PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
+                        </div>
+                    </td>
+                </tr>
                 </tfoot>
             </table>
-        </div>
-        <div>
-            <DataGridPagingControls PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
         </div>
     }
 </CascadingValue>
