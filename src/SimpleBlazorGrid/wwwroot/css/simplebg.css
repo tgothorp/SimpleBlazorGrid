@@ -4,5 +4,32 @@
 
 table.simpleBg {
     width: 100%;
-    color: var(--simple-bg-accent);
+    text-align: left;
+    border-collapse: collapse;
+}
+
+table.simpleBg tr {
+    border-left: none;
+    border-right: none;
+}
+
+table.simpleBg td, table.simpleBg th {
+    padding: 5px 2px;
+}
+
+table.simpleBg thead {
+    border-bottom: 6px solid var(--simple-bg-accent);
+}
+
+table.simpleBg thead th {
+    font-weight: bold;
+    text-align: left;
+}
+
+table.simpleBg tbody tr td {
+    border-bottom: solid var(--simple-bg-accent) 1px;
+}
+
+table.simpleBg tfoot {
+    border-top: 5px solid var(--simple-bg-accent);
 }

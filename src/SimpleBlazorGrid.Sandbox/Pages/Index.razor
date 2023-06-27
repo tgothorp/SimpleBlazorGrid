@@ -7,7 +7,7 @@
 
 <PageTitle>Another Blazor DataGrid</PageTitle>
 
-<div style="width: 250px">
+<div style="width: 500px">
     <SimpleDataGrid TType="Product" DataSource="@(new DataGridEnumerableSource<Product>(Products))">
         <SimpleColumn TType="Product" Property="@(nameof(Product.Id))"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.Name))"/>
