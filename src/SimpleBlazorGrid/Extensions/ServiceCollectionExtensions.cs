@@ -10,19 +10,18 @@ namespace SimpleBlazorGrid.Extensions
         public static IServiceCollection AddSimpleBlazorGrid(this IServiceCollection serviceCollection, Action<SimpleDataGridConfiguration> config)
         {
             var defaultOptions = new DefaultConfiguration();
-            var options = new SimpleDataGridConfiguration();
-            config.Invoke(options);
+            var configuration = new SimpleDataGridConfiguration();
+            
+            config.Invoke(configuration);
+            configuration.AccentColour ??= defaultOptions.AccentColour;
+            configuration.CurrencySymbol ??= defaultOptions.CurrencySymbol;
+            configuration.LongDateTimeFormat ??= defaultOptions.LongDateTimeFormat;
+            configuration.ShortDateTimeFormat ??= defaultOptions.ShortDateTimeFormat;
+            configuration.TimeOnlyFormat ??= defaultOptions.TimeOnlyFormat;
+            configuration.DefaultDecimalPlaces ??= defaultOptions.DefaultDecimalPlaces.Value;
 
-            var formattingService = new FormattingService
-            {
-                CurrencySymbol = options.CurrencySymbol ??= defaultOptions.CurrencySymbol,
-                LongDateTimeFormat = options.LongDateTimeFormat ??= defaultOptions.LongDateTimeFormat,
-                ShortDateTimeFormat = options.ShortDateTimeFormat ??= defaultOptions.ShortDateTimeFormat,
-                TimeOnlyFormat = options.TimeOnlyFormat ??= defaultOptions.TimeOnlyFormat,
-                DefaultDecimalPlaces = options.DefaultDecimalPlaces ??= defaultOptions.DefaultDecimalPlaces.Value
-            };
-
-            serviceCollection.AddSingleton<FormattingService>(formattingService);
+            serviceCollection.AddSingleton<SimpleDataGridConfiguration>(configuration);
+            serviceCollection.AddSingleton<IFormattingService, FormattingService>();
 
             return serviceCollection;
         }

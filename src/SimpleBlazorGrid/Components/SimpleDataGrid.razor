@@ -2,8 +2,11 @@
 @namespace SimpleBlazorGrid
 
 @using SimpleBlazorGrid.Interfaces
+@using SimpleBlazorGrid.Configuration
 
 @implements IDataGrid<TType>
+
+@inject SimpleDataGridConfiguration Configuration
 
 @typeparam TType
 
@@ -13,7 +16,7 @@
     @if (DataGridColumns.Any())
     {
         <div>
-            <table class="simpleBg">
+            <table class="simpleBg" style="--simple-bg-accent: @Configuration.AccentColour">
                 <thead>
                 <tr>
                     @foreach (var column in DataGridColumns)

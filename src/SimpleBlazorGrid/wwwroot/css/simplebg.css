@@ -1,3 +1,8 @@
+:root {
+    --simple-bg-accent: #FF6600;
+}
+
 table.simpleBg {
     width: 100%;
+    color: var(--simple-bg-accent);
 }

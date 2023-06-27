@@ -6,6 +6,8 @@ namespace SimpleBlazorGrid.Configuration
     {
         public DefaultConfiguration()
         {
+            AccentColour = "#FF0A54";
+            
             var currentCulture = CultureInfo.CurrentCulture;
             var dateFormatInfo = currentCulture.DateTimeFormat;
             var numberFormatInfo = currentCulture.NumberFormat;
@@ -18,6 +20,7 @@ namespace SimpleBlazorGrid.Configuration
             DefaultDecimalPlaces = 4;
         }
         
+        public string AccentColour { get; set; }
         public string TimeOnlyFormat { get; set; }
         public string ShortDateTimeFormat { get; set; }
         public string LongDateTimeFormat { get; set; }
