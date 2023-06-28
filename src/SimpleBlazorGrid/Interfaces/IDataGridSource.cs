@@ -6,6 +6,7 @@ namespace SimpleBlazorGrid.Interfaces
     {
         public FilterOptions FilterOptions { get; set; }
         public SearchOptions SearchOptions { get; set; }
+        public SortOptions SortOptions { get; set; }
         public PageOptions PageOptions { get; set; }
 
         public T[] Items();

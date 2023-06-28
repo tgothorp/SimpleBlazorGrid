@@ -8,7 +8,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<ProductRepo>();
 builder.Services.AddSimpleBlazorGrid(config =>
 {
-    config.CurrencySymbol = "$";
+    config.CurrencySymbol = "£";
     config.AccentColour = "#FF0A54";
 });
 

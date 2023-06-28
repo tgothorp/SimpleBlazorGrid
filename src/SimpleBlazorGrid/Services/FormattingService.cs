@@ -25,6 +25,8 @@ namespace SimpleBlazorGrid.Services
                 case Format.None:
                     return property.ToString();
                 case Format.ShortDate:
+                    if (property is DateTime date)
+                        return date.ToString(_configuration.ShortDateTimeFormat);
                     break;
                 case Format.LongDate:
                     break;

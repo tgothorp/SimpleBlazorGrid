@@ -16,12 +16,23 @@
     @if (DataGridColumns.Any())
     {
         <div>
-            <table class="simpleBg" style="--simple-bg-accent: @Configuration.AccentColour">
+            <table class="simpleDG" style="--simple-bg-accent: @Configuration.AccentColour">
                 <thead>
                 <tr>
                     @foreach (var column in DataGridColumns)
                     {
-                        <th>@column.Heading</th>
+                        if (column.Sortable)
+                        {
+                            <th class="simpleDG_sortable" @onclick="@(() => OnSort(column.Property, SortAscending))">
+                                 @column.Heading
+                            </th>
+                        }
+                        else
+                        {
+                            <th>
+                                @column.Heading
+                            </th>
+                        }
                     }
                 </tr>
                 </thead>
@@ -57,6 +68,7 @@
     public int ItemsPerPage { get; set; } = 5;
 
     private List<IColumn<TType>> DataGridColumns { get; set; } = new();
+    private bool SortAscending { get; set; } = true;
 
     protected override void OnParametersSet()
     {
@@ -73,6 +85,15 @@
     private void OnPageChanged(int newPage)
     {
         DataSource.PageOptions.CurrentPage = newPage;
+        StateHasChanged();
+    }
+
+    private void OnSort(string property, bool ascending)
+    {
+        DataSource.SortOptions.Property = property;
+        DataSource.SortOptions.Ascending = ascending;
+        
+        SortAscending = !SortAscending;
         StateHasChanged();
     }
 
