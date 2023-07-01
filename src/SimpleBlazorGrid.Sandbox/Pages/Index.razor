@@ -5,10 +5,15 @@
 
 @inject ProductRepo ProductRepo
 
-<PageTitle>Another Blazor DataGrid</PageTitle>
+<PageTitle>Simple Blazor DataGrid</PageTitle>
 
 <div style="width: 100%; padding-left: 5%; padding-right: 5%">
-    <SimpleGrid TType="Product" DataSource="@(new DataGridEnumerableSource<Product>(Products))" Selectable="@true" OnSelectionChanged="SelectedItemsChanged">
+    <SimpleGrid TType="Product" 
+                DataSource="@(new DataGridEnumerableSource<Product>(Products))" 
+                Selectable="@true" 
+                OnSelectionChanged="SelectedItemsChanged"
+                Title="2024 Product Catalogue"
+                Subtitle="All of Globex Corporation's upcoming products for sale in 2024">
         <SimpleColumn TType="Product" Property="@(nameof(Product.Id))"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.Name))" Sortable="@true"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" Format="Format.Money" Sortable="@true"/>

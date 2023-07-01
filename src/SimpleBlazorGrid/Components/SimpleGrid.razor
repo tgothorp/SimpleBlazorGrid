@@ -18,16 +18,30 @@
     @if (DataGridColumns.Any())
     {
         <div>
+            @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
+            {
+                <div class="simpleDG_title">
+                    @if (!string.IsNullOrEmpty(Title))
+                    {
+                        <h1 class="simpleDG_title">@Title</h1>
+                    }
+                    @if (!string.IsNullOrEmpty(Subtitle))
+                    {
+                        <p class="simpleDG_subtitle">@Subtitle</p>
+                    }
+                </div>
+            }
+
             <table class="simpleDG" style="--simple-bg-primary: @Configuration.PrimaryColour; --simple-bg-secondary: @Configuration.SecondaryColour">
                 <thead>
                 <tr>
                     @if (Selectable)
                     {
                         <th class="simpleDG_selectable">
-                            <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected />
+                            <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
                         </th>
                     }
-                    
+
                     @foreach (var column in DataGridColumns)
                     {
                         if (column.Sortable)
@@ -59,7 +73,7 @@
                 <tr>
                     <td colspan="@DataGridColumns.Count">
                         <div style="display: flex">
-                            <DataGridPagingControls PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
+                            <DataGridPagingControls TType="TType" PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
                         </div>
                     </td>
                 </tr>
@@ -70,6 +84,12 @@
 </CascadingValue>
 
 @code {
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Subtitle { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }

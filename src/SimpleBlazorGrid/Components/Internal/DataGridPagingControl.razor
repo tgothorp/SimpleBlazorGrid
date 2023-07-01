@@ -1,0 +1,32 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+<button class="simpleDg_footer_button @(Selected ? "simpleDg_footer_button_selected" : "")" type="button" @onclick="ChangePage">
+    @if (!string.IsNullOrEmpty(Glyph))
+    {
+        @Glyph
+    }
+    else
+    {
+        @PageIndex
+    }
+</button>
+
+@code {
+    [Parameter]
+    public int PageIndex { get; set; }
+
+    [Parameter]
+    public bool Selected { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnChangePage { get; set; }
+
+    [Parameter]
+    public string Glyph { get; set; }
+
+    private async Task ChangePage()
+    {
+        await OnChangePage.InvokeAsync(PageIndex);
+    }
+}

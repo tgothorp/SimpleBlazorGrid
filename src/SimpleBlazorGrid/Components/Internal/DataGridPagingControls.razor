@@ -1,33 +1,63 @@
 ﻿@* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid
 
+@typeparam TType
+
 @using SimpleBlazorGrid.Options
 
-<div style="width: 50%">
-    <small>Displaying Page: @(PageOptions.CurrentPage + 1) of @PageOptions.MaxPage (@PageOptions.TotalItemCount total records)</small>
-</div>
+<div class="simpleDG_footer">
+    <div>
+        <small>Displaying Page: @(PageOptions.CurrentPage + 1) of @PageOptions.MaxPage (@PageOptions.TotalItemCount total records)</small>
+    </div>
 
-<div style="width: 50%">
-@for (var i = 0; i < PageOptions.MaxPage; i++)
-{
-    var pageIndex = i;
-    if (PageOptions.CurrentPage == i)
+    @if (SimpleGrid.PageOptions != null)
     {
-        <p @onclick="@(async () => await ChangePage(pageIndex))"><strong>@(i + 1)</strong></p>
+        <div class="simpleDg_footer_paging">
+            @* First page shortcut *@
+            <DataGridPagingControl PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="F" OnChangePage="PageChanged"/>
+
+            @foreach (var page in Pages())
+            {
+                <DataGridPagingControl PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" OnChangePage="PageChanged"/>
+            }
+
+            @* Last page shortcut *@
+            <DataGridPagingControl PageIndex="@(SimpleGrid.PageOptions.MaxPage - 1)" Selected="@(SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)" Glyph="L" OnChangePage="PageChanged"/>
+        </div>
     }
-    else
-    {
-        <p @onclick="@(async () => await ChangePage(pageIndex))">@(i + 1)</p>
-    }
-}
 </div>
 
 @code {
+    [CascadingParameter]
+    public SimpleGrid<TType> SimpleGrid { get; set; }
+
     [Parameter]
     public PageOptions PageOptions { get; set; }
 
     [Parameter]
     public EventCallback<int> PageChanged { get; set; }
+
+    private List<int> Pages()
+    {
+        var result = new List<int>();
+
+        if (SimpleGrid.PageOptions.CurrentPage > 0)
+        {
+            // Add previous page if we are not on the first page
+            result.Add(SimpleGrid.PageOptions.CurrentPage - 1);
+        }
+
+        // Add the curent page
+        result.Add(SimpleGrid.PageOptions.CurrentPage);
+
+        // Add the next page where possible
+        if (SimpleGrid.PageOptions.CurrentPage < SimpleGrid.PageOptions.MaxPage - 1)
+        {
+            result.Add(SimpleGrid.PageOptions.CurrentPage + 1);
+        }
+
+        return result;
+    }
 
     private async Task ChangePage(int newPage)
     {

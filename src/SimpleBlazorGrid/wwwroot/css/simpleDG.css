@@ -3,6 +3,21 @@
     --simple-bg-secondary: #ffb27d;
 }
 
+/* Table title styles */
+div.simpleDG_title {
+    width: 100%;
+    padding-bottom: 0.5rem;
+}
+
+h1.simpleDG_title {
+    margin: 0;
+}
+
+p.simpleDG_subtitle {
+    margin: 0;
+}
+
+/* Table styles*/
 table.simpleDG {
     width: 100%;
     text-align: left;
@@ -69,4 +84,36 @@ table.simpleDG tbody tr td {
 /* Footer styles */
 table.simpleDG tfoot {
     border-top: 5px solid var(--simple-bg-primary);
+}
+
+table.simpleDG .simpleDG_footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+table.simpleDG .simpleDG_footer .simpleDg_footer_paging {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+/* Page buttons */
+table.simpleDG .simpleDg_footer_button {
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    background-color: #FFF;
+    padding: 0;
+    margin-right: 0.5rem;
+    color: #000;
+    border: solid 2px var(--simple-bg-primary);
+}
+
+table.simpleDG .simpleDg_footer_button_selected {
+    background-color: var(--simple-bg-primary);
+    color: #FFF;
 }
