@@ -71,10 +71,8 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="@DataGridColumns.Count">
-                        <div style="display: flex">
-                            <DataGridPagingControls TType="TType" PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
-                        </div>
+                    <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
+                        <DataGridPagingControls TType="TType" PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
                     </td>
                 </tr>
                 </tfoot>

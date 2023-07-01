@@ -14,11 +14,11 @@
     {
         <div class="simpleDg_footer_paging">
             @* First page shortcut *@
-            <DataGridPagingControl PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="F" OnChangePage="PageChanged"/>
+            <DataGridPagingControl PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="F" OnChangePage="ChangePage"/>
 
             @foreach (var page in Pages())
             {
-                <DataGridPagingControl PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" OnChangePage="PageChanged"/>
+                <DataGridPagingControl PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" OnChangePage="ChangePage"/>
             }
 
             @* Last page shortcut *@
@@ -43,6 +43,16 @@
 
         if (SimpleGrid.PageOptions.CurrentPage > 0)
         {
+            // If we are on the very last page we should add the page before the previous if possible
+            if (SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)
+            {
+                var twoPagesBackIndex = SimpleGrid.PageOptions.CurrentPage - 2;
+                if (twoPagesBackIndex >= 0)
+                {
+                    result.Add(twoPagesBackIndex);
+                }
+            }
+            
             // Add previous page if we are not on the first page
             result.Add(SimpleGrid.PageOptions.CurrentPage - 1);
         }
@@ -54,6 +64,12 @@
         if (SimpleGrid.PageOptions.CurrentPage < SimpleGrid.PageOptions.MaxPage - 1)
         {
             result.Add(SimpleGrid.PageOptions.CurrentPage + 1);
+            
+            // If we are on the very first page then add the third page if possible
+            if (SimpleGrid.PageOptions.CurrentPage == 0 && SimpleGrid.PageOptions.MaxPage - 1 >= 2)
+            {
+                result.Add(2);
+            }
         }
 
         return result;
@@ -61,6 +77,9 @@
 
     private async Task ChangePage(int newPage)
     {
+        if (SimpleGrid.PageOptions.CurrentPage == newPage)
+            return;
+        
         await PageChanged.InvokeAsync(newPage);
     }
 }
