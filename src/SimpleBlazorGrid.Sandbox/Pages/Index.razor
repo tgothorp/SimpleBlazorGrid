@@ -11,10 +11,11 @@
     <SimpleGrid TType="Product" 
                 DataSource="@(new DataGridEnumerableSource<Product>(Products))" 
                 Selectable="@true" 
+                ItemsPerPage="15"
                 OnSelectionChanged="SelectedItemsChanged"
                 Title="2024 Product Catalogue"
                 Subtitle="All of Globex Corporation's upcoming products for sale in 2024">
-        <SimpleColumn TType="Product" Property="@(nameof(Product.Id))"/>
+        <SimpleColumn TType="Product" Property="@(nameof(Product.Id))" Width="10"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.Name))" Sortable="@true"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" Format="Format.Money" Sortable="@true"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.CostInLocalCurrency))" Heading="Price">

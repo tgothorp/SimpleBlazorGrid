@@ -46,13 +46,13 @@
                     {
                         if (column.Sortable)
                         {
-                            <th class="simpleDG_sortable" @onclick="@(() => OnSort(column.Property, SortAscending))">
-                                @column.Heading
+                            <th class="simpleDG_sortable" style="@(column.Width != null ? $"width: {column.Width.Value}%" : "")" @onclick="@(() => OnSort(column.Property, SortAscending))">
+                                @column.Heading <DataGridSortGlyph Ascending="SortAscending" Active="@(column.Property == SortOptions.Property)" />
                             </th>
                         }
                         else
                         {
-                            <th>
+                            <th style="@(column.Width != null ? $"width: {column.Width.Value}%" : "")">
                                 @column.Heading
                             </th>
                         }

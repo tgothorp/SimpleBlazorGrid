@@ -9,6 +9,7 @@ namespace SimpleBlazorGrid.Interfaces
         public string Heading { get; set; }
         public Format Format { get; set; }
         public bool Sortable { get; set; }
+        public int? Width { get; set; }
         public RenderFragment<TType> SimpleColumnTemplate { get; set; }
     }
 }

@@ -7,7 +7,7 @@ public static class ProductFaker
     public static Faker<Product> Create()
     {
         return new Faker<Product>()
-            .RuleFor(x => x.Id, v => v.Random.Int(0))
+            .RuleFor(x => x.Id, v => v.Random.Int(1000, 99999))
             .RuleFor(x => x.Name, y => y.Commerce.Product())
             .RuleFor(x => x.Code, y => y.Random.String2(8))
             .RuleFor(x => x.InStockCount, y => y.Random.Int(0, 10))
