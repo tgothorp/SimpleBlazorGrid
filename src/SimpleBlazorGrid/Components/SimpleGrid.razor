@@ -3,6 +3,8 @@
 
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Configuration
+@using SimpleBlazorGrid.Helpers
+@using SimpleBlazorGrid.Options
 
 @implements IDataGrid<TType>
 
@@ -16,15 +18,22 @@
     @if (DataGridColumns.Any())
     {
         <div>
-            <table class="simpleDG" style="--simple-bg-accent: @Configuration.AccentColour">
+            <table class="simpleDG" style="--simple-bg-primary: @Configuration.PrimaryColour; --simple-bg-secondary: @Configuration.SecondaryColour">
                 <thead>
                 <tr>
+                    @if (Selectable)
+                    {
+                        <th class="simpleDG_selectable">
+                            <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected />
+                        </th>
+                    }
+                    
                     @foreach (var column in DataGridColumns)
                     {
                         if (column.Sortable)
                         {
                             <th class="simpleDG_sortable" @onclick="@(() => OnSort(column.Property, SortAscending))">
-                                 @column.Heading
+                                @column.Heading
                             </th>
                         }
                         else
@@ -37,9 +46,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var item in DataSource.Items())
+                @if (Items.Any())
                 {
-                    <DataGridRow TType="TType" Data="item" Columns="DataGridColumns"/>
+                    @foreach (var item in Items)
+                    {
+                        var selected = SelectedItems.Contains(item);
+                        <DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                    }
                 }
                 </tbody>
                 <tfoot>
@@ -67,12 +80,35 @@
     [Parameter]
     public int ItemsPerPage { get; set; } = 5;
 
+    [Parameter]
+    public bool Selectable { get; set; }
+
+    [Parameter]
+    public EventCallback<List<TType>> OnSelectionChanged { get; set; }
+    
+    // Table Data
+    private TType[] Items { get; set; } = {};
     private List<IColumn<TType>> DataGridColumns { get; set; } = new();
+
+    // Filtering etc
+    public PageOptions PageOptions { get; set; } = new();
+    public SortOptions SortOptions { get; set; } = new();
+    
+    // UI & internal junk
+    private List<TType> SelectedItems { get; set; } = new();
     private bool SortAscending { get; set; } = true;
+    private bool EverythingSelected { get; set; } = false;
+
+    public List<TType> GetSelectedItems()
+    {
+        return SelectedItems;
+    }
 
     protected override void OnParametersSet()
     {
-        DataSource.PageOptions.ItemsPerPage = ItemsPerPage;
+        PageOptions.ItemsPerPage = ItemsPerPage;
+        ReloadTable();
+        
         base.OnParametersSet();
     }
 
@@ -84,17 +120,59 @@
 
     private void OnPageChanged(int newPage)
     {
-        DataSource.PageOptions.CurrentPage = newPage;
-        StateHasChanged();
+        PageOptions.CurrentPage = newPage;
+        
+        SelectedItems = new List<TType>();
+        EverythingSelected = false;
+        OnSelectionChanged.InvokeAsync(SelectedItems);
+
+        ReloadTable();
     }
 
     private void OnSort(string property, bool ascending)
     {
-        DataSource.SortOptions.Property = property;
-        DataSource.SortOptions.Ascending = ascending;
-        
+        SortOptions.Property = property;
+        SortOptions.Ascending = ascending;
         SortAscending = !SortAscending;
-        StateHasChanged();
+
+        // Go back to the first page when sorting
+        PageOptions.CurrentPage = 0;
+
+        SelectedItems = new List<TType>();
+        EverythingSelected = false;
+        OnSelectionChanged.InvokeAsync(SelectedItems);
+
+        ReloadTable();
     }
 
+    private void OnSelectAll(bool selectAll)
+    {
+        SelectedItems = selectAll
+            ? DataSource.Items().ToList()
+            : new List<TType>();
+
+        if (SelectedItems.Any())
+            EverythingSelected = true;
+
+        OnSelectionChanged.InvokeAsync(SelectedItems);
+    }
+
+    private void OnItemSelected(TType item)
+    {
+        if (SelectedItems.Contains(item))
+            SelectedItems.Remove(item);
+        else
+            SelectedItems.Add(item);
+        
+        OnSelectionChanged.InvokeAsync(SelectedItems);
+    }
+
+    private void ReloadTable()
+    {
+        DataSource.SortOptions = SortOptions;
+        DataSource.PageOptions = PageOptions;
+
+        Items = DataSource.Items();
+        StateHasChanged();
+    }
 }

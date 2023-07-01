@@ -10,7 +10,15 @@
 
 @typeparam TType
 
-<tr>
+<tr class="@(Selected ? "simpleDG_selected" : "")">
+
+    @if (Selectable)
+    {
+        <td class="simpleDG_selectable">
+            <input type="checkbox" @bind="Selected" @onclick="@(async () => await ItemSelected())"/>
+        </td>
+    }
+
     @foreach (var column in Columns)
     {
         <td>
@@ -33,11 +41,26 @@
     [Parameter]
     public TType Data { get; set; }
 
+    [Parameter]
+    public bool Selectable { get; set; }
+
+    [Parameter]
+    public bool Selected { get; set; }
+    
+    [Parameter]
+    public EventCallback<TType> OnSelected { get; set; }
+
     private string GetRowDataForColumn(IColumn<TType> column)
     {
         var property = ExpressionHelper.GetPropertyByName(Data.GetType(), Data, column.Property);
         var target = property.DynamicInvoke(Data);
 
         return FormattingService.FormatProperty(target, column.Format);
+    }
+
+    private async Task ItemSelected()
+    {
+        Selected = !Selected;
+        await OnSelected.InvokeAsync(Data);
     }
 }

@@ -8,7 +8,7 @@ public class Product
     public int InStockCount { get; protected set; }
     public decimal CostInLocalCurrency { get; protected set; }
     public Currency LocalCurrency { get; protected set; }
-    public string Manufacturer { get; protected set; }
+    public string? Manufacturer { get; protected set; }
     public DateTime LastOrderedOn { get; protected set; }
 
     public decimal CostInGbp =>

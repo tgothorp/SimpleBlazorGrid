@@ -1,0 +1,72 @@
+:root {
+    --simple-bg-primary: #FF6600;
+    --simple-bg-secondary: #ffb27d;
+}
+
+table.simpleDG {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+table.simpleDG tr {
+    border-left: none;
+    border-right: none;
+}
+
+/* Styles for the select column & checkbox */
+table.simpleDG tr.simpleDG_selected {
+    background-color: var(--simple-bg-secondary);
+}
+
+.simpleDG_selectable {
+    width: 50px;
+}
+
+/* Checkbox */
+td.simpleDG_selectable input {
+    border-color: var(--simple-bg-secondary);
+}
+
+td.simpleDG_selectable input[type=checkbox]:checked {
+    background-color: var(--simple-bg-primary);
+    border-color: var(--simple-bg-secondary);
+}
+
+th.simpleDG_selectable input {
+    border-color: var(--simple-bg-secondary);
+}
+
+th.simpleDG_selectable input[type=checkbox]:checked {
+    background-color: var(--simple-bg-primary);
+    border-color: var(--simple-bg-secondary);
+}
+
+/* Selectable column styles*/
+table.simpleDG thead th.simpleDG_sortable {
+    cursor: pointer;
+}
+
+/* More table border styles */
+table.simpleDG td, table.simpleDG th {
+    padding: 5px 2px;
+}
+
+table.simpleDG thead {
+    border-bottom: 6px solid var(--simple-bg-primary);
+}
+
+table.simpleDG thead th {
+    font-weight: bold;
+    text-align: left;
+}
+
+table.simpleDG tbody tr td {
+    border-bottom: solid var(--simple-bg-primary) 1px;
+}
+
+/* Footer styles */
+table.simpleDG tfoot {
+    border-top: 5px solid var(--simple-bg-primary);
+}

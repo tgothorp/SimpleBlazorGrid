@@ -6,7 +6,8 @@ namespace SimpleBlazorGrid.Configuration
     {
         public DefaultConfiguration()
         {
-            AccentColour = "#FF0A54";
+            PrimaryColour = "#FF0A54";
+            SecondaryColour = "#F7CAD0";
             
             var currentCulture = CultureInfo.CurrentCulture;
             var dateFormatInfo = currentCulture.DateTimeFormat;
@@ -20,7 +21,9 @@ namespace SimpleBlazorGrid.Configuration
             DefaultDecimalPlaces = 4;
         }
         
-        public string AccentColour { get; set; }
+        public string PrimaryColour { get; set; }
+        public string SecondaryColour { get; set; }
+        
         public string TimeOnlyFormat { get; set; }
         public string ShortDateTimeFormat { get; set; }
         public string LongDateTimeFormat { get; set; }

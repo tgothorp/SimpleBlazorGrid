@@ -2,7 +2,8 @@ namespace SimpleBlazorGrid.Configuration
 {
     public class SimpleDataGridConfiguration
     {
-        public string AccentColour { get; set; }
+        public string PrimaryColour { get; set; }
+        public string SecondaryColour { get; set; }
         public string TimeOnlyFormat { get; set; }
         public string ShortDateTimeFormat { get; set; }
         public string LongDateTimeFormat { get; set; }
