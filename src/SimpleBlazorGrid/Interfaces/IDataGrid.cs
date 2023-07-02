@@ -4,5 +4,6 @@ namespace SimpleBlazorGrid.Interfaces
     {
         void AddColumn(IColumn<T> column);
         void AddFilter(IFilter<T> filter);
+        void Sort(string property, bool sortAscending);
     }
 }

@@ -8,13 +8,16 @@
 <PageTitle>Simple Blazor DataGrid</PageTitle>
 
 <div style="width: 100%; padding-left: 5%; padding-right: 5%">
-    <SimpleGrid TType="Product" 
-                DataSource="@(new DataGridEnumerableSource<Product>(Products))" 
-                Selectable="@true" 
+    <SimpleGrid TType="Product"
+                DataSource="@(new DataGridEnumerableSource<Product>(Products))"
+                Selectable="@true"
                 ItemsPerPage="15"
                 OnSelectionChanged="SelectedItemsChanged"
                 Title="2024 Product Catalogue"
                 Subtitle="All of Globex Corporation's upcoming products for sale in 2024">
+
+        <SimpleTextFilter TType="Product" Property="@nameof(Product.Name)"/>
+
         <SimpleColumn TType="Product" Property="@(nameof(Product.Id))" Width="10"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.Name))" Sortable="@true"/>
         <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" Format="Format.Money" Sortable="@true"/>
@@ -36,8 +39,8 @@
                 }
             </SimpleColumnTemplate>
         </SimpleColumn>
-        <SimpleColumn TType="Product" Property="@nameof(Product.Manufacturer)" />
-        <SimpleColumn TType="Product" Property="@nameof(Product.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true" />
+        <SimpleColumn TType="Product" Property="@nameof(Product.Manufacturer)"/>
+        <SimpleColumn TType="Product" Property="@nameof(Product.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true"/>
     </SimpleGrid>
 </div>
 

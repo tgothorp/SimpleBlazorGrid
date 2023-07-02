@@ -1,0 +1,11 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+<svg class="@(Active ? "simpleDG_glyph_active" : "")" height="15" width="20">
+    <polygon points="4,0 4,2 9,7 9,14 11,12 11,7 16,2 16,0"/>
+</svg>
+
+@code {
+    [Parameter]
+    public bool Active { get; set; }
+}

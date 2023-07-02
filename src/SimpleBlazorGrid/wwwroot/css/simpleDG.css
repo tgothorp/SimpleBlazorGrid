@@ -39,8 +39,8 @@ table.simpleDG tr.simpleDG_selected {
     width: 50px;
 }
 
-/* Column sort SVG glyph */
-svg.simpleDG_sortable_glyph_active {
+/* Column sort/filter SVG glyph */
+svg.simpleDG_glyph_active {
     color: var(--simple-bg-primary);
 }
 
@@ -66,6 +66,11 @@ th.simpleDG_selectable input[type=checkbox]:checked {
 /* Selectable column styles*/
 table.simpleDG thead th.simpleDG_sortable {
     cursor: pointer;
+}
+
+table.simpleDG thead th.simpleDG_sortable:hover {
+    border-radius: 5px;
+    background-color: var(--simple-bg-secondary);
 }
 
 /* More table border styles */

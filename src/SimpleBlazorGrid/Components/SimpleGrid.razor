@@ -44,18 +44,7 @@
 
                     @foreach (var column in DataGridColumns)
                     {
-                        if (column.Sortable)
-                        {
-                            <th class="simpleDG_sortable" style="@(column.Width != null ? $"width: {column.Width.Value}%" : "")" @onclick="@(() => OnSort(column.Property, SortAscending))">
-                                @column.Heading <DataGridSortGlyph Ascending="SortAscending" Active="@(column.Property == SortOptions.Property)" />
-                            </th>
-                        }
-                        else
-                        {
-                            <th style="@(column.Width != null ? $"width: {column.Width.Value}%" : "")">
-                                @column.Heading
-                            </th>
-                        }
+                        <DataGridHeading TType="TType" Column="column" SortAscending="SortAscending" SortOptions="SortOptions" />
                     }
                 </tr>
                 </thead>
@@ -143,10 +132,15 @@
         StateHasChanged();
     }
 
-    private void OnPageChanged(int newPage)
+    public void Sort(string property, bool sortAscending)
     {
-        PageOptions.CurrentPage = newPage;
-        
+        SortOptions.Property = property;
+        SortOptions.Ascending = sortAscending;
+        SortAscending = !SortAscending;
+
+        // Go back to the first page when sorting
+        PageOptions.CurrentPage = 0;
+
         SelectedItems = new List<TType>();
         EverythingSelected = false;
         OnSelectionChanged.InvokeAsync(SelectedItems);
@@ -154,15 +148,10 @@
         ReloadTable();
     }
 
-    private void OnSort(string property, bool ascending)
+    private void OnPageChanged(int newPage)
     {
-        SortOptions.Property = property;
-        SortOptions.Ascending = ascending;
-        SortAscending = !SortAscending;
-
-        // Go back to the first page when sorting
-        PageOptions.CurrentPage = 0;
-
+        PageOptions.CurrentPage = newPage;
+        
         SelectedItems = new List<TType>();
         EverythingSelected = false;
         OnSelectionChanged.InvokeAsync(SelectedItems);
