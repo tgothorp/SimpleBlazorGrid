@@ -107,6 +107,7 @@
     // Table Data
     private TType[] Items { get; set; } = {};
     private List<IColumn<TType>> DataGridColumns { get; set; } = new();
+    private List<IFilter<TType>> Filters { get; set; } = new();
 
     // Filtering etc
     public PageOptions PageOptions { get; set; } = new();
@@ -133,6 +134,12 @@
     public void AddColumn(IColumn<TType> column)
     {
         DataGridColumns.Add(column);
+        StateHasChanged();
+    }
+
+    public void AddFilter(IFilter<TType> filter)
+    {
+        Filters.Add(filter);
         StateHasChanged();
     }
 

@@ -1,0 +1,25 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@typeparam TType
+
+@using SimpleBlazorGrid.Enums
+@using SimpleBlazorGrid.Interfaces
+
+@implements SimpleBlazorGrid.Interfaces.IFilter<TType>
+
+@code {
+    [CascadingParameter]
+    public IDataGrid<TType> DataGrid { get; set; }
+    
+    [Parameter]
+    public string Property { get; set; }
+
+    public FilterType FilterType => FilterType.Text;
+
+    protected override void OnInitialized()
+    {
+        DataGrid.AddFilter(this);
+        base.OnInitialized();
+    }
+}
