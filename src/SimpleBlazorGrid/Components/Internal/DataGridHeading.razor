@@ -6,10 +6,19 @@
 
 @typeparam TType
 
-<th class="@(Column.Sortable ? "simpleDG_sortable" : "")" style="@(Column.Width != null ? $"width: {Column.Width.Value}%" : "")" @onclick="Sort">
+<th class="@(Column.Sortable ? "simpleDG_sortable" : "")" @onclick="Sort">
+
     <div style="display: flex; flex-direction: row; justify-content: space-between;">
 
-        <div style="width: @(Column.Sortable ? 85 : 100)%">
+        @* TODO - Figure out how to position the filter icon properly *@
+        @if (Filter is not null)
+        {
+            <div class="simpleDG_filter_icon" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))">
+                <DataGridFilterGlyph/>
+            </div>
+        }
+
+        <div style="width: @(CalculateHeadingWidth())%">
             @Column.Heading
         </div>
 
@@ -36,6 +45,12 @@
     [Parameter]
     public bool SortAscending { get; set; }
 
+    [Parameter]
+    public IFilter<TType> Filter { get; set; }
+
+    [Parameter]
+    public EventCallback<IFilter<TType>> ShowFilter { get; set; }
+
     private void Sort()
     {
         if (!Column.Sortable)
@@ -43,4 +58,16 @@
 
         SimpleGrid.Sort(Column.Property, SortAscending);
     }
+
+    private int CalculateHeadingWidth()
+    {
+        if (Filter is not null && Column.Sortable)
+            return 70;
+
+        if (Filter is not null || Column.Sortable)
+            return 85;
+
+        return 100;
+    }
+
 }

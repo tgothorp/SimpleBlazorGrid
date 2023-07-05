@@ -13,7 +13,8 @@
 @typeparam TType
 
 <CascadingValue Value="this">
-    @ChildContent
+    @Filters
+    @Columns
 
     @if (DataGridColumns.Any())
     {
@@ -33,6 +34,14 @@
             }
 
             <table class="simpleDG" style="--simple-bg-primary: @Configuration.PrimaryColour; --simple-bg-secondary: @Configuration.SecondaryColour">
+
+                @if (ActiveFilter is not null)
+                {
+                    <div class="simpleDG_filters">
+                        <DataGridFilters TType="TType" Filter="ActiveFilter" />
+                    </div>
+                }
+
                 <thead>
                 <tr>
                     @if (Selectable)
@@ -44,7 +53,8 @@
 
                     @foreach (var column in DataGridColumns)
                     {
-                        <DataGridHeading TType="TType" Column="column" SortAscending="SortAscending" SortOptions="SortOptions" />
+                        var filter = DataGridFilters.SingleOrDefault(x => x.Property == column.Property);
+                        <DataGridHeading TType="TType" Column="column" SortAscending="SortAscending" SortOptions="SortOptions" Filter="filter" ShowFilter="ShowFilter"/>
                     }
                 </tr>
                 </thead>
@@ -79,7 +89,10 @@
     public string Subtitle { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment Columns { get; set; }
+
+    [Parameter]
+    public RenderFragment Filters { get; set; }
 
     [Parameter]
     public IDataGridSource<TType> DataSource { get; set; }
@@ -92,20 +105,21 @@
 
     [Parameter]
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
-    
+
     // Table Data
-    private TType[] Items { get; set; } = {};
+    private TType[] Items { get; set; } = { };
     private List<IColumn<TType>> DataGridColumns { get; set; } = new();
-    private List<IFilter<TType>> Filters { get; set; } = new();
+    private List<IFilter<TType>> DataGridFilters { get; set; } = new();
 
     // Filtering etc
     public PageOptions PageOptions { get; set; } = new();
     public SortOptions SortOptions { get; set; } = new();
-    
+
     // UI & internal junk
     private List<TType> SelectedItems { get; set; } = new();
     private bool SortAscending { get; set; } = true;
     private bool EverythingSelected { get; set; } = false;
+    private IFilter<TType> ActiveFilter { get; set; } = null;
 
     public List<TType> GetSelectedItems()
     {
@@ -116,7 +130,7 @@
     {
         PageOptions.ItemsPerPage = ItemsPerPage;
         ReloadTable();
-        
+
         base.OnParametersSet();
     }
 
@@ -128,7 +142,7 @@
 
     public void AddFilter(IFilter<TType> filter)
     {
-        Filters.Add(filter);
+        DataGridFilters.Add(filter);
         StateHasChanged();
     }
 
@@ -138,7 +152,7 @@
         SortOptions.Ascending = sortAscending;
         SortAscending = !SortAscending;
 
-        // Go back to the first page when sorting
+    // Go back to the first page when sorting
         PageOptions.CurrentPage = 0;
 
         SelectedItems = new List<TType>();
@@ -151,7 +165,7 @@
     private void OnPageChanged(int newPage)
     {
         PageOptions.CurrentPage = newPage;
-        
+
         SelectedItems = new List<TType>();
         EverythingSelected = false;
         OnSelectionChanged.InvokeAsync(SelectedItems);
@@ -177,7 +191,7 @@
             SelectedItems.Remove(item);
         else
             SelectedItems.Add(item);
-        
+
         OnSelectionChanged.InvokeAsync(SelectedItems);
     }
 
@@ -188,5 +202,10 @@
 
         Items = DataSource.Items();
         StateHasChanged();
+    }
+
+    private void ShowFilter(IFilter<TType> obj)
+    {
+        ActiveFilter = obj;
     }
 }
