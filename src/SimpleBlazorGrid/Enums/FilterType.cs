@@ -2,9 +2,11 @@ namespace SimpleBlazorGrid.Enums
 {
     public enum FilterType
     {
+        Date,
         DateRange,
         Enum,
         Text,
-        Range,
+        Number,
+        NumberRange,
     }
 }

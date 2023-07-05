@@ -3,6 +3,7 @@
 
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Internal.Filters
+@using SimpleBlazorGrid.Options.Filters
 
 @typeparam TType
 
@@ -10,7 +11,12 @@
     @switch (Filter)
     {
         case SimpleTextFilter<TType> simpleTextFilter:
-            <_DataGridSimpleTextFilter TType="TType" Filter="simpleTextFilter"/>
+            <_DataGridSimpleTextFilter 
+                TType="TType" 
+                Filter="simpleTextFilter" 
+                EqualFilterOption="@((EqualFilterOption)simpleTextFilter.FilterOption)" 
+                OnFilterChanged="ApplyFilter"
+                OnFilterRemoved="RemoveFilter"/>
             break;
     }
 </div>
@@ -21,6 +27,8 @@
     public IFilter<TType> Filter { get; set; }
 
     [Parameter]
-    public EventCallback<IFilter<TType>> ApplyFilter { get; set; }
-
+    public EventCallback<FilterOption> ApplyFilter { get; set; }
+    
+    [Parameter]
+    public EventCallback<FilterOption> RemoveFilter { get; set; }
 }

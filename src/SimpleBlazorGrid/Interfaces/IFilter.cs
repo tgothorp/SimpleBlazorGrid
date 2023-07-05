@@ -1,4 +1,5 @@
 using SimpleBlazorGrid.Enums;
+using SimpleBlazorGrid.Options.Filters;
 
 namespace SimpleBlazorGrid.Interfaces
 {
@@ -6,5 +7,6 @@ namespace SimpleBlazorGrid.Interfaces
     {
         public string Property { get; set; }
         public FilterType FilterType { get; }
+        public FilterOption FilterOption { get; }
     }
 }

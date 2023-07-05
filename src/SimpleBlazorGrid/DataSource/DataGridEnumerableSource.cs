@@ -38,6 +38,11 @@ namespace SimpleBlazorGrid.DataSource
         private IEnumerable<T> ApplyFiltering(IEnumerable<T> items)
         {
             // TODO
+            if (FilterOptions.Options.Any())
+            {
+                items = FilterOptions.Options.Aggregate(items, (current, option) => option.ApplyFilter(current));
+            }
+            
             return items;
         }
 
