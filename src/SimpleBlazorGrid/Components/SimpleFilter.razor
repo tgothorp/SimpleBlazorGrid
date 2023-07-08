@@ -16,9 +16,17 @@
     [Parameter]
     public string Property { get; set; }
 
+    [Parameter]
+    public string Min { get; set; }
+
+    [Parameter]
+    public string Max { get; set; }
+
+    [Parameter]
+    public string Step { get; set; }
+
     public Guid Id { get; private set; }
     public FilterOption FilterOption { get; private set; }
-    
     public bool Active { get; set; }
 
     protected override void OnInitialized()
@@ -38,6 +46,8 @@
 
     private void GetPropertyType()
     {
+        // TODO, validate min max etc.
+        
         var propertyInfo = typeof(TType).GetProperty(Property);
         var typeCode = Type.GetTypeCode(propertyInfo.PropertyType);
 
@@ -55,7 +65,7 @@
             case TypeCode.Single:
             case TypeCode.Double:
             case TypeCode.Decimal:
-                // TODO
+                FilterOption = new NumberEqualFilterOption(Id, Property, Min, Max, Step);
                 break;
             case TypeCode.DateTime:
                 // TODO

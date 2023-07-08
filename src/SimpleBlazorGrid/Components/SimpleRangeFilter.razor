@@ -1,0 +1,49 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@typeparam TType
+
+@using SimpleBlazorGrid.Options.Filters
+@using SimpleBlazorGrid.Interfaces
+
+@implements SimpleBlazorGrid.Interfaces.IFilter<TType>
+
+@code {
+    [CascadingParameter]
+    public IDataGrid<TType> DataGrid { get; set; }
+
+    [Parameter]
+    public string Property { get; set; }
+    
+    [Parameter]
+    public object Min { get; set; }
+
+    [Parameter]
+    public object Max { get; set; }
+
+    public Guid Id { get; private set; }
+    public FilterOption FilterOption { get; }
+    public bool Active { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Id = Guid.NewGuid();
+
+        DataGrid.AddFilter(this);
+
+        base.OnInitialized();
+    }
+
+    public void SetActive(bool isActive)
+    {
+        Active = isActive;
+    }
+
+    private void GetPropertyType()
+    {
+        // TODO, validate min max etc.
+
+        var propertyInfo = typeof(TType).GetProperty(Property);
+        var typeCode = Type.GetTypeCode(propertyInfo.PropertyType);
+    }
+}

@@ -1,0 +1,36 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal.Filters
+
+@using SimpleBlazorGrid.Options.Filters
+
+@typeparam TType
+
+<div>
+    <input type="number" min="@NumberEqualFilter.Min" max="@NumberEqualFilter.Max" step="@NumberEqualFilter.Step" @bind-value="NumberEqualFilter.Value" />
+    <button @onclick="ApplyFilter">Apply Filter</button>
+</div>
+
+@code {
+    [Parameter]
+    public SimpleFilter<TType> Filter { get; set; }
+    
+    [Parameter]
+    public NumberEqualFilterOption NumberEqualFilter { get; set; }
+    
+    [Parameter]
+    public EventCallback<FilterOption> OnFilterChanged { get; set; }
+    
+    [Parameter]
+    public EventCallback<FilterOption> OnFilterRemoved { get; set; }
+
+    private async Task ApplyFilter()
+    {
+        if (string.IsNullOrEmpty(NumberEqualFilter.Value))
+        {
+            await OnFilterRemoved.InvokeAsync(NumberEqualFilter);
+            return;
+        }
+
+        await OnFilterChanged.InvokeAsync(NumberEqualFilter);
+    }
+}

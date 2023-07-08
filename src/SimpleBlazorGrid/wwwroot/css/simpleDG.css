@@ -146,9 +146,10 @@ table.simpleDG .simpleDg_footer_button_selected {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgb(5, 5, 5, 0.5);
+    background-color: rgb(5, 5, 5, 0.8);
     width: 100%;
     height: 100%;
     z-index: 100;
     border-radius: 5px;
+    color: #FFF;
 }
