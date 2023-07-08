@@ -1,20 +1,20 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid
 
-<svg class="@(Active ? "simpleDG_glyph_active" : "")" height="15" width="20">
+<svg class="simpleDG_glyph @(Active ? "simpleDG_glyph_active" : "")" viewBox="0 0 20 20" style="position: absolute; height: 100%">
     @if (!Active)
     {
-        <polygon points="10,0 0,15 20,15"/>
+        <polygon points="0,2 10,18 20,2"/>
     }
     else
     {
         @if (Ascending)
         {
-            <polygon points="10,15 0,0 20,0"/>
+            <polygon points="0,2 10,18 20,2"/>
         }
         else
         {
-            <polygon points="10,0 0,15 20,15"/>
+            <polygon points="0,18 10,2 20,18"/>
         }
     }
 </svg>

@@ -7,7 +7,7 @@
 
 <PageTitle>Simple Blazor DataGrid</PageTitle>
 
-<div style="width: 100%; padding-left: 5%; padding-right: 5%">
+<div style="width: 90%; padding-left: 5%; padding-right: 5%">
     <SimpleGrid TType="Product"
                 DataSource="@(new DataGridEnumerableSource<Product>(Products))"
                 Selectable="@true"
@@ -17,7 +17,7 @@
                 Subtitle="All of Globex Corporation's upcoming products for sale in 2024">
 
         <Filters>
-            <SimpleTextFilter TType="Product" Property="@nameof(Product.Name)"/>
+            <SimpleFilter TType="Product" Property="@nameof(Product.Name)"/>
         </Filters>
         <Columns>
             <SimpleColumn TType="Product" Property="@(nameof(Product.Id))" Width="10"/>

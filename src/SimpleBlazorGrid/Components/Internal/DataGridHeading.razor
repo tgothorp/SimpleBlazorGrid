@@ -6,25 +6,50 @@
 
 @typeparam TType
 
-<th class="@(Column.Sortable ? "simpleDG_sortable" : "")" @onclick="Sort">
+@* <th class="@(Column.Sortable ? "simpleDG_sortable" : "")" @onclick="Sort"> *@
+@* *@
+@*     <div style="display: flex; flex-direction: row; justify-content: space-between;"> *@
+@* *@
+@*         $1$ TODO - Figure out how to position the filter icon properly #1# *@
+@*         @if (Filter is not null) *@
+@*         { *@
+@*             <div class="simpleDG_filter_icon" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))"> *@
+@*                 <DataGridFilterGlyph/> *@
+@*             </div> *@
+@*         } *@
+@* *@
+@*         <div style="width: @(CalculateHeadingWidth())%"> *@
+@*             @Column.Heading *@
+@*         </div> *@
+@* *@
+@*         @if (Column.Sortable) *@
+@*         { *@
+@*             <div style="width: 15%"> *@
+@*                 <DataGridSortGlyph Ascending="SortAscending" Active="@(Column.Property == SortOptions.Property)"/> *@
+@*             </div> *@
+@*         } *@
+@*     </div> *@
+@* </th> *@
 
-    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+<th>
+
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
 
         @* TODO - Figure out how to position the filter icon properly *@
         @if (Filter is not null)
         {
-            <div class="simpleDG_filter_icon" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))">
-                <DataGridFilterGlyph/>
+            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))">
+                <DataGridFilterGlyph Active="Filter.Active"/>
             </div>
         }
 
-        <div style="width: @(CalculateHeadingWidth())%">
+        <div style="flex-grow: 4; padding-left: 5px">
             @Column.Heading
         </div>
 
         @if (Column.Sortable)
         {
-            <div style="width: 15%">
+            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="Sort">
                 <DataGridSortGlyph Ascending="SortAscending" Active="@(Column.Property == SortOptions.Property)"/>
             </div>
         }

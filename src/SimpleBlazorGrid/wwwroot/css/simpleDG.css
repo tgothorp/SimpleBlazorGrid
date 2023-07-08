@@ -41,8 +41,16 @@ table.simpleDG tr.simpleDG_selected {
 }
 
 /* Column sort/filter SVG glyph */
+svg.simpleDG_glyph {
+    cursor: pointer;
+}
+
+svg.simpleDG_glyph:hover {
+    fill: var(--simple-bg-secondary);
+}
+
 svg.simpleDG_glyph_active {
-    color: var(--simple-bg-primary);
+    fill: var(--simple-bg-primary);
 }
 
 /* Checkbox */

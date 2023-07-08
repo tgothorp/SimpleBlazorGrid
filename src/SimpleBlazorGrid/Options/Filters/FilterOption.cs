@@ -5,12 +5,7 @@ namespace SimpleBlazorGrid.Options.Filters
 {
     public abstract class FilterOption
     {
-        protected FilterOption()
-        {
-            Id = Guid.NewGuid();
-        }
-        
-        public readonly Guid Id;
+        public Guid Id { get; set; }
 
         public string Property { get; set; }
         public abstract IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items);

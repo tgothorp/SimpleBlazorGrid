@@ -6,16 +6,16 @@
 @typeparam TType
 
 <div>
-    <input type="text" @bind-value="EqualFilterOption.Value"/>
+    <input type="text" @bind-value="StringEqualFilterOption.Value"/>
     <button @onclick="ApplyFilter">Apply Filter</button>
 </div>
 
 @code {
     [Parameter]
-    public SimpleTextFilter<TType> Filter { get; set; }
+    public SimpleFilter<TType> Filter { get; set; }
     
     [Parameter]
-    public EqualFilterOption EqualFilterOption { get; set; }
+    public StringEqualFilterOption StringEqualFilterOption { get; set; }
     
     [Parameter]
     public EventCallback<FilterOption> OnFilterChanged { get; set; }
@@ -25,12 +25,12 @@
 
     private async Task ApplyFilter()
     {
-        if (string.IsNullOrEmpty(EqualFilterOption.Value))
+        if (string.IsNullOrEmpty(StringEqualFilterOption.Value))
         {
-            await OnFilterRemoved.InvokeAsync(EqualFilterOption);
+            await OnFilterRemoved.InvokeAsync(StringEqualFilterOption);
             return;
         }
 
-        await OnFilterChanged.InvokeAsync(EqualFilterOption);
+        await OnFilterChanged.InvokeAsync(StringEqualFilterOption);
     }
 }

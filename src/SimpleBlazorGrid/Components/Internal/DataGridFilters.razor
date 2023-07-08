@@ -10,11 +10,11 @@
 <div>
     @switch (Filter)
     {
-        case SimpleTextFilter<TType> simpleTextFilter:
+        case SimpleFilter<TType> {FilterOption: StringEqualFilterOption } simpleFilter:
             <_DataGridSimpleTextFilter 
                 TType="TType" 
-                Filter="simpleTextFilter" 
-                EqualFilterOption="@((EqualFilterOption)simpleTextFilter.FilterOption)" 
+                Filter="simpleFilter" 
+                StringEqualFilterOption="@((StringEqualFilterOption)simpleFilter.FilterOption)" 
                 OnFilterChanged="ApplyFilter"
                 OnFilterRemoved="RemoveFilter"/>
             break;

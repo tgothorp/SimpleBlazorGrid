@@ -217,6 +217,9 @@
         // Hide the filter dialogue
         ActiveFilter = null;
         FilterOptions.Options.Add(obj);
+
+        var filter = DataGridFilters.Single(x => x.Id == obj.Id);
+        filter.SetActive(true);
         
         ReloadTable();
     }
@@ -229,6 +232,12 @@
         if (FilterOptions.Options.Any(x => x.Id == obj.Id))
         {
             FilterOptions.Options.RemoveAll(x => x.Id == obj.Id);
+            
+            var filter = DataGridFilters.Single(x => x.Id == obj.Id);
+            filter.SetActive(false);
+            
+            // Deselect rows if we remove a filter
+            OnSelectAll(false);
             ReloadTable();
         }
     }
