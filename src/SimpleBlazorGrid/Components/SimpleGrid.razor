@@ -6,6 +6,7 @@
 @using SimpleBlazorGrid.Helpers
 @using SimpleBlazorGrid.Options
 @using SimpleBlazorGrid.Options.Filters
+@using SimpleBlazorGrid.Internal
 
 @implements IDataGrid<TType>
 
@@ -39,7 +40,7 @@
                 @if (ActiveFilter is not null)
                 {
                     <div class="simpleDG_filters">
-                        <DataGridFilters TType="TType" Filter="ActiveFilter" ApplyFilter="AddFilter" RemoveFilter="RemoveFilter" />
+                        <_DataGridFilters TType="TType" Filter="ActiveFilter" ApplyFilter="AddFilter" RemoveFilter="RemoveFilter" />
                     </div>
                 }
 
@@ -55,7 +56,7 @@
                     @foreach (var column in DataGridColumns)
                     {
                         var filter = DataGridFilters.SingleOrDefault(x => x.Property == column.Property);
-                        <DataGridHeading TType="TType" Column="column" SortAscending="SortAscending" SortOptions="SortOptions" Filter="filter" ShowFilter="ShowFilterUi"/>
+                        <_DataGridHeading TType="TType" Column="column" SortAscending="SortAscending" SortOptions="SortOptions" Filter="filter" ShowFilter="ShowFilterUi"/>
                     }
                 </tr>
                 </thead>
@@ -65,14 +66,14 @@
                     @foreach (var item in Items)
                     {
                         var selected = SelectedItems.Contains(item);
-                        <DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                        <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
                     }
                 }
                 </tbody>
                 <tfoot>
                 <tr>
                     <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
-                        <DataGridPagingControls TType="TType" PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
+                        <_DataGridPagingControls TType="TType" PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
                     </td>
                 </tr>
                 </tfoot>

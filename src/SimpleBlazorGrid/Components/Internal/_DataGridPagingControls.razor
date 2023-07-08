@@ -1,5 +1,5 @@
 ﻿@* ReSharper disable once CheckNamespace *@
-@namespace SimpleBlazorGrid
+@namespace SimpleBlazorGrid.Internal
 
 @typeparam TType
 
@@ -14,15 +14,15 @@
     {
         <div class="simpleDg_footer_paging">
             @* First page shortcut *@
-            <DataGridPagingControl PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="F" OnChangePage="ChangePage"/>
+            <_DataGridPagingControl PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="F" OnChangePage="ChangePage"/>
 
             @foreach (var page in Pages())
             {
-                <DataGridPagingControl PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" OnChangePage="ChangePage"/>
+                <_DataGridPagingControl PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" OnChangePage="ChangePage"/>
             }
 
             @* Last page shortcut *@
-            <DataGridPagingControl PageIndex="@(SimpleGrid.PageOptions.MaxPage - 1)" Selected="@(SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)" Glyph="L" OnChangePage="PageChanged"/>
+            <_DataGridPagingControl PageIndex="@(SimpleGrid.PageOptions.MaxPage - 1)" Selected="@(SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)" Glyph="L" OnChangePage="PageChanged"/>
         </div>
     }
 </div>

@@ -1,45 +1,19 @@
 @* ReSharper disable once CheckNamespace *@
-@namespace SimpleBlazorGrid
+@namespace SimpleBlazorGrid.Internal
 
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Options
 
 @typeparam TType
 
-@* <th class="@(Column.Sortable ? "simpleDG_sortable" : "")" @onclick="Sort"> *@
-@* *@
-@*     <div style="display: flex; flex-direction: row; justify-content: space-between;"> *@
-@* *@
-@*         $1$ TODO - Figure out how to position the filter icon properly #1# *@
-@*         @if (Filter is not null) *@
-@*         { *@
-@*             <div class="simpleDG_filter_icon" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))"> *@
-@*                 <DataGridFilterGlyph/> *@
-@*             </div> *@
-@*         } *@
-@* *@
-@*         <div style="width: @(CalculateHeadingWidth())%"> *@
-@*             @Column.Heading *@
-@*         </div> *@
-@* *@
-@*         @if (Column.Sortable) *@
-@*         { *@
-@*             <div style="width: 15%"> *@
-@*                 <DataGridSortGlyph Ascending="SortAscending" Active="@(Column.Property == SortOptions.Property)"/> *@
-@*             </div> *@
-@*         } *@
-@*     </div> *@
-@* </th> *@
-
+@* TODO - Tidy up CSS classes *@
 <th>
-
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
 
-        @* TODO - Figure out how to position the filter icon properly *@
         @if (Filter is not null)
         {
             <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))">
-                <DataGridFilterGlyph Active="Filter.Active"/>
+                <_DataGridFilterGlyph Active="Filter.Active"/>
             </div>
         }
 
@@ -50,7 +24,7 @@
         @if (Column.Sortable)
         {
             <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="Sort">
-                <DataGridSortGlyph Ascending="SortAscending" Active="@(Column.Property == SortOptions.Property)"/>
+                <_DataGridSortGlyph Ascending="SortAscending" Active="@(Column.Property == SortOptions.Property)"/>
             </div>
         }
     </div>
