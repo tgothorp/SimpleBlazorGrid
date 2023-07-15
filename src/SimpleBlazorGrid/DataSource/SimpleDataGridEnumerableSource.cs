@@ -7,7 +7,7 @@ using SimpleBlazorGrid.Options;
 
 namespace SimpleBlazorGrid.DataSource
 {
-    public class DataGridEnumerableSource<T> : IDataGridSource<T>
+    public class SimpleDataGridEnumerableSource<T> : IDataGridSource<T>
     {
         private IEnumerable<T> Source { get; }
 
@@ -16,7 +16,7 @@ namespace SimpleBlazorGrid.DataSource
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
 
-        public DataGridEnumerableSource(IEnumerable<T> source)
+        public SimpleDataGridEnumerableSource(IEnumerable<T> source)
         {
             Source = source;
         }

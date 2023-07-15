@@ -6,9 +6,9 @@ namespace SimpleBlazorGrid.Interfaces
     public interface IFilter<TType>
     {
         public Guid Id { get; }
-        public string Property { get; set; }
+        public string Property { get; }
         public FilterOption FilterOption { get; }
-        public bool Active { get; set; }
+        public bool Active { get; }
 
         void SetActive(bool isActive);
     }

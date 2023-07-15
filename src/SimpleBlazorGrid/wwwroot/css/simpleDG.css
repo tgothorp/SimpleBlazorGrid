@@ -152,4 +152,5 @@ table.simpleDG .simpleDg_footer_button_selected {
     z-index: 100;
     border-radius: 5px;
     color: #FFF;
+    display: inherit;
 }

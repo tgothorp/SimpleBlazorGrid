@@ -5,9 +5,17 @@
 
 @typeparam TType
 
-<div>
-    <input type="number" min="@NumberEqualFilter.Min" max="@NumberEqualFilter.Max" step="@NumberEqualFilter.Step" @bind-value="NumberEqualFilter.Value" />
-    <button @onclick="ApplyFilter">Apply Filter</button>
+<div style="width: 50%; left: 25%; top: 25%; position: relative">
+    <h2 style="width: 100%; margin-bottom: 1rem">Filter by @Filter.Property</h2>
+    <input style="width: 100%; height: 35px; border-radius: 5px; border: none; margin-bottom: 1rem" type="number" min="@NumberEqualFilter.Min" max="@NumberEqualFilter.Max" step="@NumberEqualFilter.Step" @bind-value="NumberEqualFilter.Value"/>
+    <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-evenly;">
+        <div style="width: 50%">
+            <button style="width: 96%; margin: 2%; height: 35px; border-radius: 5px; background-color: #FF0A54; color: #FFF; border: solid 2px #FF0A54" @onclick="ClearFilter">Clear</button>
+        </div>
+        <div style="width: 50%">
+            <button style="width: 96%; margin: 2%; height: 35px; border-radius: 5px; background-color: #FF0A54; color: #FFF; border: solid 2px #FF0A54" @onclick="ApplyFilter">Apply Filter</button>
+        </div>
+    </div>
 </div>
 
 @code {
@@ -32,5 +40,11 @@
         }
 
         await OnFilterChanged.InvokeAsync(NumberEqualFilter);
+    }
+ 
+    private async Task ClearFilter()
+    {
+        NumberEqualFilter.Value = null;
+        await OnFilterRemoved.InvokeAsync(NumberEqualFilter);
     }
 }
