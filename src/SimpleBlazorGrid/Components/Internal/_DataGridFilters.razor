@@ -1,0 +1,42 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@using SimpleBlazorGrid.Interfaces
+@using SimpleBlazorGrid.Internal.Filters
+@using SimpleBlazorGrid.Options.Filters
+
+@typeparam TType
+
+<div style="width: 100%; height: 100%">
+    @switch (Filter)
+    {
+        case SimpleFilter<TType> {FilterOption: StringEqualFilterOption } simpleFilter:
+            <_DataGridSimpleTextFilter 
+                TType="TType" 
+                Filter="simpleFilter" 
+                StringEqualFilterOption="@((StringEqualFilterOption)simpleFilter.FilterOption)" 
+                OnFilterChanged="ApplyFilter"
+                OnFilterRemoved="RemoveFilter"/>
+            break;
+        case SimpleFilter<TType> {FilterOption: NumberEqualFilterOption} simpleFilter:
+            <_DataGridSimpleNumberFilter
+                TType="TType"
+                Filter="simpleFilter" 
+                NumberEqualFilter="@((NumberEqualFilterOption)simpleFilter.FilterOption)"
+                OnFilterChanged="ApplyFilter"
+                OnFilterRemoved="RemoveFilter" />
+            break;
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public IFilter<TType> Filter { get; set; }
+
+    [Parameter]
+    public EventCallback<FilterOption> ApplyFilter { get; set; }
+    
+    [Parameter]
+    public EventCallback<FilterOption> RemoveFilter { get; set; }
+}

@@ -29,15 +29,17 @@ namespace SimpleBlazorGrid.Services
                         return date.ToString(_configuration.ShortDateTimeFormat);
                     break;
                 case Format.LongDate:
+                    if (property is DateTime dateTime)
+                        return dateTime.ToString(_configuration.LongDateTimeFormat);
                     break;
                 case Format.Time:
+                    if (property is DateTime time)
+                        return time.ToString(_configuration.TimeOnlyFormat);
                     break;
                 case Format.Money:
                     if (property is decimal currency)
                         return $"{_configuration.CurrencySymbol}{currency:n2}";
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(format), format, null);
             }
 
             return property.ToString();

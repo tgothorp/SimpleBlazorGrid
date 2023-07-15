@@ -15,8 +15,8 @@ public class Product
         LocalCurrency switch
         {
             Currency.GBP => CostInLocalCurrency,
-            Currency.USD => CostInLocalCurrency / 1.5m,
-            Currency.EUR => CostInLocalCurrency / 1.17m,
+            Currency.USD => decimal.Round(CostInLocalCurrency / 1.5m, 2),
+            Currency.EUR => decimal.Round(CostInLocalCurrency / 1.17m, 2),
             _ => throw new ArgumentOutOfRangeException()
         };
 }
