@@ -7,7 +7,7 @@
 @typeparam TType
 
 @* TODO - Tidy up CSS classes *@
-<th>
+<th style="@(ColumnWidth())">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
 
         @if (Filter is not null)
@@ -50,6 +50,9 @@
     [Parameter]
     public EventCallback<IFilter<TType>> ShowFilter { get; set; }
 
+    [Parameter]
+    public int? Width { get; set; }
+
     private void Sort()
     {
         if (!Column.Sortable)
@@ -69,4 +72,8 @@
         return 100;
     }
 
+    private string ColumnWidth()
+    {
+        return Width == null ? null : $"width: {Width}%";
+    }
 }

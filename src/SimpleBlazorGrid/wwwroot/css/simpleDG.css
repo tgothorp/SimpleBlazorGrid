@@ -24,6 +24,9 @@ table.simpleDG {
     text-align: left;
     border-collapse: collapse;
     table-layout: fixed;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: block;
 }
 
 table.simpleDG tr {

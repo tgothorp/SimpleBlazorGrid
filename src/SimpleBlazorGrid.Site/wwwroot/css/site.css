@@ -1,3 +1,21 @@
+@font-face {
+    font-family: 'IBMPlexSansCondensed';
+    src: url('font/IBMPlexSansCondensed-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: 'IBMPlexSansCondensed', sans-serif;
+    background-image: url('/img/background-light-3.svg');
+    background-size: cover;
+    background-color: #1d1b1b;
+    margin: 0;
+    color: #FFF;
+}
+
+main {
+    margin: 8px;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
