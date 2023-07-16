@@ -6,7 +6,7 @@
 /* Table title styles */
 div.simpleDG_title {
     width: 100%;
-    padding-bottom: 0.5rem;
+    padding-bottom: 1rem;
 }
 
 h1.simpleDG_title {
@@ -26,7 +26,14 @@ table.simpleDG {
     table-layout: fixed;
     overflow-x: auto;
     white-space: nowrap;
-    display: block;
+    display: inline-table;
+}
+
+@media screen and (max-width: 800px) {
+    table.simpleDG {
+        /* Scroll table horizontally on small screens*/
+        display: block;
+    }
 }
 
 table.simpleDG tr {

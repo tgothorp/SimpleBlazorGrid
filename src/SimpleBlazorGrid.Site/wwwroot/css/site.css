@@ -8,6 +8,7 @@ body {
     background-image: url('/img/background-light-3.svg');
     background-size: cover;
     background-color: #1d1b1b;
+    background-position: right;
     margin: 0;
     color: #FFF;
 }
