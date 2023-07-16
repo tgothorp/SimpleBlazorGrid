@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid", "SimpleB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Sandbox", "SimpleBlazorGrid.Sandbox\SimpleBlazorGrid.Sandbox.csproj", "{0BCF045D-AAB5-407A-B28A-29E9EF53631C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Site", "SimpleBlazorGrid.Site\SimpleBlazorGrid.Site.csproj", "{17BFBDB6-84B6-47B6-B84E-8948B40F8132}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{0BCF045D-AAB5-407A-B28A-29E9EF53631C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BCF045D-AAB5-407A-B28A-29E9EF53631C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BCF045D-AAB5-407A-B28A-29E9EF53631C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17BFBDB6-84B6-47B6-B84E-8948B40F8132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17BFBDB6-84B6-47B6-B84E-8948B40F8132}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17BFBDB6-84B6-47B6-B84E-8948B40F8132}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17BFBDB6-84B6-47B6-B84E-8948B40F8132}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
