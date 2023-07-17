@@ -1,7 +1,7 @@
 .topnav {
     overflow: hidden;
     background-color: #1d1b1b;
-    border-bottom: groove 10px #FF0A54;
+    border-bottom: double 10px #FF0A54;
 }
 
 .topnav a {

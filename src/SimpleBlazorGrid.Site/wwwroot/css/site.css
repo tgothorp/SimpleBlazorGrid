@@ -3,6 +3,20 @@
     src: url('font/IBMPlexSansCondensed-Regular.ttf') format('truetype');
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+html {
+    color-scheme: dark;
+}
+
 body {
     font-family: 'IBMPlexSansCondensed', sans-serif;
     background-image: url('/img/background-light-3.svg');
@@ -16,6 +30,17 @@ body {
 main {
     margin: 8px;
 }
+
+.row {
+    width: 100%;
+}
+
+@media (min-width: 1400px) {
+    .row {
+        display: flex;
+    }
+}
+
 
 #blazor-error-ui {
     background: lightyellow;

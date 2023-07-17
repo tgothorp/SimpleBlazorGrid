@@ -9,7 +9,8 @@ builder.Services.AddSingleton<ProductRepo>();
 builder.Services.AddSimpleBlazorGrid(config =>
 {
     config.CurrencySymbol = "£";
-    config.PrimaryColour = "#FF0A54";
+    config.PrimaryColour = "#ff7b00";
+    config.SecondaryColour = "#ffa857";
 });
 
 var app = builder.Build();

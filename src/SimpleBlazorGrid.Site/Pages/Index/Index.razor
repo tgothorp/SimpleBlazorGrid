@@ -2,7 +2,11 @@
 
 @using SimpleBlazorGrid.Site.Pages.Index.Components
 
-<h1>Hello World!</h1>
-
-<DemoBlazorGrid/>
+<div style="display: flex; flex-wrap: wrap; margin-top: 2rem">
+    <DemoHeading/>
+    <div class="row">
+        <DemoDetails />
+        <DemoBlazorGrid/>
+    </div>
+</div>
 

@@ -1,0 +1,20 @@
+.demo-title {
+    position: relative;
+    margin: 0;
+    font-size: 8ch;
+    left: 5%;
+    font-style: oblique;
+    text-shadow: 4px 6px 0px rgb(255 10 84);
+}
+
+.demo-title-container {
+    width: 100%;
+    padding-bottom: 2rem;
+    text-align: left;
+}
+
+@media (min-width: 400px) {
+    .demo-title {
+        font-size: 11ch;
+    }
+}

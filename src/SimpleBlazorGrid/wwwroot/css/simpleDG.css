@@ -44,6 +44,7 @@ table.simpleDG tr {
 /* Styles for the select column & checkbox */
 table.simpleDG tr.simpleDG_selected {
     background-color: var(--simple-bg-secondary);
+    color: #000;
 }
 
 .simpleDG_selectable {
@@ -53,6 +54,7 @@ table.simpleDG tr.simpleDG_selected {
 /* Column sort/filter SVG glyph */
 svg.simpleDG_glyph {
     cursor: pointer;
+    fill: #FFF;
 }
 
 svg.simpleDG_glyph:hover {
