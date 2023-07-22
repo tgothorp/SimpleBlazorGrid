@@ -1,0 +1,248 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using SimpleBlazorGrid.Interfaces
+@using SimpleBlazorGrid.Configuration
+@using SimpleBlazorGrid.Helpers
+@using SimpleBlazorGrid.Options
+@using SimpleBlazorGrid.Options.Filters
+@using SimpleBlazorGrid.Internal
+
+@implements IDataGrid<TType>
+
+@inject SimpleDataGridConfiguration Configuration
+
+@typeparam TType
+
+<CascadingValue Value="this">
+    @Filters
+    @Columns
+
+    @if (DataGridColumns.Any())
+    {
+        <div>
+            @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
+            {
+                <div class="simpleDG_title">
+                    @if (!string.IsNullOrEmpty(Title))
+                    {
+                        <h1 class="simpleDG_title">@Title</h1>
+                    }
+                    @if (!string.IsNullOrEmpty(Subtitle))
+                    {
+                        <p class="simpleDG_subtitle">@Subtitle</p>
+                    }
+                </div>
+            }
+
+            <table class="simpleDG" style="--simple-bg-primary: @Configuration.PrimaryColour; --simple-bg-secondary: @Configuration.SecondaryColour">
+
+                @if (ActiveFilter is not null)
+                {
+                    <div class="simpleDG_filters">
+                        <_DataGridFilters TType="TType" Filter="ActiveFilter" ApplyFilter="AddFilter" RemoveFilter="RemoveFilter" />
+                    </div>
+                }
+
+                <thead>
+                <tr>
+                    @if (Selectable)
+                    {
+                        <th class="simpleDG_selectable">
+                            <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
+                        </th>
+                    }
+
+                    @foreach (var column in DataGridColumns)
+                    {
+                        var filter = DataGridFilters.SingleOrDefault(x => x.Property == column.Property);
+                        <_DataGridHeading TType="TType" Column="column" SortAscending="SortAscending" SortOptions="SortOptions" Filter="filter" Width="@column.Width" ShowFilter="ShowFilterUi"/>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                @if (Items.Any())
+                {
+                    @foreach (var item in Items)
+                    {
+                        var selected = SelectedItems.Contains(item);
+                        <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                    }
+                }
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
+                        <_DataGridPagingControls TType="TType" PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+</CascadingValue>
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Subtitle { get; set; }
+
+    [Parameter]
+    public RenderFragment Columns { get; set; }
+
+    [Parameter]
+    public RenderFragment Filters { get; set; }
+
+    [Parameter]
+    public IDataGridSource<TType> DataSource { get; set; }
+
+    [Parameter]
+    public int ItemsPerPage { get; set; } = 5;
+
+    [Parameter]
+    public bool Selectable { get; set; }
+
+    [Parameter]
+    public EventCallback<List<TType>> OnSelectionChanged { get; set; }
+
+    // Table Data
+    private TType[] Items { get; set; } = { };
+    private List<IColumn<TType>> DataGridColumns { get; set; } = new();
+    private List<IFilter<TType>> DataGridFilters { get; set; } = new();
+
+    // Filtering etc
+    public PageOptions PageOptions { get; set; } = new();
+    public SortOptions SortOptions { get; set; } = new();
+    public FilterOptions FilterOptions { get; set; } = new();
+
+    // UI & internal junk
+    private List<TType> SelectedItems { get; set; } = new();
+    private bool SortAscending { get; set; } = true;
+    private bool EverythingSelected { get; set; } = false;
+    private IFilter<TType> ActiveFilter { get; set; } = null;
+
+    public List<TType> GetSelectedItems()
+    {
+        return SelectedItems;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        PageOptions.ItemsPerPage = ItemsPerPage;
+        await ReloadTable();
+        
+        await base.OnParametersSetAsync();
+    }
+
+    public Task AddColumn(IColumn<TType> column)
+    {
+        DataGridColumns.Add(column);
+        StateHasChanged();
+        
+        return Task.CompletedTask;
+    }
+
+    public Task AddFilter(IFilter<TType> filter)
+    {
+        DataGridFilters.Add(filter);
+        StateHasChanged();
+        
+        return Task.CompletedTask;
+    }
+
+    public async Task Sort(string property, bool sortAscending)
+    {
+        SortOptions.Property = property;
+        SortOptions.Ascending = sortAscending;
+        SortAscending = !SortAscending;
+
+        // Go back to the first page when sorting
+        PageOptions.CurrentPage = 0;
+
+        SelectedItems = new List<TType>();
+        EverythingSelected = false;
+        
+        await OnSelectionChanged.InvokeAsync(SelectedItems);
+        await ReloadTable();
+    }
+
+    private async Task OnPageChanged(int newPage)
+    {
+        PageOptions.CurrentPage = newPage;
+
+        SelectedItems = new List<TType>();
+        EverythingSelected = false;
+        await OnSelectionChanged.InvokeAsync(SelectedItems);
+        await ReloadTable();
+    }
+
+    private void OnSelectAll(bool selectAll)
+    {
+        SelectedItems = selectAll
+            ? Items.ToList()
+            : new List<TType>();
+
+        if (SelectedItems.Any())
+            EverythingSelected = true;
+
+        OnSelectionChanged.InvokeAsync(SelectedItems);
+    }
+
+    private void OnItemSelected(TType item)
+    {
+        if (SelectedItems.Contains(item))
+            SelectedItems.Remove(item);
+        else
+            SelectedItems.Add(item);
+
+        OnSelectionChanged.InvokeAsync(SelectedItems);
+    }
+
+    private async Task ReloadTable()
+    {
+        DataSource.SortOptions = SortOptions;
+        DataSource.PageOptions = PageOptions;
+        DataSource.FilterOptions = FilterOptions;
+
+        Items = await DataSource.Items();
+        StateHasChanged();
+    }
+
+    private void ShowFilterUi(IFilter<TType> obj)
+    {
+        ActiveFilter = obj;
+    }
+
+    private async Task AddFilter(FilterOption obj)
+    {
+        // Hide the filter dialogue
+        ActiveFilter = null;
+        FilterOptions.Options.Add(obj);
+
+        var filter = DataGridFilters.Single(x => x.Id == obj.Id);
+        filter.SetActive(true);
+        
+        await ReloadTable();
+    }
+
+    private async Task RemoveFilter(FilterOption obj)
+    {
+        // Hide the filter dialogue
+        ActiveFilter = null;
+
+        if (FilterOptions.Options.Any(x => x.Id == obj.Id))
+        {
+            FilterOptions.Options.RemoveAll(x => x.Id == obj.Id);
+            
+            var filter = DataGridFilters.Single(x => x.Id == obj.Id);
+            filter.SetActive(false);
+            
+            // Deselect rows if we remove a filter
+            OnSelectAll(false);
+            await ReloadTable();
+        }
+    }
+}
