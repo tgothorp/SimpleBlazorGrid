@@ -1,3 +1,5 @@
+@inject NavigationManager NavigationManager
+
 <div class="demo-details">
     <h2>A simple and <span style="font-style: oblique">free</span> Blazor data grid to meet your needs.</h2>
     <div style="text-align: left">
@@ -21,16 +23,21 @@
             </div>
         </div>
     </div>
-    <div style="display: flex; padding-top: 5rem; flex-wrap: wrap; justify-content: space-around; align-items: stretch; flex-direction: row">
+    <div style="display: flex; padding-top: 5rem; flex-wrap: wrap; justify-content: space-around; align-items: stretch; flex-direction: row; row-gap: 1rem">
         <div style="flex-grow: 1; margin-left: 1rem; margin-right: 1rem">
             <button class="demo-button-nuget">Download from Nuget</button>
         </div>
         <div style="flex-grow: 1; margin-left: 1rem; margin-right: 1rem">
-            <button class="demo-button-docs">Documentation</button>
+            <button class="demo-button-docs" type="button" @onclick="Documentation">Documentation</button>
         </div>
     </div>
 </div>
 
 @code {
+
+    private void Documentation()
+    {
+        NavigationManager.NavigateTo("documentation");
+    }
 
 }
