@@ -1,16 +1,14 @@
 using System.Globalization;
 using SimpleBlazorGrid.Extensions;
-using SimpleBlazorGrid.Sandbox.Data;
+using SimpleBlazorGrid.Site.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<ProductRepo>();
+builder.Services.AddSingleton<PersonnelService>();
 builder.Services.AddSimpleBlazorGrid(config =>
 {
-    config.CurrencySymbol = "£";
-    config.PrimaryColour = "#ff7b00";
-    config.SecondaryColour = "#ffa857";
+    config.PrimaryColour = "#FF0A54";
 });
 
 var app = builder.Build();
@@ -19,10 +17,8 @@ var cultureInfo = new CultureInfo("en-GB");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }

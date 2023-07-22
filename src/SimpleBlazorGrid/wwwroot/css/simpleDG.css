@@ -6,7 +6,7 @@
 /* Table title styles */
 div.simpleDG_title {
     width: 100%;
-    padding-bottom: 0.5rem;
+    padding-bottom: 1rem;
 }
 
 h1.simpleDG_title {
@@ -24,6 +24,16 @@ table.simpleDG {
     text-align: left;
     border-collapse: collapse;
     table-layout: fixed;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: inline-table;
+}
+
+@media screen and (max-width: 800px) {
+    table.simpleDG {
+        /* Scroll table horizontally on small screens*/
+        display: block;
+    }
 }
 
 table.simpleDG tr {
@@ -34,6 +44,7 @@ table.simpleDG tr {
 /* Styles for the select column & checkbox */
 table.simpleDG tr.simpleDG_selected {
     background-color: var(--simple-bg-secondary);
+    color: #000;
 }
 
 .simpleDG_selectable {
@@ -43,6 +54,7 @@ table.simpleDG tr.simpleDG_selected {
 /* Column sort/filter SVG glyph */
 svg.simpleDG_glyph {
     cursor: pointer;
+    fill: #FFF;
 }
 
 svg.simpleDG_glyph:hover {

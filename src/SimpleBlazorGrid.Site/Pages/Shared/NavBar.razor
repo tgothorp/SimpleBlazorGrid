@@ -1,0 +1,22 @@
+@namespace SimpleBlazorGrid.Site.Pages.Shared 
+
+@inject IJSRuntime JS
+
+<div class="topnav" id="myTopnav">
+    <a href="/" class="active">Simple Blazor Grid</a>
+    <a href="/features">Features</a>
+    <a href="/documentation">Documentation</a>
+    <a href="#">GitHub</a>
+    <a href="javascript:void(0);" class="icon" @onclick="ToggleMobileMenu">
+        <i class="fa fa-bars"></i>
+    </a>
+</div>
+
+@code {
+
+    private async Task ToggleMobileMenu()
+    {
+        await JS.InvokeVoidAsync("toggleMobileMenu");
+    }
+
+}

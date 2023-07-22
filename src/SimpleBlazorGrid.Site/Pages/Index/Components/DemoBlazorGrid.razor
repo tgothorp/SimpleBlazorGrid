@@ -1,0 +1,45 @@
+@namespace SimpleBlazorGrid.Site.Pages.Index.Components
+
+@using SimpleBlazorGrid.Site.Data
+@using SimpleBlazorGrid.DataSource
+@using Humanizer
+
+@inject PersonnelService PersonnelService
+
+<div class="demo-grid">
+    <SimpleGrid TType="Personnel"
+                DataSource="new SimpleDataGridEnumerableSource<Personnel>(PersonnelService.GetPersonnelForCompany(Company.BlackMesa))"
+                Selectable="@true"
+                ItemsPerPage="15"
+                Title="Black Mesa Personnel"
+                Subtitle="Current Employees at the Black Mesa Research Facility, New Mexico">
+        <Filters>
+            
+        </Filters>
+        <Columns>
+            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.Id))" Width="5" Sortable="@true" />
+            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.FirstName))" Heading="Name" Width="18">
+                <SimpleColumnTemplate Context="item">
+                    @item.Title @item.FirstName @item.LastName
+                </SimpleColumnTemplate>
+            </SimpleColumn>
+            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.DateOfBirth))" Heading="Date of Birth" Sortable="@true" Width="13"/>
+            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.JobTitle))" Heading="Job Title" Width="30">
+                <SimpleColumnTemplate Context="item">
+                    @item.JobTitle
+                    <br/>
+                    <small>Department: @item.Department</small>
+                </SimpleColumnTemplate>
+            </SimpleColumn>
+            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.SecurityClearance))" Heading="Security Clearance">
+                <SimpleColumnTemplate Context="item">
+                    @item.SecurityClearance.Humanize()
+                </SimpleColumnTemplate>
+            </SimpleColumn>
+        </Columns>
+    </SimpleGrid>
+</div>
+
+@code {
+    
+}
