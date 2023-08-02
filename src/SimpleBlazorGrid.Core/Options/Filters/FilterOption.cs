@@ -5,9 +5,10 @@ namespace SimpleBlazorGrid.Options.Filters
 {
     public abstract class FilterOption
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; protected init; }
+        public string Property { get; protected init; }
 
-        public string Property { get; set; }
         public abstract IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items);
+        public abstract void SetValue(object value);
     }
 }

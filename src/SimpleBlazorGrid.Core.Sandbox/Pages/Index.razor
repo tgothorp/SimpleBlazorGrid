@@ -19,6 +19,7 @@
         <Filters>
             <SimpleFilter TType="Product" Property="@nameof(Product.Name)"/>
             <SimpleFilter TType="Product" Property="@nameof(Product.CostInGbp)" Min="0" Max="2000" Step="0.01" />
+            @* <SimpleRangeFilter TType="Product" Property="@nameof(Product.CostInGbp)" Min="0" Max="2000" Step="0.01"/> *@
         </Filters>
         <Columns>
             <SimpleColumn TType="Product" Property="@(nameof(Product.Id))" Width="10"/>

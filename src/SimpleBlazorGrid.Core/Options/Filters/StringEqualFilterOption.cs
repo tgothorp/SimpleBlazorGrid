@@ -12,7 +12,8 @@ namespace SimpleBlazorGrid.Options.Filters
             Id = id;
             Property = property;
         }
-        public string Value { get; set; }
+
+        public string Value { get; private set; }
 
         public override IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items)
         {
@@ -26,6 +27,16 @@ namespace SimpleBlazorGrid.Options.Filters
             var lambda = Expression.Lambda<Func<T, bool>>(equality, param);
             
             return items.Where(lambda.Compile());
+        }
+
+        public override void SetValue(object value)
+        {
+            Value = value switch
+            {
+                string @string => @string,
+                null => null,
+                _ => throw new ArgumentException($"")
+            };
         }
     }
 }

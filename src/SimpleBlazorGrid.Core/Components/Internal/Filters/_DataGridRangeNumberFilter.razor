@@ -18,9 +18,10 @@
     </div>
 </div>
 
+
 @code {
     [Parameter]
-    public NumberEqualFilterOption Filter { get; set; }
+    public NumberRangeFilterOption Filter { get; set; }
     
     [Parameter]
     public EventCallback<FilterOption> OnFilterChanged { get; set; }
@@ -33,7 +34,7 @@
         get => Filter.Value;
         set => Filter.SetValue(value);
     }
-
+    
     private async Task ApplyFilter()
     {
         if (string.IsNullOrEmpty(Filter.Value.ToString()))
