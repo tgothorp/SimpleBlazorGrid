@@ -14,18 +14,16 @@ namespace SimpleBlazorGrid.Options.Filters
 
         public string Value { get; private set; }
 
-        public override IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items)
+        public override Expression<Func<T, bool>> Filter<T>()
         {
             var param = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(param, Property);
             var value = Expression.Constant(Value, typeof(string));
 
-            // string.Equals(string1, string2, StringComparison)
-            var equalsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string), typeof(StringComparison) });
-            var equality = Expression.Call(null, equalsMethod, property, value, Expression.Constant(StringComparison.OrdinalIgnoreCase));
+            var equality = Expression.Equal(property, value);
             var lambda = Expression.Lambda<Func<T, bool>>(equality, param);
-            
-            return items.Where(lambda.Compile());
+
+            return lambda;
         }
 
         public void SetValue(string value) => Value = value;

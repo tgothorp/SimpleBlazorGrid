@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace SimpleBlazorGrid.Options.Filters
 {
@@ -21,10 +22,10 @@ namespace SimpleBlazorGrid.Options.Filters
         public string Step { get; }
         public string MinValue { get; private set; }
         public string MaxValue { get; private set; }
-        
-        public override IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items)
+
+        public override Expression<Func<T, bool>> Filter<T>()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void SetValues(string min, string max)

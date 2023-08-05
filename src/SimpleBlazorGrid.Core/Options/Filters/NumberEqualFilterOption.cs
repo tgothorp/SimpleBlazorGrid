@@ -24,7 +24,7 @@ namespace SimpleBlazorGrid.Options.Filters
         public string Step { get; set; }
         public string Value { get; private set; }
 
-        public override IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items)
+        public override Expression<Func<T, bool>> Filter<T>()
         {
             var parameter = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(parameter, Property);
@@ -36,8 +36,8 @@ namespace SimpleBlazorGrid.Options.Filters
             var value = Expression.Constant(Convert.ChangeType(Value, propertyType), propertyType);
             var equality = Expression.Equal(property, value);
             var lambda = Expression.Lambda<Func<T, bool>>(equality, parameter);
-            
-            return items.Where(lambda.Compile());
+
+            return lambda;
         }
 
         public void SetValue(string value)

@@ -37,9 +37,13 @@ namespace SimpleBlazorGrid.DataSource
         {
             if (FilterOptions.Options.Any())
             {
-                items = FilterOptions.Options.Aggregate(items, (current, option) => option.ApplyFilter(current));
+                var filters = FilterOptions.Options
+                    .Select(x => x.Filter<T>())
+                    .Where(x => x is not null);
+
+                items = filters.Aggregate(items, (current, filter) => current.Where(filter.Compile()));
             }
-            
+
             return items;
         }
 

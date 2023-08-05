@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace SimpleBlazorGrid.Options.Filters
 {
@@ -14,6 +15,6 @@ namespace SimpleBlazorGrid.Options.Filters
         public Guid Id { get; protected init; }
         public string Property { get; protected init; }
 
-        public abstract IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items);
+        public abstract Expression<Func<T, bool>> Filter<T>();
     }
 }

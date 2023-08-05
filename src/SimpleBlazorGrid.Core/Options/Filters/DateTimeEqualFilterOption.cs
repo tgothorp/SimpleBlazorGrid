@@ -14,12 +14,9 @@ namespace SimpleBlazorGrid.Options.Filters
         }
 
         public DateTime? Value { get; private set; }
-        
-        public override IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items)
+
+        public override Expression<Func<T, bool>> Filter<T>()
         {
-            if (Value is null)
-                return items;
-            
             var parameter = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(parameter, Property);
 
@@ -27,9 +24,9 @@ namespace SimpleBlazorGrid.Options.Filters
             var equal = Expression.Equal(property, value);
             var lambda = Expression.Lambda<Func<T, bool>>(equal, parameter);
 
-            return items.Where(lambda.Compile());
+            return lambda;
         }
-        
+
         public void SetValue(DateTime? dateTime)
         {
             Value = dateTime;
