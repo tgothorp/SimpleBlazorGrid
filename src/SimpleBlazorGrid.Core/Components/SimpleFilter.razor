@@ -4,6 +4,7 @@
 @typeparam TType
 
 @using SimpleBlazorGrid.Enums
+@using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Options.Filters
 
@@ -68,12 +69,11 @@
                 FilterOption = new NumberEqualFilterOption(Id, Property, Min, Max, Step);
                 break;
             case TypeCode.DateTime:
-                // TODO
+                FilterOption = new DateTimeEqualFilterOption(Id, Property);
                 break;
             default: // Assume string if other
                 FilterOption = new StringEqualFilterOption(Id, Property);
                 break;
         }
     }
-
 }

@@ -9,11 +9,8 @@ namespace SimpleBlazorGrid.Options.Filters
             string property,
             string min,
             string max,
-            string step)
+            string step) : base(id, property)
         {
-            Id = id;
-            Property = property;
-
             Min = min;
             Max = max;
             Step = step;
@@ -22,21 +19,18 @@ namespace SimpleBlazorGrid.Options.Filters
         public string Min { get; }
         public string Max { get; }
         public string Step { get; }
-        public string Value { get; private set; }
+        public string MinValue { get; private set; }
+        public string MaxValue { get; private set; }
         
         public override IEnumerable<T> ApplyFilter<T>(IEnumerable<T> items)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void SetValue(object value)
+        public void SetValues(string min, string max)
         {
-            Value = value switch
-            {
-                string @string => @string,
-                null => null,
-                _ => throw new ArgumentException($"")
-            };
+            MinValue = min;
+            MaxValue = max;
         }
     }
 }

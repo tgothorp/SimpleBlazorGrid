@@ -7,10 +7,9 @@ namespace SimpleBlazorGrid.Options.Filters
 {
     public class StringEqualFilterOption : FilterOption
     {
-        public StringEqualFilterOption(Guid id, string property) : base()
+        public StringEqualFilterOption(Guid id, string property
+            ) : base(id, property)
         {
-            Id = id;
-            Property = property;
         }
 
         public string Value { get; private set; }
@@ -29,14 +28,6 @@ namespace SimpleBlazorGrid.Options.Filters
             return items.Where(lambda.Compile());
         }
 
-        public override void SetValue(object value)
-        {
-            Value = value switch
-            {
-                string @string => @string,
-                null => null,
-                _ => throw new ArgumentException($"")
-            };
-        }
+        public void SetValue(string value) => Value = value;
     }
 }

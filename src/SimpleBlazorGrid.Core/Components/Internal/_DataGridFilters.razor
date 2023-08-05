@@ -24,6 +24,13 @@
                 OnFilterChanged="ApplyFilter"
                 OnFilterRemoved="RemoveFilter"/>
             break;
+        case SimpleFilter<TType> {FilterOption: DateTimeEqualFilterOption} dateTimeEqualFilter:
+            <_DataGridSimpleDateFilter
+                TType="TType"
+                Filter="@((DateTimeEqualFilterOption)dateTimeEqualFilter.FilterOption)"
+                OnFilterChanged="ApplyFilter"
+                OnFilterRemoved="RemoveFilter"/>
+            break;
         case SimpleRangeFilter<TType> {FilterOption: NumberRangeFilterOption} numberRangeFilter:
             <_DataGridRangeNumberFilter
                 TType="TType"

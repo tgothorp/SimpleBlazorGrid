@@ -14,6 +14,6 @@ public static class ProductFaker
             .RuleFor(x => x.LocalCurrency, y => y.PickRandom<Currency>())
             .RuleFor(x => x.CostInLocalCurrency, y => y.Finance.Amount(10))
             .RuleFor(x => x.Manufacturer, y => y.Company.CompanyName())
-            .RuleFor(x => x.LastOrderedOn, y => y.Date.Between(DateTime.Today.AddDays(-14), DateTime.Today));
+            .RuleFor(x => x.LastOrderedOn, y => y.Date.Between(DateTime.Today.AddDays(-14), DateTime.Today).Date);
     }
 }
