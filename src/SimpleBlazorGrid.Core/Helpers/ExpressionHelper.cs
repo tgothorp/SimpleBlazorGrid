@@ -5,23 +5,46 @@ namespace SimpleBlazorGrid.Helpers
 {
     public static class ExpressionHelper
     {
-        public static Delegate GetPropertyByName(Type objectType, object @object, string propertyName)
+        public static object GetNestedPropertyValue<TObject>(TObject obj, string propertyName)
         {
-            ParameterExpression parameter = Expression.Parameter(objectType, "obj");
-            Expression propertyExpression = Expression.Property(parameter, propertyName);
+            var parameterExpression = Expression.Parameter(typeof(TObject), "obj");
+            Expression propertyAccess = parameterExpression;
+
+            foreach (var property in propertyName.Split('.'))
+            {
+                propertyAccess = Expression.Property(propertyAccess, property);
+            }
+
+            var lambdaExpression = Expression.Lambda(propertyAccess, parameterExpression);
+            var getter = lambdaExpression.Compile();
+
+            return getter.DynamicInvoke(obj);
+        }
+
+        public static MemberExpression ExtractMemberExpression(Expression expression)
+        {
+            if (expression is UnaryExpression unaryExpression)
+            {
+                return ExtractMemberExpression(unaryExpression.Operand);
+            }
+            else if (expression is MemberExpression memberExpression)
+            {
+                return memberExpression;
+            }
+
+            return null;
+        }
         
-            // Potential null ref if we do not provide a valid property name 
-            var propertyType = objectType.GetProperty(propertyName)?.PropertyType;
-            
-            LambdaExpression lambda = Expression.Lambda(
-                typeof(Func<,>).MakeGenericType(objectType, propertyType),
-                propertyExpression,
-                parameter
-            );
+        public static string GetPropertyPathFromExpression(MemberExpression memberExpression)
+        {
+            var path = memberExpression.Member.Name;
+            while (memberExpression.Expression is MemberExpression nextMemberExpression)
+            {
+                path = nextMemberExpression.Member.Name + "." + path;
+                memberExpression = nextMemberExpression;
+            }
 
-            Delegate getter = lambda.Compile();
-
-            return getter;
+            return path;
         }
     }
 }

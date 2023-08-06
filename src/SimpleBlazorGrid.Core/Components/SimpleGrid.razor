@@ -55,7 +55,7 @@
 
                     @foreach (var column in DataGridColumns)
                     {
-                        var filter = DataGridFilters.SingleOrDefault(x => x.Property == column.Property);
+                        var filter = DataGridFilters.SingleOrDefault(x => x.Property == column.PropertyName);
                         <_DataGridHeading TType="TType" Column="column" SortAscending="SortAscending" SortOptions="SortOptions" Filter="filter" Width="@column.Width" ShowFilter="ShowFilterUi"/>
                     }
                 </tr>

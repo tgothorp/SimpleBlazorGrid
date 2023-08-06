@@ -1,0 +1,24 @@
+@page "/Orders"
+
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Infrastructure
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Domain
+@using SimpleBlazorGrid.EntityFramework.DataSource
+@using Microsoft.EntityFrameworkCore
+
+<SimpleGrid TType="Order"
+            Title="Orders"
+            Selectable="@true"
+            DataSource="@(new SimpleDataGridEntityFrameworkSource<Order>(Context.Orders.Include(x => x.Customer).AsQueryable()))">
+    <Filters>
+        @* <SimpleFilter TType="Order" Property="Customer.CompanyName" /> *@
+    </Filters>
+    <Columns>
+        <SimpleColumn TType="Order" For="@(x => x.OrderId)"/>
+        <SimpleColumn TType="Order" For="@(x => x.Customer.CompanyName)" Sortable="@true" Heading="Customer"/>
+        <SimpleColumn TType="Order" For="@(x => x.CustomerId)" Heading="Customer ID"/>
+    </Columns>
+</SimpleGrid>
+
+@code {
+    public DatabaseContext Context { get; set; } = new DatabaseContext();
+}

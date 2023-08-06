@@ -17,21 +17,21 @@
             
         </Filters>
         <Columns>
-            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.Id))" Width="5" Sortable="@true" />
-            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.FirstName))" Heading="Name" Width="18">
+            <SimpleColumn TType="Personnel" For="@(x => x.Id)" Width="5" Sortable="@true" />
+            <SimpleColumn TType="Personnel" For="@(x => x.FirstName)" Heading="Name" Width="18">
                 <SimpleColumnTemplate Context="item">
                     @item.Title @item.FirstName @item.LastName
                 </SimpleColumnTemplate>
             </SimpleColumn>
-            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.DateOfBirth))" Heading="Date of Birth" Sortable="@true" Width="13"/>
-            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.JobTitle))" Heading="Job Title" Width="30">
+            <SimpleColumn TType="Personnel" For="@(x => x.DateOfBirth)" Heading="Date of Birth" Sortable="@true" Width="13"/>
+            <SimpleColumn TType="Personnel" For="@(x => x.JobTitle)" Heading="Job Title" Width="30">
                 <SimpleColumnTemplate Context="item">
                     @item.JobTitle
                     <br/>
                     <small>Department: @item.Department</small>
                 </SimpleColumnTemplate>
             </SimpleColumn>
-            <SimpleColumn TType="Personnel" Property="@(nameof(Personnel.SecurityClearance))" Heading="Security Clearance">
+            <SimpleColumn TType="Personnel" For="@(x => x.SecurityClearance)" Heading="Security Clearance">
                 <SimpleColumnTemplate Context="item">
                     @item.SecurityClearance.Humanize()
                 </SimpleColumnTemplate>

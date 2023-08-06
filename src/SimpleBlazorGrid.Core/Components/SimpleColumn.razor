@@ -3,6 +3,8 @@
 
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Enums
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Helpers
 
 @typeparam TType
 
@@ -13,7 +15,15 @@
     public IDataGrid<TType> DataGrid { get; set; }
 
     [Parameter]
-    public string Property { get; set; }
+    public Expression<Func<TType, object>> For { get; set; }
+
+    // Cache property name
+    private string _propertyName = null;
+    public string PropertyName
+    {
+        get => _propertyName ?? GetPropertyName();
+        set => _propertyName = value;
+    }
 
     [Parameter]
     public string Heading { get; set; }
@@ -38,7 +48,19 @@
 
     protected override void OnParametersSet()
     {
-        Heading ??= Property;
+        Heading ??= PropertyName;
         base.OnParametersSet();
+    }
+
+    private string GetPropertyName()
+    {
+        if (For is null)
+            return null;
+
+        var memberExpression = ExpressionHelper.ExtractMemberExpression(For.Body);
+        var propertyName = ExpressionHelper.GetPropertyPathFromExpression(memberExpression);
+
+        _propertyName = propertyName;
+        return propertyName;
     }
 }

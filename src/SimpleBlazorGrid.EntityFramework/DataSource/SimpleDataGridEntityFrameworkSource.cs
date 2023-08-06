@@ -15,21 +15,21 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
 {
     public class SimpleDataGridEntityFrameworkSource<T> : IDataGridSource<T> where T : class
     {
-        private DbSet<T> _dbSet;
+        private IQueryable<T> _queryable;
 
         public FilterOptions FilterOptions { get; set; } = new();
         public SearchOptions SearchOptions { get; set; } = new();
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
 
-        public SimpleDataGridEntityFrameworkSource(DbSet<T> dbSet)
+        public SimpleDataGridEntityFrameworkSource(IQueryable<T> queryable)
         {
-            _dbSet = dbSet;
+            _queryable = queryable;
         }
 
         public async Task<T[]> Items(CancellationToken cancellationToken = default)
         {
-            var query = _dbSet.AsQueryable();
+            var query = _queryable;
 
             // Filter
             if (FilterOptions.Options.Any())
@@ -42,20 +42,28 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
                     query = query.Where(combined);
                 }
             }
+            
+            // Search
+            // TODO
 
             // Sort
             if (SortOptions.Property.IsNotNullOrEmpty())
             {
-                var parameterExpression = Expression.Parameter(typeof(T), "x");
-                var propertyInfo = typeof(T).GetProperty(SortOptions.Property);
-                var propertyAccessExpression = Expression.Property(parameterExpression, propertyInfo);
+                var parameterExpression = Expression.Parameter(typeof(T), "obj");
+                Expression propertyAccess = parameterExpression;
 
-                var lambdaExpression = Expression.Lambda(propertyAccessExpression, parameterExpression);
+                foreach (var property in SortOptions.Property.Split('.'))
+                {
+                    propertyAccess = Expression.Property(propertyAccess, property);
+                }
+
+                var lambdaExpression = Expression.Lambda(propertyAccess, parameterExpression);
+
                 var orderByMethod = typeof(Queryable)
                     .GetMethods()
                     .Where(m => m.Name == (SortOptions.Ascending ? "OrderBy" : "OrderByDescending"))
                     .Single(m => m.GetParameters().Length == 2)
-                    .MakeGenericMethod(typeof(T), propertyInfo.PropertyType);
+                    .MakeGenericMethod(typeof(T), propertyAccess.Type);
                 
                 query = (IQueryable<T>) orderByMethod.Invoke(null, new object[] { query, lambdaExpression });
             }

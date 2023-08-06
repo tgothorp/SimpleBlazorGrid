@@ -22,10 +22,10 @@
             <SimpleFilter TType="Product" Property="@nameof(Product.LastOrderedOn)"/>
         </Filters>
         <Columns>
-            <SimpleColumn TType="Product" Property="@(nameof(Product.Id))" Width="10"/>
-            <SimpleColumn TType="Product" Property="@(nameof(Product.Name))" Sortable="@true"/>
-            <SimpleColumn TType="Product" Property="@(nameof(Product.CostInGbp))" Heading="Price (GBP)" Format="Format.Money" Sortable="@true"/>
-            <SimpleColumn TType="Product" Property="@(nameof(Product.CostInLocalCurrency))" Heading="Price">
+            <SimpleColumn TType="Product" For="@(x => x.Id)" Width="10"/>
+            <SimpleColumn TType="Product" For="@(x => x.Name)" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.CostInGbp)" Heading="Price (GBP)" Format="Format.Money" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.CostInLocalCurrency)" Heading="Price">
                 <SimpleColumnTemplate Context="item">
                     @switch (item.LocalCurrency)
                     {
@@ -43,8 +43,8 @@
                     }
                 </SimpleColumnTemplate>
             </SimpleColumn>
-            <SimpleColumn TType="Product" Property="@nameof(Product.Manufacturer)"/>
-            <SimpleColumn TType="Product" Property="@nameof(Product.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.Manufacturer)"/>
+            <SimpleColumn TType="Product" For="@(x => x.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true"/>
         </Columns>
     </SimpleGrid>
 </div>

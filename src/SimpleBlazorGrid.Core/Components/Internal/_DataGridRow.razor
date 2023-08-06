@@ -4,6 +4,7 @@
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Helpers
 @using SimpleBlazorGrid.Services
+@using System.Linq.Expressions
 
 @inject IFormattingService FormattingService
 
@@ -51,10 +52,24 @@
 
     private string GetRowDataForColumn(IColumn<TType> column)
     {
-        var property = ExpressionHelper.GetPropertyByName(Data.GetType(), Data, column.Property);
-        var target = property.DynamicInvoke(Data);
-
-        return FormattingService.FormatProperty(target, column.Format);
+        var obj = column.For.Compile().Invoke(Data);
+        return FormattingService.FormatProperty(obj, column.Format);
+        
+        // if (column.For is not null)
+        // {
+        //     var obj = column.For.Compile().Invoke(Data);
+        //     var name = column.PropertyName;
+        //     
+        //     return FormattingService.FormatProperty(obj, column.Format);
+        // }
+        // else
+        // {
+        //     var target = ExpressionHelper.GetNestedPropertyValue<TType>(Data, column.Property);
+        //     return FormattingService.FormatProperty(target, column.Format);
+        //     
+        //     //var property = ExpressionHelper.GetPropertyByName(Data.GetType(), Data, column.Property);
+        //     //var target = property.DynamicInvoke(Data);            
+        // }
     }
 
     private async Task ItemSelected()

@@ -24,7 +24,7 @@
         @if (Column.Sortable)
         {
             <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="Sort">
-                <_DataGridSortGlyph Ascending="SortAscending" Active="@(Column.Property == SortOptions.Property)"/>
+                <_DataGridSortGlyph Ascending="SortAscending" Active="@(Column.PropertyName == SortOptions.Property)"/>
             </div>
         }
     </div>
@@ -58,7 +58,7 @@
         if (!Column.Sortable)
             return;
 
-        SimpleGrid.Sort(Column.Property, SortAscending);
+        SimpleGrid.Sort(Column.PropertyName, SortAscending);
     }
 
     private int CalculateHeadingWidth()
