@@ -7,15 +7,29 @@
 @using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Options.Filters
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Helpers
 
 @implements SimpleBlazorGrid.Interfaces.IFilter<TType>
 
 @code {
+
     [CascadingParameter]
     public IDataGrid<TType> DataGrid { get; set; }
-    
+
     [Parameter]
     public string Property { get; set; }
+
+    // Cache property name
+    private string _propertyName = null;
+    public string PropertyName
+    {
+        get => _propertyName ?? GetPropertyName();
+        protected set => _propertyName = value;
+    }
+
+    [Parameter]
+    public Expression<Func<TType, object>> For { get; set; }
 
     [Parameter]
     public string Min { get; set; }
@@ -45,12 +59,18 @@
         Active = isActive;
     }
 
+    private string GetPropertyName()
+    {
+        _propertyName = ExpressionHelper.GetPropertyName(For);
+        return _propertyName;
+    }
+
     private void GetPropertyType()
     {
         // TODO, validate min max etc.
-        
-        var propertyInfo = typeof(TType).GetProperty(Property);
-        var typeCode = Type.GetTypeCode(propertyInfo.PropertyType);
+
+        var property = typeof(TType).GetPropertyInfoRecursively(PropertyName);
+        var typeCode = Type.GetTypeCode(property.PropertyType);
 
         switch (typeCode)
         {
@@ -66,14 +86,15 @@
             case TypeCode.Single:
             case TypeCode.Double:
             case TypeCode.Decimal:
-                FilterOption = new NumberEqualFilterOption(Id, Property, Min, Max, Step);
+                FilterOption = new NumberEqualFilterOption(Id, PropertyName, Min, Max, Step);
                 break;
             case TypeCode.DateTime:
-                FilterOption = new DateTimeEqualFilterOption(Id, Property);
+                FilterOption = new DateTimeEqualFilterOption(Id, PropertyName);
                 break;
             default: // Assume string if other
-                FilterOption = new StringEqualFilterOption(Id, Property);
+                FilterOption = new StringEqualFilterOption(Id, PropertyName);
                 break;
         }
     }
+
 }

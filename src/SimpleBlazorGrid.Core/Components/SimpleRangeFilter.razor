@@ -5,22 +5,33 @@
 
 @using SimpleBlazorGrid.Options.Filters
 @using SimpleBlazorGrid.Interfaces
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Extensions
+@using SimpleBlazorGrid.Helpers
 
 @implements SimpleBlazorGrid.Interfaces.IFilter<TType>
 
 @code {
+
     [CascadingParameter]
     public IDataGrid<TType> DataGrid { get; set; }
 
-    [Parameter]
-    public string Property { get; set; }
-    
+    // Cache property name
+    private string _propertyName = null;
+    public string PropertyName
+    {
+        get => _propertyName ?? GetPropertyName();
+        protected set => _propertyName = value;
+    }
+
+    public Expression<Func<TType, object>> For { get; set; }
+
     [Parameter]
     public string Min { get; set; }
 
     [Parameter]
     public string Max { get; set; }
-    
+
     [Parameter]
     public string Step { get; set; }
 
@@ -42,13 +53,19 @@
         Active = isActive;
     }
 
+    private string GetPropertyName()
+    {
+        _propertyName = ExpressionHelper.GetPropertyName(For);
+        return _propertyName;
+    }
+
     private void GetPropertyType()
     {
         // TODO, validate min max etc.
+        var property = typeof(TType).GetPropertyInfoRecursively(PropertyName);
+        var typeCode = Type.GetTypeCode(property.PropertyType);
 
-        var propertyInfo = typeof(TType).GetProperty(Property);
-        var typeCode = Type.GetTypeCode(propertyInfo.PropertyType);
-        
+
         switch (typeCode)
         {
             case TypeCode.Int16:
@@ -60,13 +77,14 @@
             case TypeCode.Single:
             case TypeCode.Double:
             case TypeCode.Decimal:
-                FilterOption = new NumberRangeFilterOption(Id, Property, Min, Max, Step);
+                FilterOption = new NumberRangeFilterOption(Id, PropertyName, Min, Max, Step);
                 break;
             case TypeCode.DateTime:
-                // TODO
+            // TODO
                 break;
             default:
                 throw new Exception("UNSUPPORTED!!");
         }
     }
+
 }

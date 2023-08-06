@@ -21,7 +21,16 @@ namespace SimpleBlazorGrid.Helpers
             return getter.DynamicInvoke(obj);
         }
 
-        public static MemberExpression ExtractMemberExpression(Expression expression)
+        public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
+        {
+            if (expression is null)
+                return null;
+
+            var memberExpression = ExtractMemberExpression(expression.Body);
+            return GetPropertyPathFromExpression(memberExpression);
+        }
+
+        private static MemberExpression ExtractMemberExpression(Expression expression)
         {
             if (expression is UnaryExpression unaryExpression)
             {
@@ -34,8 +43,8 @@ namespace SimpleBlazorGrid.Helpers
 
             return null;
         }
-        
-        public static string GetPropertyPathFromExpression(MemberExpression memberExpression)
+
+        private static string GetPropertyPathFromExpression(MemberExpression memberExpression)
         {
             var path = memberExpression.Member.Name;
             while (memberExpression.Expression is MemberExpression nextMemberExpression)

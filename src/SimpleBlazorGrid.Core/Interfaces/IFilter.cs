@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using SimpleBlazorGrid.Options.Filters;
 
 namespace SimpleBlazorGrid.Interfaces
@@ -6,7 +7,10 @@ namespace SimpleBlazorGrid.Interfaces
     public interface IFilter<TType>
     {
         public Guid Id { get; }
-        public string Property { get; }
+
+        public string PropertyName { get; }
+        public Expression<Func<TType, object>> For { get; set; }
+
         public FilterOption FilterOption { get; }
         public bool Active { get; }
 

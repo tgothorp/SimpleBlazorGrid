@@ -54,13 +54,7 @@
 
     private string GetPropertyName()
     {
-        if (For is null)
-            return null;
-
-        var memberExpression = ExpressionHelper.ExtractMemberExpression(For.Body);
-        var propertyName = ExpressionHelper.GetPropertyPathFromExpression(memberExpression);
-
-        _propertyName = propertyName;
-        return propertyName;
+        _propertyName = ExpressionHelper.GetPropertyName(For);
+        return _propertyName;
     }
 }

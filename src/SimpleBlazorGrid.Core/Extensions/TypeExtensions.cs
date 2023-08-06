@@ -10,7 +10,19 @@ namespace SimpleBlazorGrid.Extensions
         /// </summary>
         public static PropertyInfo GetPropertyInfoRecursively(this Type @type, string propertyName)
         {
-            throw new NotImplementedException();
+            PropertyInfo propertyInfo = null;
+            
+            foreach (var property in propertyName.Split('.'))
+            {
+                propertyInfo = type.GetProperty(property);
+
+                if (propertyInfo == null)
+                    return null;
+
+                type = propertyInfo.PropertyType;
+            }
+
+            return propertyInfo;
         }
     }
 }
