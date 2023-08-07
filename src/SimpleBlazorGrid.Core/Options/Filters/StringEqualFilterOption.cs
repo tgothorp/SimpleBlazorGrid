@@ -16,12 +16,18 @@ namespace SimpleBlazorGrid.Options.Filters
 
         public override Expression<Func<T, bool>> Filter<T>()
         {
-            var param = Expression.Parameter(typeof(T), "x");
-            var property = Expression.Property(param, Property);
+            var parameterExpression = Expression.Parameter(typeof(T), "x");
+            
+            Expression propertyAccess = parameterExpression;
+            foreach (var property in Property.Split('.'))
+            {
+                propertyAccess = Expression.Property(propertyAccess, property);
+            }
+            
             var value = Expression.Constant(Value, typeof(string));
-
-            var equality = Expression.Equal(property, value);
-            var lambda = Expression.Lambda<Func<T, bool>>(equality, param);
+            
+            var equality = Expression.Equal(propertyAccess, value);
+            var lambda = Expression.Lambda<Func<T, bool>>(equality, parameterExpression);
 
             return lambda;
         }

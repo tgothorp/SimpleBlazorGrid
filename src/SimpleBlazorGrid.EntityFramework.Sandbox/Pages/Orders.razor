@@ -10,7 +10,8 @@
             Selectable="@true"
             DataSource="@(new SimpleDataGridEntityFrameworkSource<Order>(Context.Orders.Include(x => x.Customer).AsQueryable()))">
     <Filters>
-        @* <SimpleFilter TType="Order" Property="Customer.CompanyName" /> *@
+        <SimpleFilter TType="Order" For="@(x => x.OrderId)"/>
+        <SimpleFilter TType="Order" For="@(x => x.Customer.CompanyName)"/>
     </Filters>
     <Columns>
         <SimpleColumn TType="Order" For="@(x => x.OrderId)"/>
