@@ -17,9 +17,10 @@
                 Subtitle="All of Globex Corporation's upcoming products for sale in 2024">
 
         <Filters>
-            <SimpleFilter TType="Product" For="@(x => x.Name)"/>
-            <SimpleFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="2000" Step="0.01" />
-            <SimpleFilter TType="Product" For="@(x => x.LastOrderedOn)" />
+            <SimpleStringFilter TType="Product" For="@(x => x.Name)" />
+            @* <SimpleFilter TType="Product" For="@(x => x.Name)"/> *@
+            @* <SimpleFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="2000" Step="0.01" /> *@
+            @* <SimpleFilter TType="Product" For="@(x => x.LastOrderedOn)" /> *@
         </Filters>
         <Columns>
             <SimpleColumn TType="Product" For="@(x => x.Id)" Width="10"/>

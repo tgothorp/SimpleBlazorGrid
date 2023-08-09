@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlazorGrid.EntityFramework.Extensions;
 using SimpleBlazorGrid.Extensions;
+using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Interfaces;
 using SimpleBlazorGrid.Options;
 
@@ -21,6 +22,7 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
         public SearchOptions SearchOptions { get; set; } = new();
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
+        public List<Filter<T>> Filters { get; set; }
 
         public SimpleDataGridEntityFrameworkSource(IQueryable<T> queryable)
         {

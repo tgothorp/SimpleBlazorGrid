@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Interfaces;
 using SimpleBlazorGrid.Options;
 
@@ -13,6 +14,7 @@ namespace SimpleBlazorGrid.DataSource
     {
         private IEnumerable<T> Source { get; }
 
+        public List<Filter<T>> Filters { get; set; }
         public FilterOptions FilterOptions { get; set; } = new();
         public SearchOptions SearchOptions { get; set; } = new();
         public SortOptions SortOptions { get; set; } = new();
@@ -35,14 +37,22 @@ namespace SimpleBlazorGrid.DataSource
 
         private IEnumerable<T> ApplyFiltering(IEnumerable<T> items)
         {
-            if (FilterOptions.Options.Any())
+            if (Filters.Any())
             {
-                var filters = FilterOptions.Options
-                    .Select(x => x.Filter<T>())
-                    .Where(x => x is not null);
+                var filters = Filters
+                    .Select(x => x.ApplyFilter());
 
                 items = filters.Aggregate(items, (current, filter) => current.Where(filter.Compile()));
             }
+            
+            // if (FilterOptions.Options.Any())
+            // {
+            //     var filters = FilterOptions.Options
+            //         .Select(x => x.Filter<T>())
+            //         .Where(x => x is not null);
+            //
+            //     items = filters.Aggregate(items, (current, filter) => current.Where(filter.Compile()));
+            // }
 
             return items;
         }

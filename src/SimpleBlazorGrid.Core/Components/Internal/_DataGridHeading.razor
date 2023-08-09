@@ -3,6 +3,7 @@
 
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Options
+@using SimpleBlazorGrid.Filters
 
 @typeparam TType
 
@@ -10,10 +11,17 @@
 <th style="@(ColumnWidth())">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
 
-        @if (Filter is not null)
+        @* @if (Filter is not null) *@
+        @* { *@
+        @*     <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))"> *@
+        @*         <_DataGridFilterGlyph Active="Filter.Active"/> *@
+        @*     </div> *@
+        @* } *@
+        
+        @if (SimpleFilter is not null)
         {
-            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))">
-                <_DataGridFilterGlyph Active="Filter.Active"/>
+            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="ShowSimpleFilter">
+                <_DataGridFilterGlyph Active="SimpleFilter.FilterActive"/>
             </div>
         }
 
@@ -48,6 +56,9 @@
     public IFilter<TType> Filter { get; set; }
 
     [Parameter]
+    public Filter<TType> SimpleFilter { get; set; }
+
+    [Parameter]
     public EventCallback<IFilter<TType>> ShowFilter { get; set; }
 
     [Parameter]
@@ -75,5 +86,10 @@
     private string ColumnWidth()
     {
         return Width == null ? null : $"width: {Width}%";
+    }
+
+    private void ShowSimpleFilter()
+    {
+        SimpleGrid.EditSimpleFilter(SimpleFilter);
     }
 }
