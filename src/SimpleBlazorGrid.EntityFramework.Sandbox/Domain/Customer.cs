@@ -7,17 +7,17 @@ public class Customer
         Orders = new HashSet<Order>();
     }
 
-    public string CustomerId { get; set; }
-    public string CompanyName { get; set; }
-    public string ContactName { get; set; }
-    public string ContactTitle { get; set; }
-    public string Address { get; set; }
-    public string City { get; set; }
-    public string Region { get; set; }
-    public string PostalCode { get; set; }
-    public string Country { get; set; }
-    public string Phone { get; set; }
-    public string Fax { get; set; }
-    
+    public string CustomerId { get; set; } = null!;
+    public string CompanyName { get; set; } = null!;
+    public string ContactName { get; set; } = null!;
+    public string ContactTitle { get; set; } = null!;
+    public string Address { get; set; } = null!;
+    public string City { get; set; } = null!;
+    public string Region { get; set; } = null!;
+    public string PostalCode { get; set; } = null!;
+    public string Country { get; set; } = null!;
+    public string Phone { get; set; } = null!;
+    public string Fax { get; set; } = null!;
+
     public ICollection<Order> Orders { get; private set; }
 }

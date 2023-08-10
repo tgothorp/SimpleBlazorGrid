@@ -1,0 +1,36 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Extensions
+@using SimpleBlazorGrid.Interfaces
+
+@typeparam TType;
+
+@inherits SimpleBlazorGrid.Filters.Filter<TType>
+
+@if (ShouldShowFilter)
+{
+    
+}
+
+@code {
+
+    [Parameter]
+    public object DefaultValue { get; set; }
+    
+    [Parameter]
+    public object Min { get; set; }
+    
+    [Parameter]
+    public object Max { get; set; }
+    
+    [Parameter]
+    public object Step { get; set; }
+    
+    
+    public override Expression<Func<TType, bool>> ApplyFilter()
+    {
+        throw new NotImplementedException();
+    }
+}
