@@ -15,8 +15,6 @@ namespace SimpleBlazorGrid.DataSource
         private IEnumerable<T> Source { get; }
 
         public IEnumerable<Filter<T>> Filters { get; set; }
-        public FilterOptions FilterOptions { get; set; } = new();
-        public SearchOptions SearchOptions { get; set; } = new();
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
 

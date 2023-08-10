@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using SimpleBlazorGrid.Helpers;
 using SimpleBlazorGrid.Interfaces;
-using SimpleBlazorGrid.Options;
-using SimpleBlazorGrid.Options.Filters;
 
 namespace SimpleBlazorGrid.Filters
 {

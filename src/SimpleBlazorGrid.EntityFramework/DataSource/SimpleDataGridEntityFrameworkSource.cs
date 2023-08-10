@@ -18,8 +18,6 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
     {
         private IQueryable<T> _queryable;
 
-        public FilterOptions FilterOptions { get; set; } = new();
-        public SearchOptions SearchOptions { get; set; } = new();
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
         public IEnumerable<Filter<T>> Filters { get; set; }

@@ -6,7 +6,6 @@
 @using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Helpers
 @using SimpleBlazorGrid.Options
-@using SimpleBlazorGrid.Options.Filters
 @using SimpleBlazorGrid.Internal
 
 @implements IDataGrid<TType>
@@ -16,7 +15,7 @@
 @typeparam TType
 
 <CascadingValue Value="this">
-    @Filters
+    @* @Filters *@
     @Columns
 
     @if (DataGridColumns.Any())
@@ -38,14 +37,6 @@
 
             <table class="simpleDG" style="--simple-bg-primary: @Configuration.PrimaryColour; --simple-bg-secondary: @Configuration.SecondaryColour">
 
-                @* @if (ActiveFilter is not null) *@
-                @* { *@
-                @*     <div class="simpleDG_filters"> *@
-                @*         <_DataGridFilters TType="TType" Filter="ActiveFilter" ApplyFilter="AddFilter" RemoveFilter="RemoveFilter" /> *@
-                @*     </div> *@
-                @* } *@
-                
-
                 @Filters
 
                 <thead>
@@ -59,16 +50,13 @@
 
                     @foreach (var column in DataGridColumns)
                     {
-                        var filter = DataGridFilters.SingleOrDefault(x => x.PropertyName == column.PropertyName);
                         var simpleFilter = SimpleFilters.SingleOrDefault(x => x.PropertyName == column.PropertyName);
                         
                         <_DataGridHeading TType="TType" 
                                           Column="column"
                                           SortAscending="SortAscending" 
-                                          SortOptions="SortOptions" 
-                                          Filter="filter" 
-                                          Width="@column.Width" 
-                                          ShowFilter="ShowFilterUi"
+                                          SortOptions="SortOptions"
+                                          Width="@column.Width"
                                           SimpleFilter="simpleFilter" />
                     }
                 </tr>
@@ -124,21 +112,17 @@
     // Table Data
     private TType[] Items { get; set; } = { };
     private List<IColumn<TType>> DataGridColumns { get; set; } = new();
-    
-    private List<IFilter<TType>> DataGridFilters { get; set; } = new(); // OLD
     private List<Filter<TType>> SimpleFilters { get; set; } = new();
 
     // Filtering etc
     public PageOptions PageOptions { get; set; } = new();
     public SortOptions SortOptions { get; set; } = new();
-    public FilterOptions FilterOptions { get; set; } = new();
 
     // UI & internal junk
     private List<TType> SelectedItems { get; set; } = new();
     private bool SortAscending { get; set; } = true;
     private bool EverythingSelected { get; set; } = false;
-    
-    private IFilter<TType> ActiveFilter { get; set; } = null;
+
     
     private List<Filter<TType>> AllSimpleFilters { get; set; }
     private List<Filter<TType>> ActiveSimpleFilters { get; set; } = new();
@@ -152,7 +136,7 @@
     protected override async Task OnParametersSetAsync()
     {
         PageOptions.ItemsPerPage = ItemsPerPage;
-        await ReloadTable();
+        await ReloadData();
         
         await base.OnParametersSetAsync();
     }
@@ -164,15 +148,6 @@
         
         return Task.CompletedTask;
     }
-
-    public Task AddFilter(IFilter<TType> filter)
-    {
-        DataGridFilters.Add(filter);
-        StateHasChanged();
-        
-        return Task.CompletedTask;
-    }
-
 
     public async Task Sort(string property, bool sortAscending)
     {
@@ -187,7 +162,7 @@
         EverythingSelected = false;
         
         await OnSelectionChanged.InvokeAsync(SelectedItems);
-        await ReloadTable();
+        await ReloadData();
     }
 
     private async Task OnPageChanged(int newPage)
@@ -197,7 +172,7 @@
         SelectedItems = new List<TType>();
         EverythingSelected = false;
         await OnSelectionChanged.InvokeAsync(SelectedItems);
-        await ReloadTable();
+        await ReloadData();
     }
 
     private void OnSelectAll(bool selectAll)
@@ -222,53 +197,6 @@
         OnSelectionChanged.InvokeAsync(SelectedItems);
     }
 
-    private async Task ReloadTable()
-    {
-        DataSource.SortOptions = SortOptions;
-        DataSource.PageOptions = PageOptions;
-
-        DataSource.Filters = ActiveSimpleFilters;
-        //DataSource.FilterOptions = FilterOptions;
-
-        Items = await DataSource.Items();
-        StateHasChanged();
-    }
-
-    private void ShowFilterUi(IFilter<TType> obj)
-    {
-        ActiveFilter = obj;
-    }
-
-    private async Task AddFilter(FilterOption obj)
-    {
-        // Hide the filter dialogue
-        ActiveFilter = null;
-        FilterOptions.Options.Add(obj);
-
-        var filter = DataGridFilters.Single(x => x.Id == obj.Id);
-        filter.SetActive(true);
-        
-        await ReloadTable();
-    }
-
-    private async Task RemoveFilter(FilterOption obj)
-    {
-        // Hide the filter dialogue
-        ActiveFilter = null;
-
-        if (FilterOptions.Options.Any(x => x.Id == obj.Id))
-        {
-            FilterOptions.Options.RemoveAll(x => x.Id == obj.Id);
-            
-            var filter = DataGridFilters.Single(x => x.Id == obj.Id);
-            filter.SetActive(false);
-            
-            // Deselect rows if we remove a filter
-            OnSelectAll(false);
-            await ReloadTable();
-        }
-    }
-    
     public Task AddSimpleFilter(Filter<TType> filter)
     {
         if (SimpleFilters.All(x => x.PropertyName != filter.PropertyName))

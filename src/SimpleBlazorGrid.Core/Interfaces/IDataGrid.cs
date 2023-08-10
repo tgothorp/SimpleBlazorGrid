@@ -6,8 +6,7 @@ namespace SimpleBlazorGrid.Interfaces
     public interface IDataGrid<T>
     {
         Task AddColumn(IColumn<T> column);
-        Task AddFilter(IFilter<T> filter);
-        
+
         Task AddSimpleFilter(Filter<T> filter);
         Task EditSimpleFilter(Filter<T> filter);
 

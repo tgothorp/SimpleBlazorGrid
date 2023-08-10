@@ -11,13 +11,6 @@
 <th style="@(ColumnWidth())">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
 
-        @* @if (Filter is not null) *@
-        @* { *@
-        @*     <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="@(async () => await ShowFilter.InvokeAsync(Filter))"> *@
-        @*         <_DataGridFilterGlyph Active="Filter.Active"/> *@
-        @*     </div> *@
-        @* } *@
-        
         @if (SimpleFilter is not null)
         {
             <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="ShowSimpleFilter">
@@ -53,13 +46,7 @@
     public bool SortAscending { get; set; }
 
     [Parameter]
-    public IFilter<TType> Filter { get; set; }
-
-    [Parameter]
     public Filter<TType> SimpleFilter { get; set; }
-
-    [Parameter]
-    public EventCallback<IFilter<TType>> ShowFilter { get; set; }
 
     [Parameter]
     public int? Width { get; set; }
@@ -74,10 +61,10 @@
 
     private int CalculateHeadingWidth()
     {
-        if (Filter is not null && Column.Sortable)
+        if (SimpleFilter is not null && Column.Sortable)
             return 70;
 
-        if (Filter is not null || Column.Sortable)
+        if (SimpleFilter is not null || Column.Sortable)
             return 85;
 
         return 100;
