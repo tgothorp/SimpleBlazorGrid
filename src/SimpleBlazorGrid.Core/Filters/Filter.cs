@@ -43,14 +43,14 @@ namespace SimpleBlazorGrid.Filters
         {
             FilterActive = true;
             ShowFilter(false);
-            await DataGrid.ApplySimpleFilter(this);
+            await DataGrid.ReloadData();
         }
 
         protected virtual async Task Clear()
         {
             FilterActive = false;
             ShowFilter(false);
-            await DataGrid.RemoveSimpleFilter(this);
+            await DataGrid.ReloadData();
         }
     }
 }

@@ -278,32 +278,6 @@
         return Task.CompletedTask;
     }
 
-    // Add / update the list of filters and reload the table
-    public async Task ApplySimpleFilter(Filter<TType> filter)
-    {
-        ActiveSimpleFilters = ActiveSimpleFilters
-            .Where(x => x.Id != filter.Id)
-            .ToList();
-        
-        ActiveSimpleFilters.Add(filter);
-
-        // Deselect rows if we add a filter
-        OnSelectAll(false);
-        await ReloadTable();
-    }
-
-    public async Task RemoveSimpleFilter(Filter<TType> filter)
-    {
-        if (ActiveSimpleFilters.Any(x => x.Id == filter.Id))
-        {
-            ActiveSimpleFilters.RemoveAll(x => x.Id == filter.Id);
-            
-            // Deselect rows if we remove a filter
-            OnSelectAll(false);
-            await ReloadTable();
-        }
-    }
-
     public Task EditSimpleFilter(Filter<TType> filter)
     {
         var editableFilter = SimpleFilters.Single(x => x.Id == filter.Id);
@@ -311,5 +285,17 @@
         
         StateHasChanged();
         return Task.CompletedTask;
+    }
+
+    public async Task ReloadData()
+    {
+        DataSource.SortOptions = SortOptions;
+        DataSource.PageOptions = PageOptions;
+        
+        DataSource.Filters = SimpleFilters
+            .Where(x => x.FilterActive);
+
+        Items = await DataSource.Items();
+        StateHasChanged();
     }
 }

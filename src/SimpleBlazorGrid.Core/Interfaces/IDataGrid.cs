@@ -10,8 +10,8 @@ namespace SimpleBlazorGrid.Interfaces
         
         Task AddSimpleFilter(Filter<T> filter);
         Task EditSimpleFilter(Filter<T> filter);
-        Task ApplySimpleFilter(Filter<T> filter);
-        Task RemoveSimpleFilter(Filter<T> filter);
+
+        Task ReloadData();
         
         Task Sort(string property, bool sortAscending);
     }
