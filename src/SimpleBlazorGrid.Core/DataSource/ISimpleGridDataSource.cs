@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Options;
 
-namespace SimpleBlazorGrid.Interfaces
+namespace SimpleBlazorGrid.DataSource
 {
-    public interface IDataGridSource<T>
+    public interface ISimpleGridDataSource<T>
     {
         public SortOptions SortOptions { get; set; }
         public PageOptions PageOptions { get; set; }

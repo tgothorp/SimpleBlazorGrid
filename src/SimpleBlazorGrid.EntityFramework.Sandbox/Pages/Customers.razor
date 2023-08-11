@@ -7,7 +7,7 @@
 <SimpleGrid TType="Customer"
             Title="Customers"
             Selectable="@true"
-            DataSource="@(new SimpleDataGridEntityFrameworkSource<Customer>(Context.Customers.AsQueryable()))">
+            SimpleGridDataSource="@(new SimpleGridEntityFrameworkDataSource<Customer>(Context.Customers.AsQueryable()))">
     <Filters>
         @* <SimpleFilter TType="Customer" Property="@nameof(Customer.CustomerId)"/> *@
     </Filters>

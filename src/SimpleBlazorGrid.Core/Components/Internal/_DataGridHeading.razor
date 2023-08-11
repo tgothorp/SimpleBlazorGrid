@@ -3,7 +3,6 @@
 
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Options
-@using SimpleBlazorGrid.Filters
 
 @typeparam TType
 
@@ -34,7 +33,7 @@
 @code {
 
     [CascadingParameter]
-    public IDataGrid<TType> SimpleGrid { get; set; }
+    public SimpleGrid<TType> SimpleGrid { get; set; }
 
     [Parameter]
     public IColumn<TType> Column { get; set; }

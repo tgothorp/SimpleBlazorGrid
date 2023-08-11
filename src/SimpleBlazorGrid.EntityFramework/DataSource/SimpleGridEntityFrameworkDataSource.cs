@@ -6,15 +6,15 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SimpleBlazorGrid.DataSource;
 using SimpleBlazorGrid.EntityFramework.Extensions;
 using SimpleBlazorGrid.Extensions;
-using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Interfaces;
 using SimpleBlazorGrid.Options;
 
 namespace SimpleBlazorGrid.EntityFramework.DataSource
 {
-    public class SimpleDataGridEntityFrameworkSource<T> : IDataGridSource<T> where T : class
+    public class SimpleGridEntityFrameworkDataSource<T> : ISimpleGridDataSource<T> where T : class
     {
         private IQueryable<T> _queryable;
 
@@ -22,7 +22,7 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
         public PageOptions PageOptions { get; set; } = new();
         public IEnumerable<Filter<T>> Filters { get; set; }
 
-        public SimpleDataGridEntityFrameworkSource(IQueryable<T> queryable)
+        public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable)
         {
             _queryable = queryable;
         }

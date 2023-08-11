@@ -3,15 +3,14 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using SimpleBlazorGrid.Helpers;
-using SimpleBlazorGrid.Interfaces;
 
-namespace SimpleBlazorGrid.Filters
+namespace SimpleBlazorGrid
 {
     public abstract class Filter<T> : ComponentBase
     {
         [CascadingParameter]
-        public IDataGrid<T> DataGrid { get; set; }
-        
+        public SimpleGrid<T> SimpleGrid { get; set; }
+
         public Guid Id { get; protected set; }
 
         [Parameter]
@@ -31,6 +30,14 @@ namespace SimpleBlazorGrid.Filters
             protected set => _propertyName = value;
         }
 
+        protected override void OnInitialized()
+        {
+            Id = Guid.NewGuid();
+            SimpleGrid.AddSimpleFilter(this);
+
+            base.OnInitialized();
+        }
+
         protected string GetPropertyName()
         {
             _propertyName = ExpressionHelper.GetPropertyName(For);
@@ -41,14 +48,16 @@ namespace SimpleBlazorGrid.Filters
         {
             FilterActive = true;
             ShowFilter(false);
-            await DataGrid.ReloadData();
+            await SimpleGrid.ReloadData();
+            //await DataGrid.ReloadData();
         }
 
         protected virtual async Task Clear()
         {
             FilterActive = false;
             ShowFilter(false);
-            await DataGrid.ReloadData();
+            await SimpleGrid.ReloadData();
+            //await DataGrid.ReloadData();
         }
     }
 }

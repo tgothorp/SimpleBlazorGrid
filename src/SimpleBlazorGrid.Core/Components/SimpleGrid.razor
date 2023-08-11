@@ -3,12 +3,10 @@
 
 @using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Configuration
-@using SimpleBlazorGrid.Filters
+@using SimpleBlazorGrid.DataSource
 @using SimpleBlazorGrid.Helpers
 @using SimpleBlazorGrid.Options
 @using SimpleBlazorGrid.Internal
-
-@implements IDataGrid<TType>
 
 @inject SimpleDataGridConfiguration Configuration
 
@@ -74,7 +72,7 @@
                 <tfoot>
                 <tr>
                     <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
-                        <_DataGridPagingControls TType="TType" PageOptions="DataSource.PageOptions" PageChanged="OnPageChanged"/>
+                        <_DataGridPagingControls TType="TType" PageOptions="SimpleGridDataSource.PageOptions" PageChanged="OnPageChanged"/>
                     </td>
                 </tr>
                 </tfoot>
@@ -98,7 +96,7 @@
     public RenderFragment Filters { get; set; }
 
     [Parameter]
-    public IDataGridSource<TType> DataSource { get; set; }
+    public ISimpleGridDataSource<TType> SimpleGridDataSource { get; set; }
 
     [Parameter]
     public int ItemsPerPage { get; set; } = 5;
@@ -217,13 +215,13 @@
 
     public async Task ReloadData()
     {
-        DataSource.SortOptions = SortOptions;
-        DataSource.PageOptions = PageOptions;
+        SimpleGridDataSource.SortOptions = SortOptions;
+        SimpleGridDataSource.PageOptions = PageOptions;
         
-        DataSource.Filters = SimpleFilters
+        SimpleGridDataSource.Filters = SimpleFilters
             .Where(x => x.FilterActive);
 
-        Items = await DataSource.Items();
+        Items = await SimpleGridDataSource.Items();
         StateHasChanged();
     }
 }

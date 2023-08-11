@@ -12,7 +12,7 @@
 
 @code {
     [CascadingParameter]
-    public IDataGrid<TType> DataGrid { get; set; }
+    public SimpleGrid<TType> DataGrid { get; set; }
 
     [Parameter]
     public Expression<Func<TType, object>> For { get; set; }

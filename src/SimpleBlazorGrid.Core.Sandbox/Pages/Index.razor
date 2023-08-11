@@ -9,7 +9,7 @@
 
 <div style="width: 90%; padding-left: 5%; padding-right: 5%">
     <SimpleGrid TType="Product"
-                DataSource="@(new SimpleDataGridEnumerableSource<Product>(Products))"
+                SimpleGridDataSource="@(new SimpleGridEnumerableDataSource<Product>(Products))"
                 Selectable="@true"
                 ItemsPerPage="15"
                 OnSelectionChanged="SelectedItemsChanged"

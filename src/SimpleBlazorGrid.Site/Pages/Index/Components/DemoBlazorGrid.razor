@@ -8,7 +8,7 @@
 
 <div class="demo-grid">
     <SimpleGrid TType="Personnel"
-                DataSource="new SimpleDataGridEnumerableSource<Personnel>(PersonnelService.GetPersonnelForCompany(Company.BlackMesa))"
+                SimpleGridDataSource="new SimpleGridEnumerableDataSource<Personnel>(PersonnelService.GetPersonnelForCompany(Company.BlackMesa))"
                 Selectable="@true"
                 ItemsPerPage="15"
                 Title="Black Mesa Personnel"

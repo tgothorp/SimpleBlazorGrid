@@ -4,13 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Interfaces;
 using SimpleBlazorGrid.Options;
 
 namespace SimpleBlazorGrid.DataSource
 {
-    public class SimpleDataGridEnumerableSource<T> : IDataGridSource<T>
+    public class SimpleGridEnumerableDataSource<T> : ISimpleGridDataSource<T>
     {
         private IEnumerable<T> Source { get; }
 
@@ -18,7 +17,7 @@ namespace SimpleBlazorGrid.DataSource
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
 
-        public SimpleDataGridEnumerableSource(IEnumerable<T> source)
+        public SimpleGridEnumerableDataSource(IEnumerable<T> source)
         {
             Source = source;
         }

@@ -7,7 +7,7 @@
 
 @typeparam TType;
 
-@inherits SimpleBlazorGrid.Filters.Filter<TType>
+@inherits Filter<TType>
 
 @if (ShouldShowFilter)
 {
@@ -40,11 +40,8 @@
 
     protected override void OnInitialized()
     {
-        Id = Guid.NewGuid();
+        // TODO: Validate that this filter can be applied to the target property (types match etc.)
         Value = DefaultValue;
-        DataGrid.AddSimpleFilter(this);
-
-    // TODO: Validate that this filter can be applied to the target property (types match etc.)
 
         base.OnInitialized();
     }
