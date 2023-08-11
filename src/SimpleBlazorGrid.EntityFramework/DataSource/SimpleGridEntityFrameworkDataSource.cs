@@ -40,9 +40,6 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
                     query = query.Where(combined);
                 }
             }
-            
-            // Search
-            // TODO
 
             // Sort
             if (SortOptions.Property.IsNotNullOrEmpty())
