@@ -1,7 +1,6 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid.Internal
 
-@using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Helpers
 @using SimpleBlazorGrid.Services
 @using System.Linq.Expressions
@@ -36,7 +35,7 @@
 
 @code {
     [Parameter]
-    public List<IColumn<TType>> Columns { get; set; }
+    public List<SimpleColumn<TType>> Columns { get; set; }
 
     [Parameter]
     public TType Data { get; set; }
@@ -50,26 +49,10 @@
     [Parameter]
     public EventCallback<TType> OnSelected { get; set; }
 
-    private string GetRowDataForColumn(IColumn<TType> column)
+    private string GetRowDataForColumn(SimpleColumn<TType> column)
     {
         var obj = column.For.Compile().Invoke(Data);
         return FormattingService.FormatProperty(obj, column.Format);
-        
-        // if (column.For is not null)
-        // {
-        //     var obj = column.For.Compile().Invoke(Data);
-        //     var name = column.PropertyName;
-        //     
-        //     return FormattingService.FormatProperty(obj, column.Format);
-        // }
-        // else
-        // {
-        //     var target = ExpressionHelper.GetNestedPropertyValue<TType>(Data, column.Property);
-        //     return FormattingService.FormatProperty(target, column.Format);
-        //     
-        //     //var property = ExpressionHelper.GetPropertyByName(Data.GetType(), Data, column.Property);
-        //     //var target = property.DynamicInvoke(Data);            
-        // }
     }
 
     private async Task ItemSelected()

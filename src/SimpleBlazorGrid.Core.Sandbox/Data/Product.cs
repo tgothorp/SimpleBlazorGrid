@@ -19,4 +19,9 @@ public class Product
             Currency.EUR => decimal.Round(CostInLocalCurrency / 1.17m, 2),
             _ => throw new ArgumentOutOfRangeException()
         };
+
+    public void SetNameToNull()
+    {
+        Name = null;
+    }
 }

@@ -1,14 +1,11 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid
 
-@using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Enums
 @using System.Linq.Expressions
 @using SimpleBlazorGrid.Helpers
 
 @typeparam TType
-
-@implements SimpleBlazorGrid.Interfaces.IColumn<TType>
 
 @code {
     [CascadingParameter]

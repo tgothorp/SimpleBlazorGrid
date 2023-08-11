@@ -11,7 +11,12 @@ public class ProductRepo
         _products = new List<Product>();
         
         var faker = ProductFaker.Create();
-        _products.AddRange(faker.GenerateBetween(20, 85));
+        var products = faker.GenerateBetween(20, 85);
+
+        // Introduce some nulls for test purposes
+        products[0].SetNameToNull();
+        
+        _products.AddRange(products);
     }
 
     public List<Product> GetAllProducts()

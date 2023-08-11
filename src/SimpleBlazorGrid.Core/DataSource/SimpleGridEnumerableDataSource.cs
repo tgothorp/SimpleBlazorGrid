@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using SimpleBlazorGrid.Interfaces;
 using SimpleBlazorGrid.Options;
 
 namespace SimpleBlazorGrid.DataSource

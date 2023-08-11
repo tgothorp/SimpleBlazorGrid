@@ -1,7 +1,6 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid
 
-@using SimpleBlazorGrid.Interfaces
 @using SimpleBlazorGrid.Configuration
 @using SimpleBlazorGrid.DataSource
 @using SimpleBlazorGrid.Helpers
@@ -109,7 +108,7 @@
 
     // Table Data
     private TType[] Items { get; set; } = { };
-    private List<IColumn<TType>> DataGridColumns { get; set; } = new();
+    private List<SimpleColumn<TType>> DataGridColumns { get; set; } = new();
     private List<Filter<TType>> SimpleFilters { get; set; } = new();
 
     // Filtering etc
@@ -139,7 +138,7 @@
         await base.OnParametersSetAsync();
     }
 
-    public Task AddColumn(IColumn<TType> column)
+    public Task AddColumn(SimpleColumn<TType> column)
     {
         DataGridColumns.Add(column);
         StateHasChanged();

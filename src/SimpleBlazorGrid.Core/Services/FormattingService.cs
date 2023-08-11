@@ -20,6 +20,9 @@ namespace SimpleBlazorGrid.Services
 
         public string FormatProperty(object property, Format format)
         {
+            if (property is null)
+                return null;
+            
             switch (format)
             {
                 case Format.None:
