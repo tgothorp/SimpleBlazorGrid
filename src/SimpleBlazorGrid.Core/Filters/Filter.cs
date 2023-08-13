@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using SimpleBlazorGrid.Helpers;
 
-namespace SimpleBlazorGrid
+namespace SimpleBlazorGrid.Filters
 {
     public abstract class Filter<T> : ComponentBase
     {
@@ -15,7 +15,6 @@ namespace SimpleBlazorGrid
 
         [Parameter]
         public Expression<Func<T, object>> For { get; set; }
-        public abstract Expression<Func<T, bool>> ApplyFilter();
 
         public bool FilterActive { get; private set; }
 
@@ -48,16 +47,20 @@ namespace SimpleBlazorGrid
         {
             FilterActive = true;
             ShowFilter(false);
+
+            // Reset to first page when applying / removing a filter
+            SimpleGrid.PageOptions.CurrentPage = 0;
             await SimpleGrid.ReloadData();
-            //await DataGrid.ReloadData();
         }
 
         protected virtual async Task Clear()
         {
             FilterActive = false;
             ShowFilter(false);
+
+            // Reset to first page when applying / removing a filter
+            SimpleGrid.PageOptions.CurrentPage = 0;
             await SimpleGrid.ReloadData();
-            //await DataGrid.ReloadData();
         }
     }
 }

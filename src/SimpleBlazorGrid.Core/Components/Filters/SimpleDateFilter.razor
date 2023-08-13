@@ -6,7 +6,7 @@
 
 @typeparam TType;
 
-@inherits Filter<TType>
+@inherits SimpleBlazorGrid.Filters.Filter<TType>
 
 @if (ShouldShowFilter)
 {
@@ -26,10 +26,4 @@
 
     [Parameter]
     public bool IncludeTime { get; set; }
-    
-    public override Expression<Func<TType, bool>> ApplyFilter()
-    {
-        throw new NotImplementedException();
-    }
-
 }

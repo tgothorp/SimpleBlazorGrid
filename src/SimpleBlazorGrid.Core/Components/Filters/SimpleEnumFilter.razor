@@ -7,7 +7,7 @@
 @typeparam TType;
 @typeparam TEnum where TEnum : Enum;
 
-@inherits Filter<TType>
+@inherits SimpleBlazorGrid.Filters.Filter<TType>
 
 @if (ShouldShowFilter)
 {
@@ -24,10 +24,4 @@
 
     [Parameter]
     public IEnumerable<TEnum> DefaultValues { get; set; }
-    
-    public override Expression<Func<TType, bool>> ApplyFilter()
-    {
-        throw new NotImplementedException();
-    }
-
 }

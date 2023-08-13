@@ -6,7 +6,7 @@
 
 @typeparam TType;
 
-@inherits Filter<TType>
+@inherits SimpleBlazorGrid.Filters.Filter<TType>
 
 @if (ShouldShowFilter)
 {
@@ -47,25 +47,6 @@
         // TODO Validation
         Value = DefaultValue?.ToString();
         base.OnInitialized();
-    }
-
-    public override Expression<Func<TType, bool>> ApplyFilter()
-    {
-        var parameter = Expression.Parameter(typeof(TType), "x");
-        
-        Expression propertyAccess = parameter;
-        foreach (var property in PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
-        var propertyType = propertyAccess.Type;
-        var value = Expression.Constant(Convert.ChangeType(Value, propertyType), propertyType);
-
-        var equality = Expression.Equal(propertyAccess, value);
-        var lambda = Expression.Lambda<Func<TType, bool>>(equality, parameter);
-
-        return lambda;
     }
 
     protected override Task Apply()

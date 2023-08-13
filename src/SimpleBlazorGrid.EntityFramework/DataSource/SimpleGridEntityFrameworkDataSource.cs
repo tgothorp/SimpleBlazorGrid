@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlazorGrid.DataSource;
 using SimpleBlazorGrid.EntityFramework.Extensions;
+using SimpleBlazorGrid.EntityFramework.Filters;
 using SimpleBlazorGrid.Extensions;
+using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Options;
 
 namespace SimpleBlazorGrid.EntityFramework.DataSource
@@ -19,11 +21,14 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
         public IEnumerable<Filter<T>> Filters { get; set; }
+        public FilterExpressionBuilder FilterExpressionBuilder { get; }
 
         public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable)
         {
             _queryable = queryable;
+            FilterExpressionBuilder = new EntityFrameworkFilterExpressionBuilder();
         }
+
 
         public async Task<T[]> Items(CancellationToken cancellationToken = default)
         {
@@ -32,13 +37,13 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
             // Filter
             if (Filters.Any())
             {
-                var filters = Filters.Select(x => x.ApplyFilter());
-                var combined = filters.Aggregate((left, right) => left.And(right));
-
-                if (combined != null)
-                {
-                    query = query.Where(combined);
-                }
+                // var filters = Filters.Select(x => x.ApplyFilter());
+                // var combined = filters.Aggregate((left, right) => left.And(right));
+                //
+                // if (combined != null)
+                // {
+                //     query = query.Where(combined);
+                // }
             }
 
             // Sort
