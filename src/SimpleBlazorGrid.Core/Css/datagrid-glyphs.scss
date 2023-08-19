@@ -1,5 +1,21 @@
 @use "base";
 
-.fancy-glyph {
-  color: base.$default-color 
+svg.sgd-glyph {
+  cursor: pointer;
+  
+  @include base.dark-mode {
+    color: #FFF;
+  }
+  
+  @include base.light-mode {
+    color: #000;
+  }
+  
+  :hover {
+    fill: var(--secondary-colour);
+  }
+  
+  .active {
+    fill: var(--primary-colour);
+  }
 }

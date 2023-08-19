@@ -1,0 +1,70 @@
+:root {
+  --primary-colour: #FF6600;
+  --secondary-colour: #ffb27d;
+}
+
+table.sdg-table {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  table-layout: fixed;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: inline-table;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  table.sdg-table {
+    display: block;
+  }
+}
+@media (max-width: 767px) {
+  table.sdg-table {
+    display: block;
+  }
+}
+table.sdg-table tr {
+  border-left: none;
+  border-right: none;
+}
+table.sdg-table tr .selected {
+  background-color: var(--primary-colour);
+  color: #000;
+}
+
+.sdg-selectable {
+  width: 50px;
+}
+
+svg.sgd-glyph {
+  cursor: pointer;
+}
+@media (prefers-color-scheme: dark) {
+  svg.sgd-glyph {
+    color: #FFF;
+  }
+}
+@media (prefers-color-scheme: light) {
+  svg.sgd-glyph {
+    color: #000;
+  }
+}
+svg.sgd-glyph :hover {
+  fill: var(--secondary-colour);
+}
+svg.sgd-glyph .active {
+  fill: var(--primary-colour);
+}
+
+div.sdg-table-title-container {
+  width: 100%;
+  padding: 1rem;
+}
+div.sdg-table-title-container h1 {
+  margin: 0;
+}
+div.sdg-table-title-container p {
+  margin: 0;
+}
+
+/*# sourceMappingURL=simpledatagrid.css.map */

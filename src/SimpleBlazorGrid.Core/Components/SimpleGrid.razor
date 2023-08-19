@@ -21,14 +21,14 @@
         <div>
             @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
             {
-                <div class="simpleDG_title">
+                <div class="sdg-table-title-container">
                     @if (!string.IsNullOrEmpty(Title))
                     {
-                        <h1 class="simpleDG_title">@Title</h1>
+                        <h1>@Title</h1>
                     }
                     @if (!string.IsNullOrEmpty(Subtitle))
                     {
-                        <p class="simpleDG_subtitle">@Subtitle</p>
+                        <p>@Subtitle</p>
                     }
                 </div>
             }

@@ -1,5 +1,35 @@
 @use "base";
 
-.fancy-color {
-  color: base.$default-color;
+table.sdg-table {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  table-layout: fixed;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: inline-table;
+  
+  // Scroll horizontally on smaller screens
+  @include base.tablet  {
+    display: block;
+  }
+
+  @include base.phone {
+    display: block;
+  }
+  
+  tr {
+    border-left: none;
+    border-right: none;
+    
+    .selected {
+      background-color: var(--primary-colour);
+      color: #000;
+    }
+  }
+}
+
+.sdg-selectable {
+  width: 50px;
 }
