@@ -1,0 +1,5 @@
+@use "base";
+
+.fancy-color {
+  color: base.$default-color;
+}

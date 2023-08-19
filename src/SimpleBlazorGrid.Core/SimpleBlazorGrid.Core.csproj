@@ -14,4 +14,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.17" />
     </ItemGroup>
 
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+      <Exec Command="sass $(ProjectDir)Css\_main.scss:$(ProjectDir)wwwroot\css\simpledatagrid.css" />
+    </Target>
+
 </Project>
