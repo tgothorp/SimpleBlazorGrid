@@ -10,9 +10,7 @@ namespace SimpleBlazorGrid.DataSource
     {
         public SortOptions SortOptions { get; set; }
         public PageOptions PageOptions { get; set; }
-
         public IEnumerable<Filter<T>> Filters { get; set; }
-        public FilterExpressionBuilder FilterExpressionBuilder { get; }
 
         public Task<T[]> Items(CancellationToken cancellationToken = default);
     }

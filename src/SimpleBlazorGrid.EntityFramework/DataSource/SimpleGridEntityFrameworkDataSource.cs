@@ -21,7 +21,7 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
         public IEnumerable<Filter<T>> Filters { get; set; }
-        public FilterExpressionBuilder FilterExpressionBuilder { get; }
+        public EntityFrameworkFilterExpressionBuilder FilterExpressionBuilder { get; }
 
         public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable)
         {
@@ -44,6 +44,16 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
                 // {
                 //     query = query.Where(combined);
                 // }
+                
+                
+                var filters = Filters
+                    .Select(x => FilterExpressionBuilder.GetFilterExpression(x));
+
+                var combined = filters.Aggregate((left, right) => left.And(right));
+                if (combined != null)
+                {
+                    query = query.Where(combined);
+                }
             }
 
             // Sort
