@@ -1,0 +1,62 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Extensions
+
+@typeparam TType;
+
+@inherits SimpleBlazorGrid.Filters.Filter<TType>
+
+@if (ShouldShowFilter)
+{
+    <div class="simpleDG_filters">
+        <div style="width: 50%; left: 25%; top: 25%; position: relative">
+            <h2 style="width: 100%; margin-bottom: 1rem">Filter by @PropertyName</h2>
+            <input style="width: 100%; height: 35px; border-radius: 5px; border: none; margin-bottom: 1rem" type="number" min="@Min" max="@Max" step="@Step" @bind-value="LowValue"/>
+            <input style="width: 100%; height: 35px; border-radius: 5px; border: none; margin-bottom: 1rem" type="number" min="@Min" max="@Max" step="@Step" @bind-value="HighValue"/>
+            <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-evenly;">
+                <div style="width: 50%">
+                    <button style="width: 96%; margin: 2%; height: 35px; border-radius: 5px; background-color: #FF0A54; color: #FFF; border: solid 2px #FF0A54" @onclick="Clear">Clear</button>
+                </div>
+                <div style="width: 50%">
+                    <button style="width: 96%; margin: 2%; height: 35px; border-radius: 5px; background-color: #FF0A54; color: #FFF; border: solid 2px #FF0A54" @onclick="Apply">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public string DefaultValue { get; set; }
+    
+    [Parameter]
+    public string Min { get; set; }
+    
+    [Parameter]
+    public string Max { get; set; }
+    
+    [Parameter]
+    public string Step { get; set; }
+
+    public string LowValue { get; set; } = null;
+    public string HighValue { get; set; } = null;
+
+    protected override Task Apply()
+    {
+        return LowValue.IsNotNullOrEmpty() && HighValue.IsNotNullOrEmpty()
+            ? base.Apply()
+            : Clear();
+    }
+
+    protected override Task Clear()
+    {
+        LowValue = null;
+        HighValue = null;
+
+        return base.Clear();
+    }
+}

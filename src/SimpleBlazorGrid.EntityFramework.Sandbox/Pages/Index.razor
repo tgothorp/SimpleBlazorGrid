@@ -1,0 +1,27 @@
+﻿@page "/"
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Infrastructure
+@using Microsoft.EntityFrameworkCore
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Domain
+
+<h1>Hello, world!</h1>
+
+@if (Customers.Any())
+{
+    <h1>There are @Customers.Count customers!</h1>
+}
+
+@code
+{
+    private List<Customer> Customers { get; set; } = new();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await using (var context = new DatabaseContext())
+        {
+            Customers = await context.Customers
+                .ToListAsync();
+        }
+        
+        await base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,80 @@
+﻿@page "/"
+@using SimpleBlazorGrid.Sandbox.Data
+@using SimpleBlazorGrid.Enums
+@using SimpleBlazorGrid.DataSource
+
+@inject ProductRepo ProductRepo
+
+<PageTitle>Simple Blazor DataGrid</PageTitle>
+
+<div style="width: 90%; padding-left: 5%; padding-right: 5%">
+    <SimpleGrid TType="Product"
+                SimpleGridDataSource="@(new SimpleGridEnumerableDataSource<Product>(Products))"
+                Selectable="@true"
+                ItemsPerPage="15"
+                OnSelectionChanged="SelectedItemsChanged"
+                Title="2024 Product Catalogue"
+                Subtitle="All of Globex Corporation's upcoming products for sale in 2024">
+
+        <Filters>
+            <SimpleStringFilter TType="Product" For="@(x => x.Name)" IgnoreCase="@true" />
+            @* <SimpleNumericFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="10000" Step="0.01"/> *@
+            <SimpleNumericRangeFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="10000" Step="0.01" />
+        </Filters>
+        <Columns>
+            <SimpleColumn TType="Product" For="@(x => x.Id)" Width="10"/>
+            <SimpleColumn TType="Product" For="@(x => x.Name)" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.CostInGbp)" Heading="Price (GBP)" Format="Format.Money" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.CostInLocalCurrency)" Heading="Price">
+                <SimpleColumnTemplate Context="item">
+                    @switch (item.LocalCurrency)
+                    {
+                        case Currency.GBP:
+                            <i>£@item.CostInLocalCurrency.ToString("n2")</i>
+                            break;
+                        case Currency.USD:
+                            <i>$@item.CostInLocalCurrency.ToString("n2")</i>
+                            break;
+                        case Currency.EUR:
+                            <i>€@item.CostInLocalCurrency.ToString("n2")</i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                </SimpleColumnTemplate>
+            </SimpleColumn>
+            <SimpleColumn TType="Product" For="@(x => x.Manufacturer)"/>
+            <SimpleColumn TType="Product" For="@(x => x.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true"/>
+        </Columns>
+    </SimpleGrid>
+</div>
+
+<div style="width: 100%; padding-left: 5%; padding-right: 5%">
+    @if (SelectedProducts.Any())
+    {
+        <h3>Selected Products</h3>
+        <ul>
+            @foreach (var product in SelectedProducts)
+            {
+                <li>#@product.Id @product.Name @product.CostInGbp.ToString("C")</li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+
+    private List<Product> Products { get; set; } = new();
+    private List<Product> SelectedProducts { get; set; } = new();
+
+    protected override void OnParametersSet()
+    {
+        Products = ProductRepo.GetAllProducts();
+    }
+
+    private void SelectedItemsChanged(List<Product> selectedProducts)
+    {
+        SelectedProducts = selectedProducts;
+    }
+
+}

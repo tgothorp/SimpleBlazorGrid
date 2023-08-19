@@ -1,0 +1,63 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@using SimpleBlazorGrid.Helpers
+@using SimpleBlazorGrid.Services
+@using System.Linq.Expressions
+
+@inject IFormattingService FormattingService
+
+@typeparam TType
+
+<tr class="@(Selected ? "simpleDG_selected" : "")">
+
+    @if (Selectable)
+    {
+        <td class="simpleDG_selectable">
+            <input type="checkbox" @bind="Selected" @onclick="@(async () => await ItemSelected())"/>
+        </td>
+    }
+
+    @foreach (var column in Columns)
+    {
+        <td>
+            @if (column.SimpleColumnTemplate is not null)
+            {
+                @column.SimpleColumnTemplate(Data)
+            }
+            else
+            {
+                @GetRowDataForColumn(column)
+            }
+        </td>
+    }
+</tr>
+
+@code {
+    [Parameter]
+    public List<SimpleColumn<TType>> Columns { get; set; }
+
+    [Parameter]
+    public TType Data { get; set; }
+
+    [Parameter]
+    public bool Selectable { get; set; }
+
+    [Parameter]
+    public bool Selected { get; set; }
+    
+    [Parameter]
+    public EventCallback<TType> OnSelected { get; set; }
+
+    private string GetRowDataForColumn(SimpleColumn<TType> column)
+    {
+        var obj = column.For.Compile().Invoke(Data);
+        return FormattingService.FormatProperty(obj, column.Format);
+    }
+
+    private async Task ItemSelected()
+    {
+        Selected = !Selected;
+        await OnSelected.InvokeAsync(Data);
+    }
+}

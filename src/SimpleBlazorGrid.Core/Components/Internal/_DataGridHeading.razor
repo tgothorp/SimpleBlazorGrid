@@ -1,0 +1,81 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@using SimpleBlazorGrid.Options
+@using SimpleBlazorGrid.Filters
+
+@typeparam TType
+
+@* TODO - Tidy up CSS classes *@
+<th style="@(ColumnWidth())">
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+
+        @if (SimpleFilter is not null)
+        {
+            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="ShowSimpleFilter">
+                <_DataGridFilterGlyph Active="SimpleFilter.FilterActive"/>
+            </div>
+        }
+
+        <div style="flex-grow: 4; padding-left: 5px">
+            @Column.Heading
+        </div>
+
+        @if (Column.Sortable)
+        {
+            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="Sort">
+                <_DataGridSortGlyph Ascending="SortAscending" Active="@(Column.PropertyName == SortOptions.Property)"/>
+            </div>
+        }
+    </div>
+</th>
+
+@code {
+
+    [CascadingParameter]
+    public SimpleGrid<TType> SimpleGrid { get; set; }
+
+    [Parameter]
+    public SimpleColumn<TType> Column { get; set; }
+
+    [Parameter]
+    public SortOptions SortOptions { get; set; }
+
+    [Parameter]
+    public bool SortAscending { get; set; }
+
+    [Parameter]
+    public Filter<TType> SimpleFilter { get; set; }
+
+    [Parameter]
+    public int? Width { get; set; }
+
+    private async Task Sort()
+    {
+        if (!Column.Sortable)
+            return;
+
+        await SimpleGrid.Sort(Column.PropertyName, SortAscending);
+    }
+
+    private int CalculateHeadingWidth()
+    {
+        if (SimpleFilter is not null && Column.Sortable)
+            return 70;
+
+        if (SimpleFilter is not null || Column.Sortable)
+            return 85;
+
+        return 100;
+    }
+
+    private string ColumnWidth()
+    {
+        return Width == null ? null : $"width: {Width}%";
+    }
+
+    private void ShowSimpleFilter()
+    {
+        SimpleGrid.EditSimpleFilter(SimpleFilter);
+    }
+}

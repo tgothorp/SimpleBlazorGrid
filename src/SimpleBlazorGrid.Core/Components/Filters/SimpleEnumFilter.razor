@@ -1,0 +1,27 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Extensions
+
+@typeparam TType;
+@typeparam TEnum where TEnum : Enum;
+
+@inherits SimpleBlazorGrid.Filters.Filter<TType>
+
+@if (ShouldShowFilter)
+{
+    
+}
+
+@code {
+
+    [Parameter]
+    public bool AllowMultiple { get; set; }
+
+    [Parameter]
+    public IEnumerable<TEnum> PermittedValues { get; set; }
+
+    [Parameter]
+    public IEnumerable<TEnum> DefaultValues { get; set; }
+}

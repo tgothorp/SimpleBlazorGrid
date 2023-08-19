@@ -1,10 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid", "SimpleBlazorGrid\SimpleBlazorGrid.csproj", "{CE489940-B2B1-41E0-B464-72D0438E205D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Core", "SimpleBlazorGrid.Core\SimpleBlazorGrid.Core.csproj", "{CE489940-B2B1-41E0-B464-72D0438E205D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Sandbox", "SimpleBlazorGrid.Sandbox\SimpleBlazorGrid.Sandbox.csproj", "{0BCF045D-AAB5-407A-B28A-29E9EF53631C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Core.Sandbox", "SimpleBlazorGrid.Core.Sandbox\SimpleBlazorGrid.Core.Sandbox.csproj", "{0BCF045D-AAB5-407A-B28A-29E9EF53631C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Site", "SimpleBlazorGrid.Site\SimpleBlazorGrid.Site.csproj", "{17BFBDB6-84B6-47B6-B84E-8948B40F8132}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{38177AB6-D0AE-48ED-8209-63A1433E84DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Website", "Website", "{AA033C82-AC84-4C4D-83BD-F1F6239ED716}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntityFramework", "EntityFramework", "{28A2488A-CDB1-4E22-8014-B069FDC85240}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.EntityFramework", "SimpleBlazorGrid.EntityFramework\SimpleBlazorGrid.EntityFramework.csproj", "{C1FF475B-2E53-4B0B-B3D9-EE49853E8813}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.EntityFramework.Sandbox", "SimpleBlazorGrid.EntityFramework.Sandbox\SimpleBlazorGrid.EntityFramework.Sandbox.csproj", "{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +34,20 @@ Global
 		{17BFBDB6-84B6-47B6-B84E-8948B40F8132}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17BFBDB6-84B6-47B6-B84E-8948B40F8132}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17BFBDB6-84B6-47B6-B84E-8948B40F8132}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1FF475B-2E53-4B0B-B3D9-EE49853E8813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1FF475B-2E53-4B0B-B3D9-EE49853E8813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1FF475B-2E53-4B0B-B3D9-EE49853E8813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1FF475B-2E53-4B0B-B3D9-EE49853E8813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CE489940-B2B1-41E0-B464-72D0438E205D} = {38177AB6-D0AE-48ED-8209-63A1433E84DC}
+		{0BCF045D-AAB5-407A-B28A-29E9EF53631C} = {38177AB6-D0AE-48ED-8209-63A1433E84DC}
+		{17BFBDB6-84B6-47B6-B84E-8948B40F8132} = {AA033C82-AC84-4C4D-83BD-F1F6239ED716}
+		{C1FF475B-2E53-4B0B-B3D9-EE49853E8813} = {28A2488A-CDB1-4E22-8014-B069FDC85240}
+		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0} = {28A2488A-CDB1-4E22-8014-B069FDC85240}
 	EndGlobalSection
 EndGlobal

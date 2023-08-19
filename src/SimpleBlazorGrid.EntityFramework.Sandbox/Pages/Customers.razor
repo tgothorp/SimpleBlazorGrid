@@ -1,0 +1,21 @@
+@page "/Customers"
+
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Infrastructure
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Domain
+@using SimpleBlazorGrid.EntityFramework.DataSource
+
+<SimpleGrid TType="Customer"
+            Title="Customers"
+            Selectable="@true"
+            SimpleGridDataSource="@(new SimpleGridEntityFrameworkDataSource<Customer>(Context.Customers.AsQueryable()))">
+    <Filters>
+        @* <SimpleFilter TType="Customer" Property="@nameof(Customer.CustomerId)"/> *@
+    </Filters>
+    <Columns>
+        <SimpleColumn TType="Customer" For="@(x => x.CustomerId)" Sortable="true" Heading="Id"/>
+    </Columns>
+</SimpleGrid>
+
+@code {
+    public DatabaseContext Context { get; set; } = new DatabaseContext();
+}

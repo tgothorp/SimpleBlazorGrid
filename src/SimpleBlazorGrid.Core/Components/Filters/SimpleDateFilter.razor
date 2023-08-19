@@ -1,0 +1,29 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Extensions
+
+@typeparam TType;
+
+@inherits SimpleBlazorGrid.Filters.Filter<TType>
+
+@if (ShouldShowFilter)
+{
+    
+}
+
+@code {
+
+    [Parameter]
+    public DateTime DefaultValue { get; set; }
+
+    [Parameter]
+    public DateTime? Min { get; set; }
+
+    [Parameter]
+    public DateTime? Max { get; set; }
+
+    [Parameter]
+    public bool IncludeTime { get; set; }
+}

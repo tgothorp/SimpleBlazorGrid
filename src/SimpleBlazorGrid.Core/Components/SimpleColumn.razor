@@ -1,0 +1,57 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid
+
+@using SimpleBlazorGrid.Enums
+@using System.Linq.Expressions
+@using SimpleBlazorGrid.Helpers
+
+@typeparam TType
+
+@code {
+    [CascadingParameter]
+    public SimpleGrid<TType> DataGrid { get; set; }
+
+    [Parameter]
+    public Expression<Func<TType, object>> For { get; set; }
+
+    // Cache property name
+    private string _propertyName = null;
+    public string PropertyName
+    {
+        get => _propertyName ?? GetPropertyName();
+        set => _propertyName = value;
+    }
+
+    [Parameter]
+    public string Heading { get; set; }
+
+    [Parameter]
+    public Format Format { get; set; } = Format.None;
+    
+    [Parameter]
+    public RenderFragment<TType> SimpleColumnTemplate { get; set; }
+
+    [Parameter]
+    public bool Sortable { get; set; }
+
+    [Parameter]
+    public int? Width { get; set; }
+
+    protected override void OnInitialized()
+    {
+        DataGrid.AddColumn(this);
+        base.OnInitialized();
+    }
+
+    protected override void OnParametersSet()
+    {
+        Heading ??= PropertyName;
+        base.OnParametersSet();
+    }
+
+    private string GetPropertyName()
+    {
+        _propertyName = ExpressionHelper.GetPropertyName(For);
+        return _propertyName;
+    }
+}
