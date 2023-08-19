@@ -13,7 +13,7 @@
 @typeparam TType
 
 <CascadingValue Value="this">
-    @* @Filters *@
+
     @Columns
 
     @if (DataGridColumns.Any())
@@ -60,12 +60,35 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if (Items.Any())
+                @if (Loading)
                 {
-                    @foreach (var item in Items)
+                    <tr>
+                        <td rowspan="@DataGridColumns.Count">
+                            <div style="width: 100%; text-align: center">
+                                <h2>LOADING!!</h2>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @if (Items.Any())
                     {
-                        var selected = SelectedItems.Contains(item);
-                        <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                        @foreach (var item in Items)
+                        {
+                            var selected = SelectedItems.Contains(item);
+                            <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td rowspan="@DataGridColumns.Count">
+                                <div style="width: 100%; text-align: center">
+                                    <h2>NO DATA!</h2>
+                                </div>
+                            </td>
+                        </tr>
                     }
                 }
                 </tbody>
@@ -115,21 +138,16 @@
     // Filtering etc
     public PageOptions PageOptions { get; set; } = new();
     public SortOptions SortOptions { get; set; } = new();
+    private List<Filter<TType>> AllSimpleFilters { get; set; }
+    private List<Filter<TType>> ActiveSimpleFilters { get; set; } = new();
+    private Filter<TType> ActiveSimpleFilter { get; set; } = null;
 
     // UI & internal junk
     private List<TType> SelectedItems { get; set; } = new();
     private bool SortAscending { get; set; } = true;
     private bool EverythingSelected { get; set; } = false;
 
-    
-    private List<Filter<TType>> AllSimpleFilters { get; set; }
-    private List<Filter<TType>> ActiveSimpleFilters { get; set; } = new();
-    private Filter<TType> ActiveSimpleFilter { get; set; } = null;
-
-    public List<TType> GetSelectedItems()
-    {
-        return SelectedItems;
-    }
+    private bool Loading { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -215,6 +233,9 @@
 
     public async Task ReloadData()
     {
+        Loading = true;
+        StateHasChanged();
+        
         SimpleGridDataSource.SortOptions = SortOptions;
         SimpleGridDataSource.PageOptions = PageOptions;
         
@@ -222,6 +243,8 @@
             .Where(x => x.FilterActive);
 
         Items = await SimpleGridDataSource.Items();
+
+        Loading = false;
         StateHasChanged();
     }
 }
