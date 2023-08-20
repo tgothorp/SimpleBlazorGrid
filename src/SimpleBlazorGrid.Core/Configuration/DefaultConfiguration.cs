@@ -6,8 +6,10 @@ namespace SimpleBlazorGrid.Configuration
     {
         public DefaultConfiguration()
         {
-            PrimaryColour = "#FF0A54";
-            SecondaryColour = "#F7CAD0";
+            PrimaryColour = "#1934fc";
+            //PrimaryColour = "#FF0A54";
+            //SecondaryColour = "#F7CAD0";
+            SecondaryColour = "#8ad4ff";
             
             var currentCulture = CultureInfo.CurrentCulture;
             var dateFormatInfo = currentCulture.DateTimeFormat;

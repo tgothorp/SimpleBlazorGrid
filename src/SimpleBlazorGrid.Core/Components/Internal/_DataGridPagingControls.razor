@@ -5,29 +5,30 @@
 
 @using SimpleBlazorGrid.Options
 
-<div class="simpleDG_footer">
+<div class="sdg-table-paging-container">
     <div>
         <small>Displaying Page: @(PageOptions.CurrentPage + 1) of @PageOptions.MaxPage (@PageOptions.TotalItemCount total records)</small>
     </div>
 
     @if (SimpleGrid.PageOptions != null)
     {
-        <div class="simpleDg_footer_paging">
-            @* First page shortcut *@
-            <_DataGridPagingControl PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="F" OnChangePage="ChangePage"/>
+        <div class="sdg-table-paging-controls">
+
+            <_DataGridPagingGlyph PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="_DataGridPagingGlyph.PageGlyph.First" OnChangePage="ChangePage"/>
 
             @foreach (var page in Pages())
             {
-                <_DataGridPagingControl PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" OnChangePage="ChangePage"/>
+                <_DataGridPagingGlyph PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" Glyph="_DataGridPagingGlyph.PageGlyph.None" OnChangePage="ChangePage"/>
             }
 
-            @* Last page shortcut *@
-            <_DataGridPagingControl PageIndex="@(SimpleGrid.PageOptions.MaxPage - 1)" Selected="@(SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)" Glyph="L" OnChangePage="PageChanged"/>
+            <_DataGridPagingGlyph PageIndex="@(SimpleGrid.PageOptions.MaxPage - 1)" Selected="@(SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)" Glyph="_DataGridPagingGlyph.PageGlyph.Last" OnChangePage="ChangePage"/>
+
         </div>
     }
 </div>
 
 @code {
+
     [CascadingParameter]
     public SimpleGrid<TType> SimpleGrid { get; set; }
 
@@ -43,7 +44,7 @@
 
         if (SimpleGrid.PageOptions.CurrentPage > 0)
         {
-            // If we are on the very last page we should add the page before the previous if possible
+    // If we are on the very last page we should add the page before the previous if possible
             if (SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)
             {
                 var twoPagesBackIndex = SimpleGrid.PageOptions.CurrentPage - 2;
@@ -52,20 +53,20 @@
                     result.Add(twoPagesBackIndex);
                 }
             }
-            
-            // Add previous page if we are not on the first page
+
+    // Add previous page if we are not on the first page
             result.Add(SimpleGrid.PageOptions.CurrentPage - 1);
         }
 
-        // Add the curent page
+    // Add the curent page
         result.Add(SimpleGrid.PageOptions.CurrentPage);
 
-        // Add the next page where possible
+    // Add the next page where possible
         if (SimpleGrid.PageOptions.CurrentPage < SimpleGrid.PageOptions.MaxPage - 1)
         {
             result.Add(SimpleGrid.PageOptions.CurrentPage + 1);
-            
-            // If we are on the very first page then add the third page if possible
+
+    // If we are on the very first page then add the third page if possible
             if (SimpleGrid.PageOptions.CurrentPage == 0 && SimpleGrid.PageOptions.MaxPage - 1 >= 2)
             {
                 result.Add(2);
@@ -79,7 +80,8 @@
     {
         if (SimpleGrid.PageOptions.CurrentPage == newPage)
             return;
-        
+
         await PageChanged.InvokeAsync(newPage);
     }
+
 }

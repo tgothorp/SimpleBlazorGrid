@@ -1,0 +1,44 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+<button class="sdg-table-paging-button @(Selected ? "sdg-table-paging-button-selected" : "")" type="button" @onclick="@(async () => await OnChangePage.InvokeAsync(PageIndex))">
+
+@switch (Glyph)
+{
+    case PageGlyph.First:
+        <svg viewBox="0 0 20 20">
+            <polygon points="5,4 7,4 7,10 17,4 17,16 7,10 7,16 5,16"/>
+        </svg>
+        break;
+    case PageGlyph.Last:
+        <svg viewBox="0 0 20 20">
+            <polygon points="3,4 13,10 13,4 15,4 15,16 13,16 13,10 3,16"/>
+        </svg>
+        break;
+    default:
+        @(PageIndex + 1)
+        break;
+}
+
+</button>
+
+@code {
+    [Parameter]
+    public int PageIndex { get; set; }
+
+    [Parameter]
+    public bool Selected { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnChangePage { get; set; }
+
+    [Parameter]
+    public PageGlyph Glyph { get; set; } = PageGlyph.None;
+
+    public enum PageGlyph
+    {
+        First,
+        Last,
+        None
+    }
+}

@@ -3,30 +3,23 @@
 
 @using SimpleBlazorGrid.Options
 @using SimpleBlazorGrid.Filters
+@using System.Text
 
 @typeparam TType
 
-@* TODO - Tidy up CSS classes *@
 <th style="@(ColumnWidth())">
-    <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+    <div class="sdg-heading-container">
 
         @if (SimpleFilter is not null)
         {
-            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="ShowSimpleFilter">
+            <div class="sdg-heading-filter" @onclick="ShowSimpleFilter">
                 <_DataGridFilterGlyph Active="SimpleFilter.FilterActive"/>
             </div>
         }
 
-        <div style="flex-grow: 4; padding-left: 5px">
-            @Column.Heading
+        <div class="sdg-heading-text" @onclick="Sort">
+            <span>@ColumnHeading()</span>
         </div>
-
-        @if (Column.Sortable)
-        {
-            <div style="width: 20px; position: relative; aspect-ratio: 1; cursor: pointer" @onclick="Sort">
-                <_DataGridSortGlyph Ascending="SortAscending" Active="@(Column.PropertyName == SortOptions.Property)"/>
-            </div>
-        }
     </div>
 </th>
 
@@ -72,6 +65,24 @@
     private string ColumnWidth()
     {
         return Width == null ? null : $"width: {Width}%";
+    }
+
+    private MarkupString ColumnHeading()
+    {
+        var sb = new StringBuilder();
+        sb.Append(Column.Heading);
+        
+        switch (Column.Sortable)
+        {
+            case true when SortOptions.Property == Column.PropertyName:
+                sb.Append(SortAscending ? "&nbsp;⥥" : "&nbsp;⥣");
+                break;
+            case true:
+                sb.Append("&nbsp;⥯");
+                break;
+        }
+
+        return new MarkupString(sb.ToString());
     }
 
     private void ShowSimpleFilter()

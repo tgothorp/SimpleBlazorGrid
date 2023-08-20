@@ -21,19 +21,19 @@
         <div>
             @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
             {
-                <div class="simpleDG_title">
+                <div class="sdg-table-title-container">
                     @if (!string.IsNullOrEmpty(Title))
                     {
-                        <h1 class="simpleDG_title">@Title</h1>
+                        <h1>@Title</h1>
                     }
                     @if (!string.IsNullOrEmpty(Subtitle))
                     {
-                        <p class="simpleDG_subtitle">@Subtitle</p>
+                        <p>@Subtitle</p>
                     }
                 </div>
             }
 
-            <table class="simpleDG" style="--simple-bg-primary: @Configuration.PrimaryColour; --simple-bg-secondary: @Configuration.SecondaryColour">
+            <table class="sdg-table" style="--primary-colour: @Configuration.PrimaryColour; --secondary-colour: @Configuration.SecondaryColour">
 
                 @Filters
 
@@ -41,7 +41,7 @@
                 <tr>
                     @if (Selectable)
                     {
-                        <th class="simpleDG_selectable">
+                        <th class="sdg-selectable">
                             <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
                         </th>
                     }

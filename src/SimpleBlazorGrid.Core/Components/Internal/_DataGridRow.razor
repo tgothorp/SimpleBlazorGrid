@@ -9,11 +9,11 @@
 
 @typeparam TType
 
-<tr class="@(Selected ? "simpleDG_selected" : "")">
+<tr class="@(Selected ? "sdg-selectable-selected" : "")">
 
     @if (Selectable)
     {
-        <td class="simpleDG_selectable">
+        <td class="sdg-selectable">
             <input type="checkbox" @bind="Selected" @onclick="@(async () => await ItemSelected())"/>
         </td>
     }

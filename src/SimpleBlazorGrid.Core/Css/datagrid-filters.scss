@@ -1,0 +1,96 @@
+@use "base";
+
+.sdg-filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(5, 5, 5, 0.8);
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  border-radius: 5px;
+  color: #FFF;
+  display: inherit;
+
+  @include base.phone {
+    position: fixed;
+  }
+}
+
+.sdg-filter-container {
+  width: 50%;
+  left: 25%;
+  top: 25%;
+  position: relative;
+
+  @include base.phone {
+    width: 90%;
+    left: 5%;
+  }
+
+  h2 {
+    width: 100%;
+    margin-bottom: 1rem
+  }
+
+}
+
+div.sdg-filter-inputs {
+
+}
+
+div.sdg-filter-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: nowrap;
+
+  @include base.phone {
+    flex-wrap: wrap-reverse;
+  }
+  
+  div.clear {
+    width: 50%;
+
+    @include base.phone {
+      width: 100%;
+    }
+
+    button {
+      width: 96%;
+      margin: 2%;
+      height: 35px;
+      border-radius: 5px;
+      background-color: var(--primary-colour);
+      color: #FFF;
+      border: solid 2px var(--primary-colour)
+    }
+    
+    button:hover {
+      cursor: pointer;
+    }
+  }
+
+  div.apply {
+    width: 50%;
+
+    @include base.phone {
+      width: 100%;
+    }
+
+    button {
+      width: 96%;
+      margin: 2%;
+      height: 35px;
+      border-radius: 5px;
+      background-color: var(--primary-colour);
+      color: #FFF;
+      border: solid 2px var(--primary-colour)
+    }
+    
+    button:hover {
+      cursor: pointer;
+    }
+  }
+}

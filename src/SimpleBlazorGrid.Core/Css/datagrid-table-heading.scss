@@ -1,0 +1,23 @@
+@use "base";
+
+.sdg-heading-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  
+  div.sdg-heading-filter {
+    width: 20px;
+    position: relative;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+  
+  div.sdg-heading-text {
+    flex-grow: 4;
+    padding-left: 5px;
+    
+    :hover {
+      cursor: pointer;
+    }
+  }
+}
