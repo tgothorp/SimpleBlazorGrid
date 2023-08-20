@@ -2,6 +2,9 @@
 
 svg.sgd-glyph {
   cursor: pointer;
+  position: absolute; 
+  height: 100%;
+  max-height: 20px;
   
   @include base.dark-mode {
     color: #FFF;
@@ -14,8 +17,8 @@ svg.sgd-glyph {
   :hover {
     fill: var(--secondary-colour);
   }
-  
-  .active {
-    fill: var(--primary-colour);
-  }
+}
+
+svg.sdg-glyph-active {
+  fill: var(--primary-colour);
 }

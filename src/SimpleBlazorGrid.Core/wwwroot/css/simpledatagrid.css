@@ -38,6 +38,9 @@ table.sdg-table tr .selected {
 
 svg.sgd-glyph {
   cursor: pointer;
+  position: absolute;
+  height: 100%;
+  max-height: 20px;
 }
 @media (prefers-color-scheme: dark) {
   svg.sgd-glyph {
@@ -52,7 +55,8 @@ svg.sgd-glyph {
 svg.sgd-glyph :hover {
   fill: var(--secondary-colour);
 }
-svg.sgd-glyph .active {
+
+svg.sdg-glyph-active {
   fill: var(--primary-colour);
 }
 
@@ -65,6 +69,25 @@ div.sdg-table-title-container h1 {
 }
 div.sdg-table-title-container p {
   margin: 0;
+}
+
+.sdg-heading-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.sdg-heading-container div.sdg-heading-filter {
+  width: 20px;
+  position: relative;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+.sdg-heading-container div.sdg-heading-text {
+  flex-grow: 4;
+  padding-left: 5px;
+}
+.sdg-heading-container div.sdg-heading-text :hover {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=simpledatagrid.css.map */
