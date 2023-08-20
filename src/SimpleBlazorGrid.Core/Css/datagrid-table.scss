@@ -61,6 +61,32 @@ table.sdg-table {
     color: #000;
 
   }
+
+  td.sdg-selectable input {
+    border-color: var(--secondary-colour);
+  }
+
+  td.sdg-selectable input[type=checkbox]:checked {
+    background-color: var(--primary-colour);
+    border-color: var(--secondary-colour);
+  }
+
+  td.sdg-selectable input[type=checkbox]:hover {
+    cursor: pointer;
+  }
+
+  th.sdg-selectable input {
+    border-color: var(--secondary-colour);
+  }
+
+  th.sdg-selectable input[type=checkbox]:checked {
+    background-color: var(--primary-colour);
+    border-color: var(--secondary-colour);
+  }
+
+  th.sdg-selectable input[type=checkbox]:hover {
+    cursor: pointer;
+  }
 }
 
 .sdg-selectable {

@@ -51,6 +51,26 @@ table.sdg-table tr.sdg-selectable-selected {
   background-color: var(--secondary-colour);
   color: #000;
 }
+table.sdg-table td.sdg-selectable input {
+  border-color: var(--secondary-colour);
+}
+table.sdg-table td.sdg-selectable input[type=checkbox]:checked {
+  background-color: var(--primary-colour);
+  border-color: var(--secondary-colour);
+}
+table.sdg-table td.sdg-selectable input[type=checkbox]:hover {
+  cursor: pointer;
+}
+table.sdg-table th.sdg-selectable input {
+  border-color: var(--secondary-colour);
+}
+table.sdg-table th.sdg-selectable input[type=checkbox]:checked {
+  background-color: var(--primary-colour);
+  border-color: var(--secondary-colour);
+}
+table.sdg-table th.sdg-selectable input[type=checkbox]:hover {
+  cursor: pointer;
+}
 
 .sdg-selectable {
   width: 50px;
