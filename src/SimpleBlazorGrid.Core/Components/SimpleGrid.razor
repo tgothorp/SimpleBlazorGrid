@@ -33,7 +33,7 @@
                 </div>
             }
 
-            <table class="simpleDG" style="--simple-bg-primary: @Configuration.PrimaryColour; --simple-bg-secondary: @Configuration.SecondaryColour">
+            <table class="sdg-table" style="--primary-colour: @Configuration.PrimaryColour; --secondary-colour: @Configuration.SecondaryColour">
 
                 @Filters
 
@@ -41,7 +41,7 @@
                 <tr>
                     @if (Selectable)
                     {
-                        <th class="simpleDG_selectable">
+                        <th class="sdg-selectable">
                             <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
                         </th>
                     }

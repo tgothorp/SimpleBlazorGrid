@@ -9,24 +9,57 @@ table.sdg-table {
   overflow-x: auto;
   white-space: nowrap;
   display: inline-table;
-  
+
   // Scroll horizontally on smaller screens
-  @include base.tablet  {
+  @include base.tablet {
     display: block;
   }
 
   @include base.phone {
     display: block;
   }
-  
+
   tr {
     border-left: none;
     border-right: none;
-    
+
     .selected {
       background-color: var(--primary-colour);
       color: #000;
     }
+  }
+
+  // Add some padding between the rows
+  td, th {
+    padding: 5px 2px;
+  }
+
+  // Header should be bold & aligned left
+  thead th {
+    font-weight: bold;
+    text-align: left;
+  }
+
+  // Add thick border after header
+  thead {
+    border-bottom: 6px solid var(--primary-colour);
+  }
+
+  // Add thin border between each row
+  tbody tr td {
+    border-bottom: solid var(--primary-colour) 1px;
+  }
+
+  // Add thick border to footer 
+  tfoot {
+    border-top: 5px solid var(--primary-colour);
+  }
+
+
+  tr.sdg-selectable-selected {
+    background-color: var(--secondary-colour);
+    color: #000;
+
   }
 }
 

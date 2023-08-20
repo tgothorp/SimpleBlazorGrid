@@ -31,28 +31,48 @@ table.sdg-table tr .selected {
   background-color: var(--primary-colour);
   color: #000;
 }
+table.sdg-table td, table.sdg-table th {
+  padding: 5px 2px;
+}
+table.sdg-table thead th {
+  font-weight: bold;
+  text-align: left;
+}
+table.sdg-table thead {
+  border-bottom: 6px solid var(--primary-colour);
+}
+table.sdg-table tbody tr td {
+  border-bottom: solid var(--primary-colour) 1px;
+}
+table.sdg-table tfoot {
+  border-top: 5px solid var(--primary-colour);
+}
+table.sdg-table tr.sdg-selectable-selected {
+  background-color: var(--secondary-colour);
+  color: #000;
+}
 
 .sdg-selectable {
   width: 50px;
 }
 
-svg.sgd-glyph {
+svg.sdg-glyph {
   cursor: pointer;
   position: absolute;
   height: 100%;
   max-height: 20px;
 }
 @media (prefers-color-scheme: dark) {
-  svg.sgd-glyph {
+  svg.sdg-glyph {
     color: #FFF;
   }
 }
 @media (prefers-color-scheme: light) {
-  svg.sgd-glyph {
+  svg.sdg-glyph {
     color: #000;
   }
 }
-svg.sgd-glyph :hover {
+svg.sdg-glyph :hover {
   fill: var(--secondary-colour);
 }
 
@@ -113,12 +133,12 @@ div.sdg-table-title-container p {
   padding: 0;
   margin-right: 0.5rem;
   color: #000;
-  border: solid 2px var(--simple-bg-primary);
+  border: solid 2px var(--primary-colour);
   cursor: pointer;
 }
 
 .sdg-table-paging-button-selected {
-  background-color: var(--simple-bg-primary);
+  background-color: var(--primary-colour);
   color: #FFF;
 }
 
