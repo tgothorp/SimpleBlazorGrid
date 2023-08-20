@@ -162,4 +162,92 @@ div.sdg-table-title-container p {
   color: #FFF;
 }
 
+.sdg-filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(5, 5, 5, 0.8);
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  border-radius: 5px;
+  color: #FFF;
+  display: inherit;
+}
+@media (max-width: 767px) {
+  .sdg-filter {
+    position: fixed;
+  }
+}
+
+.sdg-filter-container {
+  width: 50%;
+  left: 25%;
+  top: 25%;
+  position: relative;
+}
+@media (max-width: 767px) {
+  .sdg-filter-container {
+    width: 90%;
+    left: 5%;
+  }
+}
+.sdg-filter-container h2 {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+div.sdg-filter-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: nowrap;
+}
+@media (max-width: 767px) {
+  div.sdg-filter-buttons {
+    flex-wrap: wrap-reverse;
+  }
+}
+div.sdg-filter-buttons div.clear {
+  width: 50%;
+}
+@media (max-width: 767px) {
+  div.sdg-filter-buttons div.clear {
+    width: 100%;
+  }
+}
+div.sdg-filter-buttons div.clear button {
+  width: 96%;
+  margin: 2%;
+  height: 35px;
+  border-radius: 5px;
+  background-color: var(--primary-colour);
+  color: #FFF;
+  border: solid 2px var(--primary-colour);
+}
+div.sdg-filter-buttons div.clear button:hover {
+  cursor: pointer;
+}
+div.sdg-filter-buttons div.apply {
+  width: 50%;
+}
+@media (max-width: 767px) {
+  div.sdg-filter-buttons div.apply {
+    width: 100%;
+  }
+}
+div.sdg-filter-buttons div.apply button {
+  width: 96%;
+  margin: 2%;
+  height: 35px;
+  border-radius: 5px;
+  background-color: var(--primary-colour);
+  color: #FFF;
+  border: solid 2px var(--primary-colour);
+}
+div.sdg-filter-buttons div.apply button:hover {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=simpledatagrid.css.map */
