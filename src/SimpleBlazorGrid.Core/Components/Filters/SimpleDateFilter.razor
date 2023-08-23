@@ -1,18 +1,44 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid
 
-@using System.Linq.Expressions
-@using SimpleBlazorGrid.Extensions
-
 @typeparam TType;
 
 @inherits SimpleBlazorGrid.Filters.Filter<TType>
 
 @if (ShouldShowFilter)
 {
-    
+    <div class="sdg-filter">
+        <div class="sdg-filter-container">
+            <h2>Filter by @PropertyName</h2>
+            <div class="sdg-filter-inputs">
+                @if (IncludeTime)
+                {
+                    <input type="datetime-local" 
+                           min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
+                           max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
+                           @bind-value="Value" 
+                           placeholder="@PropertyName"/>
+                }
+                else
+                {
+                    <input type="date" 
+                           min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")" 
+                           max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")" 
+                           @bind-value="Value" 
+                           placeholder="@PropertyName"/>
+                }
+            </div>
+            <div class="sdg-filter-buttons">
+                <div class="clear">
+                    <button @onclick="Clear">Clear</button>
+                </div>
+                <div class="apply">
+                    <button @onclick="Apply">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
-
 @code {
 
     [Parameter]
@@ -26,4 +52,6 @@
 
     [Parameter]
     public bool IncludeTime { get; set; }
+
+    public DateTime? Value { get; set; }
 }

@@ -20,6 +20,7 @@
             <SimpleStringFilter TType="Product" For="@(x => x.Name)" IgnoreCase="@true" />
             @* <SimpleNumericFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="10000" Step="0.01"/> *@
             <SimpleNumericRangeFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="10000" Step="0.01" />
+            <SimpleDateFilter TType="Product" For="@(x => x.LastOrderedOn)" IncludeTime="@true" Min="DateTime.Today.AddYears(-5)" />
         </Filters>
         <Columns>
             <SimpleColumn TType="Product" For="@(x => x.Id)" Width="10"/>
