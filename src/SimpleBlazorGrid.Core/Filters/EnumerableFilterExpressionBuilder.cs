@@ -87,7 +87,34 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
 
     private Expression<Func<T, bool>> DateFilterExpression<T>(SimpleDateFilter<T> filter)
     {
-        throw new NotImplementedException();
+        var parameter = Expression.Parameter(typeof(T), "x");
+
+        Expression propertyAccess = parameter;
+        foreach (var property in filter.PropertyName.Split('.'))
+        {
+            propertyAccess = Expression.Property(propertyAccess, property);
+        }
+        
+        var propertyType = propertyAccess.Type;
+        if (propertyType == typeof(DateTime?)) 
+            propertyAccess = Expression.Property(propertyAccess, "Value");
+
+        if (filter.IncludeTime)
+        {
+            var value = Expression.Constant(filter.Value.Value, typeof(DateTime));
+            var equal = Expression.Equal(propertyAccess, value);
+
+            return Expression.Lambda<Func<T, bool>>(equal, parameter);
+        }
+        else
+        {
+            propertyAccess = Expression.Property(propertyAccess, "Date");
+
+            var value = Expression.Constant(filter.Value.Value.Date, typeof(DateTime));
+            var equal = Expression.Equal(propertyAccess, value);
+
+            return Expression.Lambda<Func<T, bool>>(equal, parameter);
+        }
     }
 
     private Expression<Func<T, bool>> DateRangeFilterExpression<T>(SimpleDateRangeFilter<T> filter)
