@@ -130,6 +130,16 @@ div.sdg-table-title-container p {
   cursor: pointer;
 }
 
+.sdg-no-data {
+  width: 100%;
+  text-align: center;
+}
+
+.sdg-loading {
+  width: 100%;
+  text-align: center;
+}
+
 .sdg-table-paging-container {
   width: 100%;
   display: flex;
