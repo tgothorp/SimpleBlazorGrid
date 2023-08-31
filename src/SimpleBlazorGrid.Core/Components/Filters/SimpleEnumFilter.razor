@@ -11,7 +11,39 @@
 
 @if (ShouldShowFilter)
 {
-    
+    <div class="sdg-filter">
+        <div class="sdg-filter-container">
+            <h2>Filter by @PropertyName</h2>
+            <div class="sdg-filter-inputs">
+                @if (AllowMultiple)
+                {
+                    <select @onchange="SelectionChanged" multiple="multiple">
+                        @foreach (var item in PermittedValues)
+                        {
+                            <option value="@item">@item.ToString()</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <select @onchange="SelectionChanged">
+                        @foreach (var item in PermittedValues)
+                        {
+                            <option value="@item">@item.ToString()</option>
+                        }
+                    </select>
+                }
+            </div>
+            <div class="sdg-filter-buttons">
+                <div class="clear">
+                    <button @onclick="Clear">Clear</button>
+                </div>
+                <div class="apply">
+                    <button @onclick="Apply">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 @code {
@@ -24,4 +56,38 @@
 
     [Parameter]
     public IEnumerable<TEnum> DefaultValues { get; set; }
+
+    public List<TEnum> SelectedValues { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (PermittedValues == null || !PermittedValues.Any())
+        {
+            var values = Enum.GetValues(typeof(TEnum));
+            PermittedValues = values.Cast<TEnum>().ToList();
+        }
+        
+        return base.OnInitializedAsync();
+    }
+
+    private void SelectionChanged(ChangeEventArgs obj)
+    {
+        SelectedValues = new List<TEnum>();
+
+        switch (obj.Value)
+        {
+            case string[] selectedValues:
+            {
+                foreach (var selectedValue in selectedValues)
+                {
+                    var enumValue = (TEnum) Enum.Parse(typeof(TEnum), selectedValue, true);
+                    SelectedValues.Add(enumValue);
+                }
+                break;
+            }
+            case string selectedValue:
+                SelectedValues.Add((TEnum) Enum.Parse(typeof(TEnum), selectedValue, true));
+                break;
+        }
+    }
 }
