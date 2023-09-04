@@ -7,7 +7,7 @@
 @typeparam TType;
 @typeparam TEnum where TEnum : Enum;
 
-@inherits SimpleBlazorGrid.Filters.Filter<TType>
+@inherits SimpleBlazorGrid.Filters.EnumFilter<TType>
 
 @if (ShouldShowFilter)
 {
@@ -49,15 +49,15 @@
 @code {
 
     [Parameter]
-    public bool AllowMultiple { get; set; }
-
-    [Parameter]
     public IEnumerable<TEnum> PermittedValues { get; set; }
 
     [Parameter]
     public IEnumerable<TEnum> DefaultValues { get; set; }
+    
+    [Parameter]
+    public override bool AllowMultiple { get; set; }
 
-    public List<TEnum> SelectedValues { get; set; }
+    public override List<string> SelectedValues { get; set; }
 
     protected override Task OnInitializedAsync()
     {
@@ -72,7 +72,7 @@
 
     private void SelectionChanged(ChangeEventArgs obj)
     {
-        SelectedValues = new List<TEnum>();
+        SelectedValues = new List<string>();
 
         switch (obj.Value)
         {
@@ -80,13 +80,12 @@
             {
                 foreach (var selectedValue in selectedValues)
                 {
-                    var enumValue = (TEnum) Enum.Parse(typeof(TEnum), selectedValue, true);
-                    SelectedValues.Add(enumValue);
+                    SelectedValues.Add(selectedValue);
                 }
                 break;
             }
             case string selectedValue:
-                SelectedValues.Add((TEnum) Enum.Parse(typeof(TEnum), selectedValue, true));
+                SelectedValues.Add(selectedValue);
                 break;
         }
     }

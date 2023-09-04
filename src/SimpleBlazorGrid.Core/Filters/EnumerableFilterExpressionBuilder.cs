@@ -14,8 +14,8 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
             SimpleNumericRangeFilter<T> numericRangeFilter => NumericRangeFilterExpression(numericRangeFilter),
             SimpleDateFilter<T> dateFilter => DateFilterExpression(dateFilter),
             SimpleDateRangeFilter<T> dateRangeFilter => DateRangeFilterExpression(dateRangeFilter),
-            SimpleEnumFilter<T, Enum> simpleEnumFilter => EnumFilterExpression(simpleEnumFilter),
-            _ => throw new ArgumentException($"There is no appropriate method to handle generation of a filter expression for the provided filter", nameof(filter))
+            EnumFilter<T> simpleEnumFilter => EnumFilterExpression(simpleEnumFilter),
+            _ => throw new ArgumentException($"There is no appropriate method to create a filter expression for the provided filter", nameof(filter))
         };
     }
 
@@ -122,8 +122,8 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         throw new NotImplementedException();
     }
 
-    private Expression<Func<TType, bool>> EnumFilterExpression<TType, TEnum>(SimpleEnumFilter<TType, TEnum> filter) where TEnum : Enum
+    private Expression<Func<TType, bool>> EnumFilterExpression<TType>(EnumFilter<TType> filter)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException($"Enum filter not implemented!");
     }
 }
