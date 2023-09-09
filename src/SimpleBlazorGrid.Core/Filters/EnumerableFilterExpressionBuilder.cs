@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace SimpleBlazorGrid.Filters;
@@ -122,8 +124,28 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         throw new NotImplementedException();
     }
 
-    private Expression<Func<TType, bool>> EnumFilterExpression<TType>(EnumFilter<TType> filter)
+    private Expression<Func<T, bool>> EnumFilterExpression<T>(EnumFilter<T> filter)
     {
-        throw new NotImplementedException($"Enum filter not implemented!");
+        var parameter = Expression.Parameter(typeof(T), "x");
+
+        Expression propertyAccess = parameter;
+        foreach (var property in filter.PropertyName.Split('.'))
+        {
+            propertyAccess = Expression.Property(propertyAccess, property);
+        }
+        
+        if (filter.AllowMultiple)
+        {
+            Expression propertyToString = Expression.Call(Expression.Convert(propertyAccess, typeof(object)), typeof(object).GetMethod("ToString"));
+            
+            var containsMethodCall = Expression.Call(Expression.Constant(filter.SelectedValues), typeof(List<string>).GetMethod("Contains"), propertyToString);
+            return Expression.Lambda<Func<T, bool>>(containsMethodCall, parameter);
+        }
+
+        var convertedValue = Enum.Parse(filter.EnumType, filter.SelectedValues[0], true);
+        var value = Expression.Constant(convertedValue, filter.EnumType);
+        var equal = Expression.Equal(propertyAccess, value);
+
+        return Expression.Lambda<Func<T, bool>>(equal, parameter);
     }
 }

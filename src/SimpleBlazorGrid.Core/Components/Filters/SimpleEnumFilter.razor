@@ -27,6 +27,8 @@
                 else
                 {
                     <select @onchange="SelectionChanged">
+                        <option>Select @PropertyName to filter by...</option>
+
                         @foreach (var item in PermittedValues)
                         {
                             <option value="@item">@item.ToString()</option>
@@ -58,9 +60,12 @@
     public override bool AllowMultiple { get; set; }
 
     public override List<string> SelectedValues { get; set; }
+    
 
     protected override Task OnInitializedAsync()
     {
+        EnumType = typeof(TEnum);
+        
         if (PermittedValues == null || !PermittedValues.Any())
         {
             var values = Enum.GetValues(typeof(TEnum));
@@ -86,6 +91,8 @@
             }
             case string selectedValue:
                 SelectedValues.Add(selectedValue);
+                break;
+            case null:
                 break;
         }
     }
