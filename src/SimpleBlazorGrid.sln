@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.EntityFram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.EntityFramework.Sandbox", "SimpleBlazorGrid.EntityFramework.Sandbox\SimpleBlazorGrid.EntityFramework.Sandbox.csproj", "{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBlazorGrid.Website", "SimpleBlazorGrid.Website\SimpleBlazorGrid.Website.csproj", "{00AABCE9-8C64-454F-8E2F-B2265DD9F42C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00AABCE9-8C64-454F-8E2F-B2265DD9F42C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00AABCE9-8C64-454F-8E2F-B2265DD9F42C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00AABCE9-8C64-454F-8E2F-B2265DD9F42C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00AABCE9-8C64-454F-8E2F-B2265DD9F42C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CE489940-B2B1-41E0-B464-72D0438E205D} = {38177AB6-D0AE-48ED-8209-63A1433E84DC}
@@ -49,5 +55,6 @@ Global
 		{17BFBDB6-84B6-47B6-B84E-8948B40F8132} = {AA033C82-AC84-4C4D-83BD-F1F6239ED716}
 		{C1FF475B-2E53-4B0B-B3D9-EE49853E8813} = {28A2488A-CDB1-4E22-8014-B069FDC85240}
 		{3DB4C1B0-5CA2-4AD3-A105-82AF1212C2F0} = {28A2488A-CDB1-4E22-8014-B069FDC85240}
+		{00AABCE9-8C64-454F-8E2F-B2265DD9F42C} = {AA033C82-AC84-4C4D-83BD-F1F6239ED716}
 	EndGlobalSection
 EndGlobal

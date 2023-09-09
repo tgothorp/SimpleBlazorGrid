@@ -1,0 +1,38 @@
+@use "base";
+@use "blazor";
+@use "navbar";
+@use "index";
+
+@font-face {
+  font-family: 'IBMPlexSansCondensed';
+  src: url('font/IBMPlexSansCondensed-Regular.ttf') format('truetype');
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  font-family: 'IBMPlexSansCondensed', sans-serif;
+  font-size: var(--fs-1);
+  min-height: 100vh;
+  background-color: base.$color-background;
+}
+
+img, picture, svg, video {
+  display: block;
+  max-width: 100%;
+}
+
+input, textarea, button, select {
+  font: inherit;
+}
