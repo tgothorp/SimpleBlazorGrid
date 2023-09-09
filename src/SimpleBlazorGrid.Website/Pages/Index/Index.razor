@@ -1,9 +1,50 @@
 ﻿@page "/"
+@using SimpleBlazorGrid.Website.Data
+@using SimpleBlazorGrid.DataSource
+
+@inject VideoGameRepo VideoGameRepo
 
 <div class="top">
     <h1>SIMPLE BLAZOR GRID</h1>
+    <p>A free and easy way to simplify your Blazor data tables!</p>
 </div>
 
 <div class="bottom">
-    <h1>Goodbye world</h1>
+    <div class="container">
+        <div class="features">
+            <h3>Features</h3>
+            <ul>
+                <li>Supports .NET 6 / 7 +</li>
+                <li>Easily configure sorting and pagination</li>
+                <li>Simple filter components make data filtering a breeze!</li>
+                <li>Works with Blazor WASM and Blazor Server</li>
+                <li>Entity Framework integration available</li>
+            </ul>
+        </div>
+        <div class="table">
+            <SimpleGrid
+                TType="VideoGame"
+                Selectable="@true"
+                Title="Metacritic™ Top 100 Video Games of All Time"
+                Subtitle="Game releases by user score"
+                SimpleGridDataSource="new SimpleGridEnumerableDataSource<VideoGame>(VideoGameRepo.GetAllVideoGames())"
+                ItemsPerPage="10">
+
+                <Columns>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Rank)" Sortable="@true" Width="5"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Name)" Sortable="@true"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.ReleaseDate)" Sortable="@true" Width="10"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Platform)"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)">
+                        <SimpleColumnTemplate Context="item">
+                            @item.Developer
+                            <br/>
+                            <small>Published by: @item.Publisher</small>
+                        </SimpleColumnTemplate>
+                    </SimpleColumn>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Metascore)" Sortable="@true" Heading="Metascore™" Width="5"/>
+                </Columns>
+            </SimpleGrid>
+        </div>
+    </div>
 </div>

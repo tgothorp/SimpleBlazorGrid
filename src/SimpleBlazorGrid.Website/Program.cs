@@ -1,9 +1,15 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using SimpleBlazorGrid.Extensions;
+using SimpleBlazorGrid.Website.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddSingleton<VideoGameRepo>();
+builder.Services.AddSimpleBlazorGrid(conf =>
+{
+    conf.PrimaryColour = "#ff0a54";
+    conf.SecondaryColour = "#ff477e";
+});
 
 var app = builder.Build();
 

@@ -40,8 +40,7 @@
 
 .navbar {
   overflow: hidden;
-  background: rgb(255, 10, 84);
-  background: linear-gradient(0deg, rgb(255, 10, 84) 0%, rgb(255, 255, 255) 3%);
+  background-color: white;
   padding-bottom: 5px;
 }
 .navbar a {
@@ -90,29 +89,42 @@
 }
 .top {
   width: 100%;
-  background: rgb(255, 10, 84);
-  background: linear-gradient(180deg, rgb(255, 10, 84) 0%, rgb(255, 71, 126) 50%, rgb(255, 10, 84) 100%);
-}
-@media (min-width: 1024px) {
-  .top {
-    height: 30vh;
-  }
+  background: #ff0a54;
+  padding-bottom: 3rem;
 }
 .top h1 {
   font-style: oblique;
   color: #1D1B1B;
-  text-shadow: 2px 3px 0px rgb(255, 255, 255);
   text-align: center;
   font-size: var(--fs-5);
+}
+.top p {
+  text-align: center;
+  color: #1D1B1B;
+  font-size: var(--fs-1);
 }
 
 .bottom {
   width: 100%;
 }
-@media (min-width: 1024px) {
-  .bottom {
-    height: 50vh;
-  }
+.bottom ul {
+  font-size: var(--fs-1);
+}
+.bottom .container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 5rem;
+}
+.bottom .container .features {
+  width: 40%;
+  padding-left: 5%;
+}
+.bottom .container .features h3 {
+  font-size: var(--fs-3);
+  padding-bottom: 2rem;
+}
+.bottom .container .table {
+  width: 55%;
 }
 
 @font-face {
@@ -134,7 +146,7 @@ html {
 
 body {
   font-family: "IBMPlexSansCondensed", sans-serif;
-  font-size: var(--fs-1);
+  font-size: var(--fs--1);
   min-height: 100vh;
   background-color: #1D1B1B;
 }
