@@ -37,15 +37,6 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
             // Filter
             if (Filters.Any())
             {
-                // var filters = Filters.Select(x => x.ApplyFilter());
-                // var combined = filters.Aggregate((left, right) => left.And(right));
-                //
-                // if (combined != null)
-                // {
-                //     query = query.Where(combined);
-                // }
-                
-                
                 var filters = Filters
                     .Select(x => FilterExpressionBuilder.GetFilterExpression(x));
 

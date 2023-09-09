@@ -51,11 +51,11 @@
                         var simpleFilter = SimpleFilters.SingleOrDefault(x => x.PropertyName == column.PropertyName);
                         
                         <_DataGridHeading TType="TType" 
-                                          Column="column"
-                                          SortAscending="SortAscending" 
-                                          SortOptions="SortOptions"
-                                          Width="@column.Width"
-                                          SimpleFilter="simpleFilter" />
+                              Column="column"
+                              SortAscending="SortAscending" 
+                              SortOptions="SortOptions"
+                              Width="@column.Width"
+                              SimpleFilter="simpleFilter" />
                     }
                 </tr>
                 </thead>
@@ -63,9 +63,9 @@
                 @if (Loading)
                 {
                     <tr>
-                        <td rowspan="@DataGridColumns.Count">
-                            <div style="width: 100%; text-align: center">
-                                <h2>LOADING!!</h2>
+                        <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
+                            <div class="sdg-loading">
+                                <h2>Loading</h2>
                             </div>
                         </td>
                     </tr>
@@ -83,9 +83,9 @@
                     else
                     {
                         <tr>
-                            <td rowspan="@DataGridColumns.Count">
-                                <div style="width: 100%; text-align: center">
-                                    <h2>NO DATA!</h2>
+                            <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
+                                <div class="sdg-no-data">
+                                    <h2>No records!</h2>
                                 </div>
                             </td>
                         </tr>

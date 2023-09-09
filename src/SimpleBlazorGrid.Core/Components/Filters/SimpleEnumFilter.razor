@@ -7,21 +7,93 @@
 @typeparam TType;
 @typeparam TEnum where TEnum : Enum;
 
-@inherits SimpleBlazorGrid.Filters.Filter<TType>
+@inherits SimpleBlazorGrid.Filters.EnumFilter<TType>
 
 @if (ShouldShowFilter)
 {
-    
+    <div class="sdg-filter">
+        <div class="sdg-filter-container">
+            <h2>Filter by @PropertyName</h2>
+            <div class="sdg-filter-inputs">
+                @if (AllowMultiple)
+                {
+                    <select @onchange="SelectionChanged" multiple="multiple">
+                        @foreach (var item in PermittedValues)
+                        {
+                            <option value="@item">@item.ToString()</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <select @onchange="SelectionChanged">
+                        <option>Select @PropertyName to filter by...</option>
+
+                        @foreach (var item in PermittedValues)
+                        {
+                            <option value="@item">@item.ToString()</option>
+                        }
+                    </select>
+                }
+            </div>
+            <div class="sdg-filter-buttons">
+                <div class="clear">
+                    <button @onclick="Clear">Clear</button>
+                </div>
+                <div class="apply">
+                    <button @onclick="Apply">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 @code {
-
-    [Parameter]
-    public bool AllowMultiple { get; set; }
 
     [Parameter]
     public IEnumerable<TEnum> PermittedValues { get; set; }
 
     [Parameter]
     public IEnumerable<TEnum> DefaultValues { get; set; }
+    
+    [Parameter]
+    public override bool AllowMultiple { get; set; }
+
+    public override List<string> SelectedValues { get; set; }
+    
+
+    protected override Task OnInitializedAsync()
+    {
+        EnumType = typeof(TEnum);
+        
+        if (PermittedValues == null || !PermittedValues.Any())
+        {
+            var values = Enum.GetValues(typeof(TEnum));
+            PermittedValues = values.Cast<TEnum>().ToList();
+        }
+        
+        return base.OnInitializedAsync();
+    }
+
+    private void SelectionChanged(ChangeEventArgs obj)
+    {
+        SelectedValues = new List<string>();
+
+        switch (obj.Value)
+        {
+            case string[] selectedValues:
+            {
+                foreach (var selectedValue in selectedValues)
+                {
+                    SelectedValues.Add(selectedValue);
+                }
+                break;
+            }
+            case string selectedValue:
+                SelectedValues.Add(selectedValue);
+                break;
+            case null:
+                break;
+        }
+    }
 }
