@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
   --fs--2: clamp(0.63rem, calc(0.84rem + -0.27vw), 0.78rem);
   --fs--1: clamp(0.88rem, calc(0.96rem + -0.09vw), 0.94rem);
@@ -40,8 +41,8 @@
 
 .navbar {
   overflow: hidden;
-  background-color: white;
-  padding-bottom: 5px;
+  background-color: #ff0a54;
+  padding-bottom: 50px;
 }
 .navbar a {
   float: left;
@@ -109,6 +110,11 @@
 }
 .bottom ul {
   font-size: var(--fs-1);
+}
+.bottom ul li {
+  margin-top: 10px;
+  list-style-type: "✔";
+  padding-left: 1em;
 }
 .bottom .container {
   display: flex;

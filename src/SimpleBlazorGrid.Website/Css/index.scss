@@ -24,6 +24,12 @@
 
   ul {
     font-size: var(--fs-1);
+    
+    li {
+      margin-top: 10px;
+      list-style-type: "✔";
+      padding-left: 1em;
+    }
   }
   
   .container {
