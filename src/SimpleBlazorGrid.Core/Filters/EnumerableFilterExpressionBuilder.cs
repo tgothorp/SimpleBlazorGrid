@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace SimpleBlazorGrid.Filters;
@@ -30,7 +29,7 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         {
             propertyAccess = Expression.Property(propertyAccess, property);
         }
-        
+
         var value = Expression.Constant(filter.Value, typeof(string));
 
         if (filter.IgnoreCase)
@@ -78,7 +77,7 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         var propertyType = propertyAccess.Type;
         var lowValue = Expression.Constant(Convert.ChangeType(filter.LowValue, propertyType), propertyType);
         var highValue = Expression.Constant(Convert.ChangeType(filter.HighValue, propertyType), propertyType);
-        
+
         // x => x.Property >= lowValue && x.Property <= highValue
         var greaterThanLowValue = Expression.GreaterThanOrEqual(propertyAccess, lowValue);
         var lessThanHighValue = Expression.LessThanOrEqual(propertyAccess, highValue);
@@ -96,9 +95,9 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         {
             propertyAccess = Expression.Property(propertyAccess, property);
         }
-        
+
         var propertyType = propertyAccess.Type;
-        if (propertyType == typeof(DateTime?)) 
+        if (propertyType == typeof(DateTime?))
             propertyAccess = Expression.Property(propertyAccess, "Value");
 
         if (filter.IncludeTime)
@@ -110,8 +109,6 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         }
         else
         {
-            propertyAccess = Expression.Property(propertyAccess, "Date");
-
             var value = Expression.Constant(filter.Value.Value.Date, typeof(DateTime));
             var equal = Expression.Equal(propertyAccess, value);
 
@@ -121,7 +118,35 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
 
     private Expression<Func<T, bool>> DateRangeFilterExpression<T>(SimpleDateRangeFilter<T> filter)
     {
-        throw new NotImplementedException();
+        var parameter = Expression.Parameter(typeof(T), "x");
+
+        Expression propertyAccess = parameter;
+        foreach (var property in filter.PropertyName.Split('.'))
+        {
+            propertyAccess = Expression.Property(propertyAccess, property);
+        }
+
+        var propertyType = propertyAccess.Type;
+        if (propertyType == typeof(DateTime?))
+            propertyAccess = Expression.Property(propertyAccess, "Value");
+
+        if (!filter.IncludeTime)
+            propertyAccess = Expression.Property(propertyAccess, "Date");
+
+        var low = Expression.Constant(filter.LowValue.Value, typeof(DateTime));
+        var high = Expression.Constant(filter.HighValue.Value, typeof(DateTime));
+
+        var greaterThanLow = filter.Inclusive
+            ? Expression.GreaterThanOrEqual(propertyAccess, low)
+            : Expression.GreaterThan(propertyAccess, low);
+
+        var lessThanHigh = filter.Inclusive
+            ? Expression.LessThanOrEqual(propertyAccess, high)
+            : Expression.LessThan(propertyAccess, high);
+
+        var and = Expression.And(greaterThanLow, lessThanHigh);
+
+        return Expression.Lambda<Func<T, bool>>(and, parameter);
     }
 
     private Expression<Func<T, bool>> EnumFilterExpression<T>(EnumFilter<T> filter)
@@ -133,11 +158,11 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         {
             propertyAccess = Expression.Property(propertyAccess, property);
         }
-        
+
         if (filter.AllowMultiple)
         {
             Expression propertyToString = Expression.Call(Expression.Convert(propertyAccess, typeof(object)), typeof(object).GetMethod("ToString"));
-            
+
             var containsMethodCall = Expression.Call(Expression.Constant(filter.SelectedValues), typeof(List<string>).GetMethod("Contains"), propertyToString);
             return Expression.Lambda<Func<T, bool>>(containsMethodCall, parameter);
         }

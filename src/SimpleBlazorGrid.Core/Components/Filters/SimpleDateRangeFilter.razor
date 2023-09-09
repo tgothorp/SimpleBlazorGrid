@@ -65,7 +65,18 @@
 
     [Parameter]
     public bool IncludeTime { get; set; }
+
+    [Parameter]
+    public bool Inclusive { get; set; }
     
     public DateTime? LowValue { get; set; }
     public DateTime? HighValue { get; set; }
+
+    protected override Task Clear()
+    {
+        LowValue = null;
+        HighValue = null;
+        
+        return base.Clear();
+    }
 }
