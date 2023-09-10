@@ -43,10 +43,10 @@ table.sdg-table thead {
 }
 table.sdg-table tbody tr td {
   border-bottom: solid var(--primary-colour) 1px;
+  white-space: initial;
 }
 table.sdg-table tfoot {
   border-top: 5px solid var(--primary-colour);
-  text-wrap: balance;
 }
 table.sdg-table tr.sdg-selectable-selected {
   background-color: var(--secondary-colour);

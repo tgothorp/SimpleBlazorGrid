@@ -77,11 +77,15 @@
       @include base.tablet {
         width: 100%;
         padding-top: 5%;
+        padding-left: 1%;
+        padding-right: 1%;
       }
       
       @include base.phone {
         width: 100%;
         padding-top: 5%;
+        padding-left: 1%;
+        padding-right: 1%;
       }
     }
   }

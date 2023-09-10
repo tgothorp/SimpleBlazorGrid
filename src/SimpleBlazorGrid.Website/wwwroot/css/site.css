@@ -161,12 +161,16 @@
   .bottom .container .table {
     width: 100%;
     padding-top: 5%;
+    padding-left: 1%;
+    padding-right: 1%;
   }
 }
 @media (max-width: 767px) {
   .bottom .container .table {
     width: 100%;
     padding-top: 5%;
+    padding-left: 1%;
+    padding-right: 1%;
   }
 }
 

@@ -48,12 +48,12 @@ table.sdg-table {
   // Add thin border between each row
   tbody tr td {
     border-bottom: solid var(--primary-colour) 1px;
+    white-space: initial;
   }
 
   // Add thick border to footer 
   tfoot {
     border-top: 5px solid var(--primary-colour);
-    text-wrap: balance;
   }
 
 

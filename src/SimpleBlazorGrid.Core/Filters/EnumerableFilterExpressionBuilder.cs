@@ -127,14 +127,21 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         }
 
         var propertyType = propertyAccess.Type;
-        if (propertyType == typeof(DateTime?))
+        if (propertyType == typeof(DateTime?) || propertyType == typeof(DateOnly?))
             propertyAccess = Expression.Property(propertyAccess, "Value");
 
-        if (!filter.IncludeTime)
+        if (!filter.IncludeTime && propertyType != typeof(DateOnly) && propertyType != typeof(DateOnly?))
+        {
             propertyAccess = Expression.Property(propertyAccess, "Date");
+        }
 
-        var low = Expression.Constant(filter.LowValue.Value, typeof(DateTime));
-        var high = Expression.Constant(filter.HighValue.Value, typeof(DateTime));
+        var low = (propertyType == typeof(DateOnly) || propertyType == typeof(DateOnly?))
+            ? Expression.Constant(DateOnly.FromDateTime(filter.LowValue.Value), typeof(DateOnly))
+            : Expression.Constant(filter.LowValue.Value, typeof(DateTime));
+        
+        var high = (propertyType == typeof(DateOnly) || propertyType == typeof(DateOnly?))
+            ? Expression.Constant(DateOnly.FromDateTime(filter.HighValue.Value), typeof(DateOnly))
+            : Expression.Constant(filter.HighValue.Value, typeof(DateTime));
 
         var greaterThanLow = filter.Inclusive
             ? Expression.GreaterThanOrEqual(propertyAccess, low)
