@@ -37,7 +37,6 @@
         <div class="table">
             <SimpleGrid
                 TType="VideoGame"
-                Selectable="@true"
                 Title="Metacritic™ Top 100 Video Games of All Time"
                 Subtitle="Game releases by user score"
                 SimpleGridDataSource="new SimpleGridEnumerableDataSource<VideoGame>(VideoGameRepo.GetAllVideoGames())"
@@ -49,7 +48,7 @@
                     <SimpleNumericFilter TType="VideoGame" Step="1" For="@(x => x.Metascore)" Min="94" Max="99" />
                 </Filters>
                 <Columns>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Rank)" Sortable="@true" Width="6"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Rank)" Sortable="@true" Width="10"/>
                     <SimpleColumn TType="VideoGame" For="@(x => x.Name)" Sortable="@true"/>
                     <SimpleColumn TType="VideoGame" For="@(x => x.ReleaseDate)" Sortable="@true" Width="15"/>
                     <SimpleColumn TType="VideoGame" For="@(x => x.Platform)" Width="12">
@@ -69,14 +68,13 @@
                             }
                         </SimpleColumnTemplate>
                     </SimpleColumn>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)" Width="20">
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)" Width="25">
                         <SimpleColumnTemplate Context="item">
                             @item.Developer
                             <br/>
                             <small>Published by: @item.Publisher</small>
                         </SimpleColumnTemplate>
                     </SimpleColumn>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Metascore)" Sortable="@true" Heading="Metascore™" Width="15"/>
                 </Columns>
             </SimpleGrid>
         </div>
