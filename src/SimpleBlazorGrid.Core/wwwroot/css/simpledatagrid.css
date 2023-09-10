@@ -46,6 +46,7 @@ table.sdg-table tbody tr td {
 }
 table.sdg-table tfoot {
   border-top: 5px solid var(--primary-colour);
+  text-wrap: balance;
 }
 table.sdg-table tr.sdg-selectable-selected {
   background-color: var(--secondary-colour);
@@ -84,12 +85,12 @@ svg.sdg-glyph {
 }
 @media (prefers-color-scheme: dark) {
   svg.sdg-glyph {
-    color: #FFF;
+    fill: #FFF;
   }
 }
 @media (prefers-color-scheme: light) {
   svg.sdg-glyph {
-    color: #000;
+    fill: #000;
   }
 }
 svg.sdg-glyph :hover {
@@ -117,7 +118,7 @@ div.sdg-table-title-container p {
   justify-content: space-evenly;
 }
 .sdg-heading-container div.sdg-heading-filter {
-  width: 20px;
+  min-width: 20px;
   position: relative;
   aspect-ratio: 1;
   cursor: pointer;
@@ -159,16 +160,21 @@ div.sdg-table-title-container p {
   width: 35px;
   height: 35px;
   border-radius: 5px;
-  background-color: #FFF;
+  background-color: var(--secondary-colour);
   padding: 0;
   margin-right: 0.5rem;
   color: #000;
-  border: solid 2px var(--primary-colour);
+  border: solid 2px var(--secondary-colour);
   cursor: pointer;
+}
+
+.sdg-table-paging-button:hover {
+  border: solid 2px var(--primary-colour);
 }
 
 .sdg-table-paging-button-selected {
   background-color: var(--primary-colour);
+  border: solid 2px var(--primary-colour);
   color: #FFF;
 }
 

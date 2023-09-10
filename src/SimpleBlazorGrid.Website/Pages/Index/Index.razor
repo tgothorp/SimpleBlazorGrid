@@ -1,6 +1,8 @@
 ﻿@page "/"
 @using SimpleBlazorGrid.Website.Data
 @using SimpleBlazorGrid.DataSource
+@using System.Text.Encodings.Web
+@using Humanizer
 
 @inject VideoGameRepo VideoGameRepo
 
@@ -18,8 +20,19 @@
                 <li>Easily configure sorting and pagination</li>
                 <li>Simple filter components make data filtering a breeze!</li>
                 <li>Works with Blazor WASM and Blazor Server</li>
+                <li>100% free and open source (MIT)</li>
                 <li>Entity Framework integration available</li>
             </ul>
+
+
+            <div class="buttons">
+                <div>
+                    <button>Download from Nuget</button>
+                </div>
+                <div>
+                    <button>Documentation</button>
+                </div>
+            </div>
         </div>
         <div class="table">
             <SimpleGrid
@@ -29,20 +42,41 @@
                 Subtitle="Game releases by user score"
                 SimpleGridDataSource="new SimpleGridEnumerableDataSource<VideoGame>(VideoGameRepo.GetAllVideoGames())"
                 ItemsPerPage="10">
-
+                <Filters>
+                    <SimpleStringFilter TType="VideoGame" For="@(x => x.Name)" IgnoreCase="@true"/>
+                    <SimpleDateRangeFilter TType="VideoGame" For="@(x => x.ReleaseDate)"/>
+                    <SimpleEnumFilter TType="VideoGame" TEnum="Platform" For="@(x => x.Platform)" AllowMultiple="@true"/>
+                    <SimpleNumericFilter TType="VideoGame" Step="1" For="@(x => x.Metascore)" Min="94" Max="99" />
+                </Filters>
                 <Columns>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Rank)" Sortable="@true" Width="5"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Rank)" Sortable="@true" Width="6"/>
                     <SimpleColumn TType="VideoGame" For="@(x => x.Name)" Sortable="@true"/>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.ReleaseDate)" Sortable="@true" Width="10"/>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Platform)"/>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)">
+                    <SimpleColumn TType="VideoGame" For="@(x => x.ReleaseDate)" Sortable="@true" Width="15"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Platform)" Width="12">
+                        <SimpleColumnTemplate Context="item">
+                            @switch (item.Platform)
+                            {
+                                case Platform._3DS:
+                                    <span>3 DS</span>
+                                    break;
+                                case Platform.GameCube:
+                                    <span>GameCube</span>
+                                    break;
+                                default:
+                                    @item.Platform.Humanize(LetterCasing.Title)
+                                    break;
+                                    
+                            }
+                        </SimpleColumnTemplate>
+                    </SimpleColumn>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)" Width="20">
                         <SimpleColumnTemplate Context="item">
                             @item.Developer
                             <br/>
                             <small>Published by: @item.Publisher</small>
                         </SimpleColumnTemplate>
                     </SimpleColumn>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Metascore)" Sortable="@true" Heading="Metascore™" Width="5"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Metascore)" Sortable="@true" Heading="Metascore™" Width="15"/>
                 </Columns>
             </SimpleGrid>
         </div>

@@ -41,13 +41,12 @@
 
 .navbar {
   overflow: hidden;
-  background-color: #ff0a54;
-  padding-bottom: 50px;
+  padding-bottom: 5px;
 }
 .navbar a {
   float: left;
   display: block;
-  color: #000;
+  color: #FFF;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -91,6 +90,7 @@
 .top {
   width: 100%;
   background: #ff0a54;
+  padding-top: 50px;
   padding-bottom: 3rem;
 }
 .top h1 {
@@ -120,10 +120,34 @@
   display: flex;
   flex-direction: row;
   padding-top: 5rem;
+  padding-bottom: 2rem;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bottom .container {
+    flex-direction: column;
+  }
+}
+@media (max-width: 767px) {
+  .bottom .container {
+    flex-direction: column;
+  }
 }
 .bottom .container .features {
   width: 40%;
-  padding-left: 5%;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bottom .container .features {
+    width: 90%;
+    padding-left: 10%;
+  }
+}
+@media (max-width: 767px) {
+  .bottom .container .features {
+    width: 90%;
+    padding-left: 10%;
+  }
 }
 .bottom .container .features h3 {
   font-size: var(--fs-3);
@@ -131,6 +155,54 @@
 }
 .bottom .container .table {
   width: 55%;
+  overflow-x: auto;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bottom .container .table {
+    width: 100%;
+    padding-top: 5%;
+  }
+}
+@media (max-width: 767px) {
+  .bottom .container .table {
+    width: 100%;
+    padding-top: 5%;
+  }
+}
+
+.buttons {
+  display: flex;
+  padding-top: 5rem;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  flex-direction: row;
+  row-gap: 1rem;
+}
+@media (max-width: 767px) {
+  .buttons {
+    flex-direction: column;
+  }
+}
+.buttons div {
+  flex-grow: 1;
+  flex: 1;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.buttons div button {
+  border: none;
+  height: 50px;
+  border-radius: 5px;
+  padding: 0;
+  background-color: #ff0a54;
+  width: 100%;
+  font-weight: bold;
+  font-size: var(--fs-0);
+}
+.buttons div button:hover {
+  cursor: pointer;
+  background-color: #ff477e;
 }
 
 @font-face {

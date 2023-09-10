@@ -3,6 +3,7 @@
 .top {
   width: 100%;
   background: base.$color-primary;
+  padding-top: 50px;
   padding-bottom: 3rem;
   
   h1 {
@@ -36,10 +37,32 @@
     display: flex;
     flex-direction: row;
     padding-top: 5rem;
+    padding-bottom: 2rem;
+    
+    @include base.tablet {
+      flex-direction: column;
+    }
+    
+    @include base.phone {
+      flex-direction: column;
+    }
     
     .features {
       width: 40%;
-      padding-left: 5%;
+      padding-left: 3%;
+      padding-right: 3%;
+
+      @include base.tablet {
+        width: 90%;
+        padding-left: 10%;
+
+      }
+      
+      @include base.phone {
+        width: 90%;
+        padding-left: 10%;
+        
+      }
       
       h3 {
         font-size: var(--fs-3);
@@ -49,6 +72,54 @@
     
     .table {
       width: 55%;
+      overflow-x: auto;
+
+      @include base.tablet {
+        width: 100%;
+        padding-top: 5%;
+      }
+      
+      @include base.phone {
+        width: 100%;
+        padding-top: 5%;
+      }
+    }
+  }
+}
+
+.buttons {
+  display: flex; 
+  padding-top: 5rem; 
+  flex-wrap: wrap; 
+  justify-content: space-around; 
+  align-items: stretch; 
+  flex-direction: row; 
+  row-gap: 1rem;
+  
+  @include base.phone {
+    flex-direction: column;
+  }
+  
+  div {
+    flex-grow: 1; 
+    flex: 1;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    
+    button {
+      border: none;
+      height: 50px;
+      border-radius: 5px;
+      padding: 0;
+      background-color: base.$color-primary;
+      width: 100%;
+      font-weight: bold;
+      font-size: var(--fs-0);
+    }
+    
+    button:hover {
+      cursor: pointer;
+      background-color: base.$color-secondary;
     }
   }
 }

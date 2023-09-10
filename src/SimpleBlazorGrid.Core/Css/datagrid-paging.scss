@@ -17,16 +17,21 @@
   width: 35px;
   height: 35px;
   border-radius: 5px;
-  background-color: #FFF;
+  background-color: var(--secondary-colour);
   padding: 0;
   margin-right: 0.5rem;
   color: #000;
-  border: solid 2px var(--primary-colour);
+  border: solid 2px var(--secondary-colour);
   cursor: pointer;
+}
+
+.sdg-table-paging-button:hover {
+  border: solid 2px var(--primary-colour);
 }
 
 .sdg-table-paging-button-selected {
   background-color: var(--primary-colour);
+  border: solid 2px var(--primary-colour);
   color: #FFF;
 }
   

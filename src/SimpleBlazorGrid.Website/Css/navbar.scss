@@ -2,13 +2,12 @@
 
 .navbar {
   overflow: hidden;
-  background-color: base.$color-primary;
-  padding-bottom: 50px;
+  padding-bottom: 5px;
 
   a {
     float: left;
     display: block;
-    color: #000;
+    color: base.$color-text;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;

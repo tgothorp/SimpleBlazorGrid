@@ -7,11 +7,11 @@ svg.sdg-glyph {
   max-height: 20px;
   
   @include base.dark-mode {
-    color: #FFF;
+    fill: #FFF;
   }
   
   @include base.light-mode {
-    color: #000;
+    fill: #000;
   }
   
   :hover {

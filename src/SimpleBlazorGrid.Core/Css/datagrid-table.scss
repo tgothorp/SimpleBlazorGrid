@@ -53,6 +53,7 @@ table.sdg-table {
   // Add thick border to footer 
   tfoot {
     border-top: 5px solid var(--primary-colour);
+    text-wrap: balance;
   }
 
 
