@@ -2,14 +2,13 @@ using System.Globalization;
 
 namespace SimpleBlazorGrid.Configuration
 {
-    public class DefaultConfiguration
+    public class DefaultConfiguration : SimpleDataGridConfiguration
     {
         public DefaultConfiguration()
         {
-            PrimaryColour = "#1934fc";
-            //PrimaryColour = "#FF0A54";
-            //SecondaryColour = "#F7CAD0";
-            SecondaryColour = "#8ad4ff";
+            PrimaryColour = "#FF0A54";
+            SecondaryColour = "#F7CAD0";
+            GlyphColour = "#000000";
             
             var currentCulture = CultureInfo.CurrentCulture;
             var dateFormatInfo = currentCulture.DateTimeFormat;
@@ -22,14 +21,5 @@ namespace SimpleBlazorGrid.Configuration
             CurrencySymbol = numberFormatInfo.CurrencySymbol;
             DefaultDecimalPlaces = 4;
         }
-        
-        public string PrimaryColour { get; set; }
-        public string SecondaryColour { get; set; }
-        
-        public string TimeOnlyFormat { get; set; }
-        public string ShortDateTimeFormat { get; set; }
-        public string LongDateTimeFormat { get; set; }
-        public string CurrencySymbol { get; set; }
-        public int DefaultDecimalPlaces { get; set; }
     }
 }
