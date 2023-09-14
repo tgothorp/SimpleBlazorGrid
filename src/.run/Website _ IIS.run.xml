@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Website : IIS" type="LaunchSettings" factoryName=".NET Launch Settings Profile" folderName="Sandboxes - IIS">
-    <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/SimpleBlazorGrid.Site/SimpleBlazorGrid.Site.csproj" />
+    <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/SimpleBlazorGrid.Website/SimpleBlazorGrid.Website.csproj" />
     <option name="LAUNCH_PROFILE_TFM" value="net7.0" />
     <option name="LAUNCH_PROFILE_NAME" value="IIS Express" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />

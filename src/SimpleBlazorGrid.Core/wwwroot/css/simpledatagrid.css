@@ -1,6 +1,7 @@
 :root {
   --primary-colour: #FF6600;
   --secondary-colour: #ffb27d;
+  --glyph-colour: #000 ;
 }
 
 table.sdg-table {
@@ -43,6 +44,7 @@ table.sdg-table thead {
 }
 table.sdg-table tbody tr td {
   border-bottom: solid var(--primary-colour) 1px;
+  white-space: initial;
 }
 table.sdg-table tfoot {
   border-top: 5px solid var(--primary-colour);
@@ -81,16 +83,7 @@ svg.sdg-glyph {
   position: absolute;
   height: 100%;
   max-height: 20px;
-}
-@media (prefers-color-scheme: dark) {
-  svg.sdg-glyph {
-    color: #FFF;
-  }
-}
-@media (prefers-color-scheme: light) {
-  svg.sdg-glyph {
-    color: #000;
-  }
+  fill: var(--glyph-colour);
 }
 svg.sdg-glyph :hover {
   fill: var(--secondary-colour);
@@ -117,7 +110,7 @@ div.sdg-table-title-container p {
   justify-content: space-evenly;
 }
 .sdg-heading-container div.sdg-heading-filter {
-  width: 20px;
+  min-width: 20px;
   position: relative;
   aspect-ratio: 1;
   cursor: pointer;
@@ -159,16 +152,21 @@ div.sdg-table-title-container p {
   width: 35px;
   height: 35px;
   border-radius: 5px;
-  background-color: #FFF;
+  background-color: var(--secondary-colour);
   padding: 0;
   margin-right: 0.5rem;
   color: #000;
-  border: solid 2px var(--primary-colour);
+  border: solid 2px var(--secondary-colour);
   cursor: pointer;
+}
+
+.sdg-table-paging-button:hover {
+  border: solid 2px var(--primary-colour);
 }
 
 .sdg-table-paging-button-selected {
   background-color: var(--primary-colour);
+  border: solid 2px var(--primary-colour);
   color: #FFF;
 }
 

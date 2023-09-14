@@ -1,0 +1,36 @@
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+$color-primary: #ff0a54;
+$color-secondary: #ff477e;
+$color-background: #1D1B1B;
+$color-text: #FFF;
+
+:root {
+  --fs--2: clamp(0.63rem, calc(0.84rem + -0.27vw), 0.78rem);
+  --fs--1: clamp(0.88rem, calc(0.96rem + -0.09vw), 0.94rem);
+  --fs-0: clamp(1.13rem, calc(1.08rem + 0.22vw), 1.25rem);
+  --fs-1: clamp(1.35rem, calc(1.20rem + 0.73vw), 1.77rem);
+  --fs-2: clamp(1.62rem, calc(1.31rem + 1.53vw), 2.50rem);
+  --fs-3: clamp(1.94rem, calc(1.39rem + 2.77vw), 3.53rem);
+  --fs-4: clamp(2.33rem, calc(1.41rem + 4.63vw), 5.00rem);
+  --fs-5: clamp(2.80rem, calc(1.32rem + 7.42vw), 7.07rem);
+}
+
+@mixin phone {
+  @media (max-width: #{$tablet-width - 1px}) {
+    @content
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
