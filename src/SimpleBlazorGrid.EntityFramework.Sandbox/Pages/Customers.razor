@@ -1,8 +1,8 @@
 @page "/Customers"
 
-@using SimpleBlazorGrid.EntityFramework.Sandbox.Infrastructure
-@using SimpleBlazorGrid.EntityFramework.Sandbox.Domain
 @using SimpleBlazorGrid.EntityFramework.DataSource
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain
+@using SimpleBlazorGrid.EntityFramework.Sandbox.Core.Infrastructure
 
 <SimpleGrid TType="Customer"
             Title="Customers"
@@ -17,5 +17,6 @@
 </SimpleGrid>
 
 @code {
+
     public DatabaseContext Context { get; set; } = new DatabaseContext();
 }

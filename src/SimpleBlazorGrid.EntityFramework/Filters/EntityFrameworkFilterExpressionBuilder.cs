@@ -4,9 +4,9 @@ using SimpleBlazorGrid.Filters;
 
 namespace SimpleBlazorGrid.EntityFramework.Filters;
 
-public class EntityFrameworkFilterExpressionBuilder : FilterExpressionBuilder
+public class EntityFrameworkFilterExpressionBuilder
 {
-    public override Expression<Func<T, bool>> GetFilterExpression<T>(Filter<T> filter)
+    public Expression<Func<T, bool>> GetFilterExpression<T>(Filter<T> filter)
     {
         return filter switch
         {
@@ -34,9 +34,9 @@ public class EntityFrameworkFilterExpressionBuilder : FilterExpressionBuilder
 
         if (filter.IgnoreCase)
         {
-            // string.Equals(string1, string2, StringComparison)
-            var equalsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string), typeof(StringComparison) });
-            var equality = Expression.Call(null, equalsMethod, propertyAccess, value, Expression.Constant(StringComparison.OrdinalIgnoreCase));
+            // string.Equals(string1, string2)
+            var equalsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string) });
+            var equality = Expression.Call(null, equalsMethod, propertyAccess, value);
 
             return Expression.Lambda<Func<T, bool>>(equality, parameter);
         }

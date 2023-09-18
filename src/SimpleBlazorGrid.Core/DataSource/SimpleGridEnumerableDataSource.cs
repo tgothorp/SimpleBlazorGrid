@@ -12,10 +12,9 @@ namespace SimpleBlazorGrid.DataSource
     public class SimpleGridEnumerableDataSource<T> : ISimpleGridDataSource<T>
     {
         private IEnumerable<T> Source { get; }
+        private EnumerableFilterExpressionBuilder FilterExpressionBuilder { get; }
 
         public IEnumerable<Filter<T>> Filters { get; set; }
-        public FilterExpressionBuilder FilterExpressionBuilder { get; }
-
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
 

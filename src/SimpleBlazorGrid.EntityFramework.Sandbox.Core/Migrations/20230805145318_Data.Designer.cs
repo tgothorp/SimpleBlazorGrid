@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SimpleBlazorGrid.EntityFramework.Sandbox.Infrastructure;
+using SimpleBlazorGrid.EntityFramework.Sandbox.Core.Infrastructure;
 
 #nullable disable
 

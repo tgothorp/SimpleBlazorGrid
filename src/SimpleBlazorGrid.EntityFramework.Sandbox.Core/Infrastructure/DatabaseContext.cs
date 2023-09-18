@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using SimpleBlazorGrid.EntityFramework.Sandbox.Domain;
+using SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain;
 
-namespace SimpleBlazorGrid.EntityFramework.Sandbox.Infrastructure;
+namespace SimpleBlazorGrid.EntityFramework.Sandbox.Core.Infrastructure;
 
 public class DatabaseContext : DbContext
 {

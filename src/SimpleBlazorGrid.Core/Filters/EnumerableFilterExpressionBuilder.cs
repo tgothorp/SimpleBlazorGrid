@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 
 namespace SimpleBlazorGrid.Filters;
 
-public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
+public class EnumerableFilterExpressionBuilder
 {
-    public override Expression<Func<T, bool>> GetFilterExpression<T>(Filter<T> filter)
+    public Expression<Func<T, bool>> GetFilterExpression<T>(Filter<T> filter)
     {
         return filter switch
         {
