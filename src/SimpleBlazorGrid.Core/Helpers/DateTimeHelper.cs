@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleBlazorGrid.EntityFramework.Helpers;
+namespace SimpleBlazorGrid.Helpers;
 
 public static class DateTimeHelper
 {

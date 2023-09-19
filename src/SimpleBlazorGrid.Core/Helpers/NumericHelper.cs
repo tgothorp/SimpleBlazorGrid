@@ -1,7 +1,7 @@
 ﻿using System;
-using SimpleBlazorGrid.EntityFramework.Extensions;
+using SimpleBlazorGrid.Extensions;
 
-namespace SimpleBlazorGrid.EntityFramework.Helpers;
+namespace SimpleBlazorGrid.Helpers;
 
 public static class NumericHelper
 {
@@ -20,7 +20,6 @@ public static class NumericHelper
             }
         }
 
-        // TODO throw
-        return null;
+        throw new Exception();
     }
 }

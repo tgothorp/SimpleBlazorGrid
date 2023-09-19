@@ -4,6 +4,7 @@
 @using System.Linq.Expressions
 @using SimpleBlazorGrid.Exceptions
 @using SimpleBlazorGrid.Extensions
+@using System.Diagnostics
 
 @typeparam TType;
 
@@ -46,7 +47,7 @@
 
         var type = For.Body.Type;
         if (type != typeof(string))
-            throw new SimpleGridFilterException<TType>(this, $"Cannot apply string filter to {PropertyName} as is not a string type!");
+            throw new SimpleGridFilterException<TType>(this, $"Cannot apply 'Simple String Filter' to property '{typeof(TType)}.{PropertyName}' as is not a string!");
 
         base.OnInitialized();
     }

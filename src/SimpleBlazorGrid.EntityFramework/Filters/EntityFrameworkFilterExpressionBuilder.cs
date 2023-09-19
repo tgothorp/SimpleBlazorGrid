@@ -1,27 +1,34 @@
 using System;
 using System.Linq.Expressions;
 using SimpleBlazorGrid.EntityFramework.Extensions;
-using SimpleBlazorGrid.EntityFramework.Helpers;
+using SimpleBlazorGrid.Extensions;
 using SimpleBlazorGrid.Filters;
+using SimpleBlazorGrid.Helpers;
 
 namespace SimpleBlazorGrid.EntityFramework.Filters;
 
 public class EntityFrameworkFilterExpressionBuilder
 {
+    private EnumerableFilterExpressionBuilder _enumerableFilterExpression = new();
+    
     public Expression<Func<T, bool>> GetFilterExpression<T>(Filter<T> filter)
     {
         return filter switch
         {
             SimpleStringFilter<T> stringFilter => StringFilterExpression(stringFilter),
-            SimpleNumericFilter<T> numericFilter => NumericFilterExpression(numericFilter),
-            SimpleNumericRangeFilter<T> numericRangeFilter => NumericRangeFilterExpression(numericRangeFilter),
-            SimpleDateFilter<T> dateFilter => DateFilterExpression(dateFilter),
-            SimpleDateRangeFilter<T> dateRangeFilter => DateRangeFilterExpression(dateRangeFilter),
-            SimpleEnumFilter<T, Enum> simpleEnumFilter => EnumFilterExpression(simpleEnumFilter),
+            SimpleNumericFilter<T> numericFilter => _enumerableFilterExpression.NumericFilterExpression(numericFilter),
+            SimpleNumericRangeFilter<T> numericRangeFilter => _enumerableFilterExpression.NumericRangeFilterExpression(numericRangeFilter),
+            SimpleDateFilter<T> dateFilter => _enumerableFilterExpression.DateFilterExpression(dateFilter),
+            SimpleDateRangeFilter<T> dateRangeFilter => _enumerableFilterExpression.DateRangeFilterExpression(dateRangeFilter),
+            SimpleEnumFilter<T, Enum> simpleEnumFilter => _enumerableFilterExpression.EnumFilterExpression(simpleEnumFilter),
             _ => throw new ArgumentException($"There is no appropriate method to handle generation of a filter expression for the provided filter", nameof(filter))
         };
     }
 
+    /// <summary>
+    /// Entity framework specific implementation, the enumerable string filter uses string.Equals(arg1, arg2, StringComparison) which
+    /// cannot be translated by entity framework so we use .ToLower() instead which does the job despite being poor performance-wise
+    /// </summary>
     private Expression<Func<T, bool>> StringFilterExpression<T>(SimpleStringFilter<T> stringFilter)
     {
         var parameter = Expression.Parameter(typeof(T), "x");
@@ -47,68 +54,5 @@ public class EntityFrameworkFilterExpressionBuilder
             var equality = Expression.Equal(propertyAccess, value);
             return Expression.Lambda<Func<T, bool>>(equality, parameter);
         }
-    }
-
-    private Expression<Func<T, bool>> NumericFilterExpression<T>(SimpleNumericFilter<T> numericFilter)
-    {
-        var parameter = Expression.Parameter(typeof(T), "x");
-
-        Expression propertyAccess = parameter;
-        foreach (var property in numericFilter.PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
-        var value = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericFilter.Value, propertyAccess.Type), propertyAccess.Type);
-        var equality = Expression.Equal(propertyAccess, value);
-        return Expression.Lambda<Func<T, bool>>(equality, parameter);
-    }
-
-    private Expression<Func<T, bool>> NumericRangeFilterExpression<T>(SimpleNumericRangeFilter<T> numericRangeFilter)
-    {
-        throw new NotImplementedException();
-    }
-
-    private Expression<Func<T, bool>> DateFilterExpression<T>(SimpleDateFilter<T> dateFilter)
-    {
-        var parameter = Expression.Parameter(typeof(T), "x");
-
-        Expression propertyAccess = parameter;
-        foreach (var property in dateFilter.PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
-        var propertyType = propertyAccess.Type;
-
-        if (dateFilter.IncludeTime || (Nullable.GetUnderlyingType(propertyType) ?? propertyType) == typeof(DateOnly))
-        {
-            var value = Expression.Constant(DateTimeHelper.ConvertDateTimeToTargetType(propertyType, dateFilter.Value), propertyType);
-            var equal = Expression.Equal(propertyAccess, value);
-
-            return Expression.Lambda<Func<T, bool>>(equal, parameter);
-        }
-        else
-        {
-            if (propertyType.IsNullable())
-                propertyAccess = Expression.Property(propertyAccess, "Value");
-
-            propertyAccess = Expression.Property(propertyAccess, "Date");
-
-            var value = Expression.Constant(dateFilter.Value.Value.Date, typeof(DateTime));
-            var equal = Expression.Equal(propertyAccess, value);
-
-            return Expression.Lambda<Func<T, bool>>(equal, parameter);
-        }
-    }
-
-    private Expression<Func<T, bool>> DateRangeFilterExpression<T>(SimpleDateRangeFilter<T> dateRangeFilter)
-    {
-        throw new NotImplementedException();
-    }
-
-    private Expression<Func<T, bool>> EnumFilterExpression<T>(SimpleEnumFilter<T, Enum> simpleEnumFilter)
-    {
-        throw new NotImplementedException();
     }
 }

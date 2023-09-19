@@ -1,24 +1,20 @@
 using System;
 using System.Linq.Expressions;
+using SimpleBlazorGrid.Filters;
 
 namespace SimpleBlazorGrid.Helpers
 {
     public static class ExpressionHelper
     {
-        public static object GetNestedPropertyValue<TObject>(TObject obj, string propertyName)
+        public static Expression PropertyAccess<T>(Filter<T> numericRangeFilter, ParameterExpression parameter)
         {
-            var parameterExpression = Expression.Parameter(typeof(TObject), "obj");
-            Expression propertyAccess = parameterExpression;
-
-            foreach (var property in propertyName.Split('.'))
+            Expression propertyAccess = parameter;
+            foreach (var property in numericRangeFilter.PropertyName.Split('.'))
             {
                 propertyAccess = Expression.Property(propertyAccess, property);
             }
 
-            var lambdaExpression = Expression.Lambda(propertyAccess, parameterExpression);
-            var getter = lambdaExpression.Compile();
-
-            return getter.DynamicInvoke(obj);
+            return propertyAccess;
         }
 
         public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
