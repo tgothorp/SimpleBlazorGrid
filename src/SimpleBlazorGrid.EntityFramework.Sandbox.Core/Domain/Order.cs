@@ -12,6 +12,7 @@ public class Order
     public DateTime? OrderDate { get; set; }
     public DateTime? RequiredDate { get; set; }
     public DateTime? ShippedDate { get; set; }
+    public DateOnly? LatestRefundDate { get; set; }
     public decimal? Freight { get; set; }
 
     public Customer Customer { get; set; } = null!;

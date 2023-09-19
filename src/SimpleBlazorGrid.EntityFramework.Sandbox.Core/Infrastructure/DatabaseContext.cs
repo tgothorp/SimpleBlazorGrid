@@ -7,11 +7,13 @@ public class DatabaseContext : DbContext
 {
     public string DbPath { get; }
 
-    public DatabaseContext()
+    public DatabaseContext(bool testDatabase = false) // TODO, This is only for testing, but it's still pretty bad (but it works).
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        DbPath = Path.Join(path, "simpleblazorgrid.db");
+        var databaseName = testDatabase ? "simpleblazorgrid_test.db" : "simpleblazorgrid.db";
+        
+        DbPath = Path.Join(path, databaseName);
     }
     
     public DbSet<Customer> Customers { get; set; }

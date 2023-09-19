@@ -10,43 +10,77 @@ namespace SimpleBlazorGrid.EntityFramework.Tests.Filters;
 public class StringFilterTests
 {
     [Fact]
-    public async Task StringFilter()
+    public async Task StringFilter_IgnoreCase_SameCaseMatches()
     {
-        var context = new DatabaseContext();
-        await SeedDatabase(context);
-        
-        var filter = new SimpleStringFilter<Customer>()
+        var customer = await DatabaseSetup.AddCustomer();
+        var context = new DatabaseContext(true);
+
+        var filter = new SimpleStringFilter<Customer>
         {
-            For = x => x.ContactName,
+            For = x => x.CustomerId,
             IgnoreCase = true,
-            Value = "ABC"
+            Value = customer.CustomerId
         };
 
         var source = TestSetup.CreateDataSource(context.Customers, filter);
-
         var result = await source.Items(CancellationToken.None);
-        result.ShouldNotBeNull();
         result.ShouldNotBeEmpty();
+        result.SingleOrDefault(x => x.CustomerId == customer.CustomerId).ShouldNotBeNull();
     }
 
-    private async Task SeedDatabase(DatabaseContext context)
+    [Fact]
+    public async Task StringFilter_IgnoreCase_DifferentCaseMatches()
     {
-        var customer = new Customer
+        var customer = await DatabaseSetup.AddCustomer();
+        var context = new DatabaseContext(true);
+
+        var filter = new SimpleStringFilter<Customer>
         {
-            CustomerId = Guid.NewGuid().ToString(),
-            CompanyName = "ABC",
-            ContactName = "ABC",
-            ContactTitle = "ABC",
-            Address = "ABC",
-            City = "ABC",
-            Region = "ABC",
-            PostalCode = "ABC",
-            Country = "ABC",
-            Fax = "ABC",
-            Phone = "ABC",
+            For = x => x.CustomerId,
+            IgnoreCase = true,
+            Value = customer.CustomerId.ToUpper()
         };
 
-        context.Customers.Add(customer);
-        await context.SaveChangesAsync();
+        var source = TestSetup.CreateDataSource(context.Customers, filter);
+        var result = await source.Items(CancellationToken.None);
+        result.ShouldNotBeEmpty();
+        result.SingleOrDefault(x => x.CustomerId == customer.CustomerId).ShouldNotBeNull();
+    }
+    
+    [Fact]
+    public async Task StringFilter_MatchCase_SameCaseMatches()
+    {
+        var customer = await DatabaseSetup.AddCustomer();
+        var context = new DatabaseContext(true);
+
+        var filter = new SimpleStringFilter<Customer>
+        {
+            For = x => x.CustomerId,
+            IgnoreCase = false,
+            Value = customer.CustomerId
+        };
+
+        var source = TestSetup.CreateDataSource(context.Customers, filter);
+        var result = await source.Items(CancellationToken.None);
+        result.ShouldNotBeEmpty();
+        result.SingleOrDefault(x => x.CustomerId == customer.CustomerId).ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task StringFilter_MatchCase_DifferentCaseDoesNotMatch()
+    {
+        var customer = await DatabaseSetup.AddCustomer();
+        var context = new DatabaseContext(true);
+
+        var filter = new SimpleStringFilter<Customer>
+        {
+            For = x => x.CustomerId,
+            IgnoreCase = false,
+            Value = customer.CustomerId.ToUpper()
+        };
+
+        var source = TestSetup.CreateDataSource(context.Customers, filter);
+        var result = await source.Items(CancellationToken.None);
+        result.ShouldBeEmpty();
     }
 }
