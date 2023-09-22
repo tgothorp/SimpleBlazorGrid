@@ -70,9 +70,10 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
+  displayName: 'Push to Pre-Release Feed'
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '0d8b2f6e-0ec6-4500-8e70-5ce0e716c1de/defa3eef-2913-49ef-902e-c3a810b55852'
