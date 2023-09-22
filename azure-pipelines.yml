@@ -1,0 +1,79 @@
+trigger:
+- none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet'
+
+- task: Npm@1
+  displayName: 'Install SASS'
+  inputs:
+    command: 'custom'
+    customCommand: 'install -g sass'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    projects: '**/*.sln'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: 'build'
+    projects: '**/*.sln'
+    arguments: '-c Release -v minimal --no-restore'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test [Core]'
+  inputs:
+    command: 'test'
+    projects: '**/SimpleBlazorGrid.Core.Tests.Unit.csproj'
+    testRunTitle: 'Core'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test [Entity Framework]'
+  inputs:
+    command: 'test'
+    projects: '**/SimpleBlazorGrid.EntityFramework.Tests.csproj'
+    testRunTitle: 'Entity Framework'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack [Core]'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/SimpleBlazorGrid.Core.csproj'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'PACKAGE_VERSION_CORE'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack [Entity Framework]'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/SimpleBlazorGrid.EntityFramework.csproj'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'PACKAGE_VERSION_EF'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Push to Pre-Release Feed'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '0d8b2f6e-0ec6-4500-8e70-5ce0e716c1de/defa3eef-2913-49ef-902e-c3a810b55852'
