@@ -21,5 +21,5 @@
 </SimpleGrid>
 
 @code {
-    public DatabaseContext Context { get; set; } = new DatabaseContext();
+    public DatabaseContext Context { get; set; } = DatabaseContextFactory.Create();
 }

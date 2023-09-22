@@ -14,7 +14,7 @@ public class StringFilterTests
     public async Task StringFilter_IgnoreCase_SameCaseMatches()
     {
         var customer = await DatabaseSetup.AddCustomer();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleStringFilter<Customer>
         {
@@ -33,7 +33,7 @@ public class StringFilterTests
     public async Task StringFilter_IgnoreCase_DifferentCaseMatches()
     {
         var customer = await DatabaseSetup.AddCustomer();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleStringFilter<Customer>
         {
@@ -52,7 +52,7 @@ public class StringFilterTests
     public async Task StringFilter_MatchCase_SameCaseMatches()
     {
         var customer = await DatabaseSetup.AddCustomer();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleStringFilter<Customer>
         {
@@ -71,7 +71,7 @@ public class StringFilterTests
     public async Task StringFilter_MatchCase_DifferentCaseDoesNotMatch()
     {
         var customer = await DatabaseSetup.AddCustomer();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleStringFilter<Customer>
         {
@@ -89,7 +89,7 @@ public class StringFilterTests
     public async Task StringFilter_NestedProperty_IgnoreCase_SameCaseMatches()
     {
         var orderAndCustomer = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleStringFilter<Order>()
         {

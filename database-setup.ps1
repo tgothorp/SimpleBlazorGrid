@@ -32,22 +32,5 @@ if (Test-Path -Path $targetDirectory -PathType Container) {
 $commandToRun = "dotnet ef database update -s ..\SimpleBlazorGrid.EntityFramework.Sandbox"
 Invoke-Expression -Command $commandToRun
 
-# Change directory to the current user's AppData\Local directory
-$userAppDataLocalDirectory = [System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::LocalApplicationData)
-Set-Location -Path $userAppDataLocalDirectory
-
-# Check for the existence of "simpleblazorgrid.db" file
-$sourceFile = Join-Path $userAppDataLocalDirectory "simpleblazorgrid.db"
-
-Write-Output "Generating test database..."
-if (-not (Test-Path -Path $sourceFile -PathType Leaf)) {
-    Write-Warning "The 'simpleblazorgrid.db' file does not exist in $userAppDataLocalDirectory."
-    exit 1
-}
-
-# Duplicate the file as "simpleblazorgrid_test.db" and overwrite if it already exists
-$targetFile = Join-Path $userAppDataLocalDirectory "simpleblazorgrid_test.db"
-Copy-Item -Path $sourceFile -Destination $targetFile -Force
-
 Write-Output "Done!"
 Set-Location -Path $scriptDirectory

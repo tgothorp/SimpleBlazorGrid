@@ -13,7 +13,7 @@ public class DateFilterTests
     public async Task DateFilter_ExcludeTime_SameNullableDateTimeMatches()
     {
         var order = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleDateFilter<Order>
         {
@@ -32,7 +32,7 @@ public class DateFilterTests
     public async Task DateFilter_IncludeTime_SameNullableDateTimeMatches()
     {
         var order = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleDateFilter<Order>
         {
@@ -51,12 +51,12 @@ public class DateFilterTests
     public async Task DateFilter_IncludeTime_DateOnlyNullableDateTimeDoesNotMatch()
     {
         var order = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleDateFilter<Order>
         {
             For = x => x.OrderDate,
-            Value = order.OrderDate.Value.Date,
+            Value = order.OrderDate!.Value.Date,
             IncludeTime = true
         };
         
@@ -69,12 +69,12 @@ public class DateFilterTests
     public async Task DateFilter_ExcludeTime_NullableDateOnly_DoesMatch()
     {
         var order = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleDateFilter<Order>
         {
             For = x => x.LatestRefundDate,
-            Value = new DateTime(order.LatestRefundDate.Value.Year, order.LatestRefundDate.Value.Month, order.LatestRefundDate.Value.Day),
+            Value = new DateTime(order.LatestRefundDate!.Value.Year, order.LatestRefundDate.Value.Month, order.LatestRefundDate.Value.Day),
             IncludeTime = false
         };
         
@@ -88,12 +88,12 @@ public class DateFilterTests
     public async Task DateFilter_IncludeTime_NullableDateOnly_DoesMatch()
     {
         var order = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleDateFilter<Order>
         {
             For = x => x.LatestRefundDate,
-            Value = new DateTime(order.LatestRefundDate.Value.Year, order.LatestRefundDate.Value.Month, order.LatestRefundDate.Value.Day),
+            Value = new DateTime(order.LatestRefundDate!.Value.Year, order.LatestRefundDate.Value.Month, order.LatestRefundDate.Value.Day),
             IncludeTime = true
         };
         

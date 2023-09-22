@@ -5,25 +5,19 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Core.Infrastructure;
 
 public class DatabaseContext : DbContext
 {
-    public string DbPath { get; }
+    public string? DbPath { get; } = null;
 
-    public DatabaseContext(bool testDatabase = false) // TODO, This is only for testing, but it's still pretty bad (but it works).
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        var databaseName = testDatabase ? "simpleblazorgrid_test.db" : "simpleblazorgrid.db";
+        var databaseName = "simpleblazorgrid.db";
         
         DbPath = Path.Join(path, databaseName);
     }
-    
-    public DbSet<Customer> Customers { get; set; }
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderDetail> OrderDetails { get; set; }
-    public DbSet<Product> Products { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite($"Data Source={DbPath}");
-        base.OnConfiguring(optionsBuilder);
-    }
+    public DbSet<Customer> Customers { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<OrderDetail> OrderDetails { get; set; } = null!;
+    public DbSet<Product> Products { get; set; } = null!;
 }
