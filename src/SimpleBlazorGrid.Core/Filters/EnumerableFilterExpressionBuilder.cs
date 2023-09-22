@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using SimpleBlazorGrid.Extensions;
+using SimpleBlazorGrid.Helpers;
 
 namespace SimpleBlazorGrid.Filters;
 
-public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
+public class EnumerableFilterExpressionBuilder
 {
-    public override Expression<Func<T, bool>> GetFilterExpression<T>(Filter<T> filter)
+    public Expression<Func<T, bool>> GetFilterExpression<T>(Filter<T> filter)
     {
         return filter switch
         {
@@ -20,164 +22,132 @@ public class EnumerableFilterExpressionBuilder : FilterExpressionBuilder
         };
     }
 
-    private Expression<Func<T, bool>> StringFilterExpression<T>(SimpleStringFilter<T> filter)
+    public Expression<Func<T, bool>> StringFilterExpression<T>(SimpleStringFilter<T> stringFilter)
     {
         var parameter = Expression.Parameter(typeof(T), "x");
+        var propertyAccess = ExpressionHelper.PropertyAccess(stringFilter, parameter);
 
-        Expression propertyAccess = parameter;
-        foreach (var property in filter.PropertyName.Split('.'))
+        var value = Expression.Constant(stringFilter.Value, typeof(string));
+
+        if (stringFilter.IgnoreCase)
         {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
-        var value = Expression.Constant(filter.Value, typeof(string));
-
-        if (filter.IgnoreCase)
-        {
-            // string.Equals(string1, string2, StringComparison)
             var equalsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string), typeof(StringComparison) });
             var equality = Expression.Call(null, equalsMethod, propertyAccess, value, Expression.Constant(StringComparison.OrdinalIgnoreCase));
 
+            // x => string.Equals(x.Property, FilterValue, StringComparison.OrdinalIgnoreCase)
             return Expression.Lambda<Func<T, bool>>(equality, parameter);
         }
         else
         {
             var equality = Expression.Equal(propertyAccess, value);
+            
+            // x => x.Property == FilterValue
             return Expression.Lambda<Func<T, bool>>(equality, parameter);
         }
     }
 
-    private Expression<Func<T, bool>> NumericFilterExpression<T>(SimpleNumericFilter<T> filter)
+    public Expression<Func<T, bool>> NumericFilterExpression<T>(SimpleNumericFilter<T> numericFilter)
     {
         var parameter = Expression.Parameter(typeof(T), "x");
+        var propertyAccess = ExpressionHelper.PropertyAccess(numericFilter, parameter);
 
-        Expression propertyAccess = parameter;
-        foreach (var property in filter.PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
-        var propertyType = propertyAccess.Type;
-        var value = Expression.Constant(Convert.ChangeType(filter.Value, propertyType), propertyType);
-
+        var value = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericFilter.Value, propertyAccess.Type), propertyAccess.Type);
         var equality = Expression.Equal(propertyAccess, value);
+        
+        // x => x.Property == FilterValue
         return Expression.Lambda<Func<T, bool>>(equality, parameter);
     }
 
-    private Expression<Func<T, bool>> NumericRangeFilterExpression<T>(SimpleNumericRangeFilter<T> filter)
+    public Expression<Func<T, bool>> NumericRangeFilterExpression<T>(SimpleNumericRangeFilter<T> numericRangeFilter)
     {
         var parameter = Expression.Parameter(typeof(T), "x");
-
-        Expression propertyAccess = parameter;
-        foreach (var property in filter.PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
+        var propertyAccess = ExpressionHelper.PropertyAccess(numericRangeFilter, parameter);
         var propertyType = propertyAccess.Type;
-        var lowValue = Expression.Constant(Convert.ChangeType(filter.LowValue, propertyType), propertyType);
-        var highValue = Expression.Constant(Convert.ChangeType(filter.HighValue, propertyType), propertyType);
 
-        // x => x.Property >= lowValue && x.Property <= highValue
+        var lowValue = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericRangeFilter.LowValue, propertyType), propertyType);
+        var highValue = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericRangeFilter.HighValue, propertyType), propertyType);
+
         var greaterThanLowValue = Expression.GreaterThanOrEqual(propertyAccess, lowValue);
         var lessThanHighValue = Expression.LessThanOrEqual(propertyAccess, highValue);
         var and = Expression.And(greaterThanLowValue, lessThanHighValue);
 
+        // x => x.Property >= lowValue && x.Property <= highValue
         return Expression.Lambda<Func<T, bool>>(and, parameter);
     }
 
-    private Expression<Func<T, bool>> DateFilterExpression<T>(SimpleDateFilter<T> filter)
+    public Expression<Func<T, bool>> DateFilterExpression<T>(SimpleDateFilter<T> dateFilter)
     {
         var parameter = Expression.Parameter(typeof(T), "x");
-
-        Expression propertyAccess = parameter;
-        foreach (var property in filter.PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
+        var propertyAccess = ExpressionHelper.PropertyAccess(dateFilter, parameter);
         var propertyType = propertyAccess.Type;
-        if (propertyType == typeof(DateTime?))
-            propertyAccess = Expression.Property(propertyAccess, "Value");
 
-        if (filter.IncludeTime)
+        if (dateFilter.IncludeTime || (Nullable.GetUnderlyingType(propertyType) ?? propertyType) == typeof(DateOnly))
         {
-            var value = Expression.Constant(filter.Value.Value, typeof(DateTime));
+            var value = Expression.Constant(DateTimeHelper.ConvertDateTimeToTargetType(propertyType, dateFilter.Value), propertyType);
             var equal = Expression.Equal(propertyAccess, value);
 
+            // x => x.Property == FilterValue
             return Expression.Lambda<Func<T, bool>>(equal, parameter);
         }
         else
         {
-            var value = Expression.Constant(filter.Value.Value.Date, typeof(DateTime));
+            if (propertyType.IsNullable())
+                propertyAccess = Expression.Property(propertyAccess, "Value");
+
+            propertyAccess = Expression.Property(propertyAccess, "Date");
+
+            var value = Expression.Constant(dateFilter.Value.Value.Date, typeof(DateTime));
             var equal = Expression.Equal(propertyAccess, value);
 
+            // x => x.Property.Date == FilterValue.Value.Date
             return Expression.Lambda<Func<T, bool>>(equal, parameter);
         }
     }
 
-    private Expression<Func<T, bool>> DateRangeFilterExpression<T>(SimpleDateRangeFilter<T> filter)
+    public Expression<Func<T, bool>> DateRangeFilterExpression<T>(SimpleDateRangeFilter<T> dateRangeFilter)
     {
         var parameter = Expression.Parameter(typeof(T), "x");
-
-        Expression propertyAccess = parameter;
-        foreach (var property in filter.PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
+        var propertyAccess = ExpressionHelper.PropertyAccess(dateRangeFilter, parameter);
         var propertyType = propertyAccess.Type;
+        
         if (propertyType == typeof(DateTime?) || propertyType == typeof(DateOnly?))
             propertyAccess = Expression.Property(propertyAccess, "Value");
 
-        if (!filter.IncludeTime && propertyType != typeof(DateOnly) && propertyType != typeof(DateOnly?))
-        {
+        if (!dateRangeFilter.IncludeTime && propertyType != typeof(DateOnly) && propertyType != typeof(DateOnly?)) 
             propertyAccess = Expression.Property(propertyAccess, "Date");
-        }
 
         var low = (propertyType == typeof(DateOnly) || propertyType == typeof(DateOnly?))
-            ? Expression.Constant(DateOnly.FromDateTime(filter.LowValue.Value), typeof(DateOnly))
-            : Expression.Constant(filter.LowValue.Value, typeof(DateTime));
+            ? Expression.Constant(DateOnly.FromDateTime(dateRangeFilter.LowValue.Value), typeof(DateOnly))
+            : Expression.Constant(dateRangeFilter.LowValue.Value, typeof(DateTime));
         
         var high = (propertyType == typeof(DateOnly) || propertyType == typeof(DateOnly?))
-            ? Expression.Constant(DateOnly.FromDateTime(filter.HighValue.Value), typeof(DateOnly))
-            : Expression.Constant(filter.HighValue.Value, typeof(DateTime));
+            ? Expression.Constant(DateOnly.FromDateTime(dateRangeFilter.HighValue.Value), typeof(DateOnly))
+            : Expression.Constant(dateRangeFilter.HighValue.Value, typeof(DateTime));
 
-        var greaterThanLow = filter.Inclusive
+        var greaterThanLow = dateRangeFilter.Inclusive
             ? Expression.GreaterThanOrEqual(propertyAccess, low)
             : Expression.GreaterThan(propertyAccess, low);
 
-        var lessThanHigh = filter.Inclusive
+        var lessThanHigh = dateRangeFilter.Inclusive
             ? Expression.LessThanOrEqual(propertyAccess, high)
             : Expression.LessThan(propertyAccess, high);
 
         var and = Expression.And(greaterThanLow, lessThanHigh);
 
+        // x => x.Property >= Low && x.Property <= High
         return Expression.Lambda<Func<T, bool>>(and, parameter);
     }
 
-    private Expression<Func<T, bool>> EnumFilterExpression<T>(EnumFilter<T> filter)
+    public Expression<Func<T, bool>> EnumFilterExpression<T>(EnumFilter<T> enumFilter)
     {
         var parameter = Expression.Parameter(typeof(T), "x");
+        var propertyAccess = ExpressionHelper.PropertyAccess(enumFilter, parameter);
 
-        Expression propertyAccess = parameter;
-        foreach (var property in filter.PropertyName.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-
-        if (filter.AllowMultiple)
-        {
-            Expression propertyToString = Expression.Call(Expression.Convert(propertyAccess, typeof(object)), typeof(object).GetMethod("ToString"));
-
-            var containsMethodCall = Expression.Call(Expression.Constant(filter.SelectedValues), typeof(List<string>).GetMethod("Contains"), propertyToString);
-            return Expression.Lambda<Func<T, bool>>(containsMethodCall, parameter);
-        }
-
-        var convertedValue = Enum.Parse(filter.EnumType, filter.SelectedValues[0], true);
-        var value = Expression.Constant(convertedValue, filter.EnumType);
-        var equal = Expression.Equal(propertyAccess, value);
-
-        return Expression.Lambda<Func<T, bool>>(equal, parameter);
+        var enumValues = EnumHelper.ParseEnumList(enumFilter.EnumType, enumFilter.SelectedValues);
+        var enumListType = typeof(List<>).MakeGenericType(enumFilter.EnumType);
+        var contains = Expression.Call(Expression.Constant(enumValues), enumListType.GetMethod("Contains")!, propertyAccess);
+        
+        // x => listOfEnumValues.Contains(x.EnumProperty)
+        return Expression.Lambda<Func<T, bool>>(contains, parameter);
     }
 }

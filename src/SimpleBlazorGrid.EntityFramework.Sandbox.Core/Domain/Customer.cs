@@ -1,4 +1,4 @@
-namespace SimpleBlazorGrid.EntityFramework.Sandbox.Domain;
+namespace SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain;
 
 public class Customer
 {

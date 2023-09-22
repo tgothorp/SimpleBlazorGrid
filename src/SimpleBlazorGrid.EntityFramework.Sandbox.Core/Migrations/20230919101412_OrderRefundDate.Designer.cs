@@ -2,22 +2,25 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SimpleBlazorGrid.EntityFramework.Sandbox.Infrastructure;
+using SimpleBlazorGrid.EntityFramework.Sandbox.Core.Infrastructure;
 
 #nullable disable
 
 namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230919101412_OrderRefundDate")]
+    partial class OrderRefundDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Customer", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Customer", b =>
                 {
                     b.Property<string>("CustomerId")
                         .HasColumnType("TEXT");
@@ -67,7 +70,7 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Order", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Order", b =>
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
@@ -78,6 +81,9 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("Freight")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly?>("LatestRefundDate")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("OrderDate")
@@ -96,7 +102,7 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.OrderDetail", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.OrderDetail", b =>
                 {
                     b.Property<int>("OrderDetailId")
                         .ValueGeneratedOnAdd()
@@ -126,7 +132,7 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Product", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Product", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -160,9 +166,9 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Order", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Order", b =>
                 {
-                    b.HasOne("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Customer", "Customer")
+                    b.HasOne("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -171,15 +177,15 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.OrderDetail", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.OrderDetail", b =>
                 {
-                    b.HasOne("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Order", "Order")
+                    b.HasOne("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Product", "Product")
+                    b.HasOne("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -190,17 +196,17 @@ namespace SimpleBlazorGrid.EntityFramework.Sandbox.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Customer", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Order", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Order", b =>
                 {
                     b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Domain.Product", b =>
+            modelBuilder.Entity("SimpleBlazorGrid.EntityFramework.Sandbox.Core.Domain.Product", b =>
                 {
                     b.Navigation("OrderDetails");
                 });

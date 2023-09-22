@@ -1,28 +1,25 @@
 using System;
-using System.Reflection;
+using System.Linq;
 
 namespace SimpleBlazorGrid.Extensions
 {
     public static class TypeExtensions
     {
         /// <summary>
-        /// Get the property info for a given property name even if deeply nested, for example; MyObject.Property1.Property2.Property3
+        /// Determines if a given type is a int, float, double or decimal or a nullable version of these types
         /// </summary>
-        public static PropertyInfo GetPropertyInfoRecursively(this Type @type, string propertyName)
+        public static bool IsNumericType(this Type type)
         {
-            PropertyInfo propertyInfo = null;
-            
-            foreach (var property in propertyName.Split('.'))
-            {
-                propertyInfo = type.GetProperty(property);
+            Type[] numericTypes = { typeof(int), typeof(float), typeof(double), typeof(decimal) };
+            return numericTypes.Contains(type) || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) && Nullable.GetUnderlyingType(type).IsNumericType());
+        }
 
-                if (propertyInfo == null)
-                    return null;
-
-                type = propertyInfo.PropertyType;
-            }
-
-            return propertyInfo;
+        /// <summary>
+        /// Determines if the given type is a nullable type, eg. decimal?
+        /// </summary>
+        public static bool IsNullable(this Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
     }
 }

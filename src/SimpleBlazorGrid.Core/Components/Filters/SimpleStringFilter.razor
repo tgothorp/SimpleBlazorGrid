@@ -2,7 +2,9 @@
 @namespace SimpleBlazorGrid
 
 @using System.Linq.Expressions
+@using SimpleBlazorGrid.Exceptions
 @using SimpleBlazorGrid.Extensions
+@using System.Diagnostics
 
 @typeparam TType;
 
@@ -41,8 +43,11 @@
 
     protected override void OnInitialized()
     {
-        // TODO: Validate that this filter can be applied to the target property (types match etc.)
         Value = DefaultValue;
+
+        var type = For.Body.Type;
+        if (type != typeof(string))
+            throw new SimpleGridFilterException<TType>(this, $"Cannot apply 'Simple String Filter' to property '{typeof(TType)}.{PropertyName}' as is not a string!");
 
         base.OnInitialized();
     }
