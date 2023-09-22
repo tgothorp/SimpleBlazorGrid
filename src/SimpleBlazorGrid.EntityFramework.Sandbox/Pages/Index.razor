@@ -16,7 +16,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        await using (var context = new DatabaseContext())
+        await using (var context = DatabaseContextFactory.Create())
         {
             Customers = await context.Customers
                 .ToListAsync();

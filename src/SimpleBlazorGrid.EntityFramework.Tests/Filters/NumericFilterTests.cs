@@ -13,7 +13,7 @@ public class NumericFilterTests
     public async Task NumericFilter_Int()
     {
         var order = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleNumericFilter<Order>
         {
@@ -31,7 +31,7 @@ public class NumericFilterTests
     public async Task NumericFilter_Decimal()
     {
         var order = await DatabaseSetup.AddOrder();
-        var context = new DatabaseContext(true);
+        var context = DatabaseSetup.CreateDatabaseContext();
 
         var filter = new SimpleNumericFilter<Order>
         {
