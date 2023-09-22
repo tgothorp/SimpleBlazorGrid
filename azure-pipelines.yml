@@ -69,16 +69,8 @@ steps:
     versionEnvVar: 'PACKAGE_VERSION_EF'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Core'
+  displayName: 'Publish'
   inputs:
-    PathtoPublish: '**\SimpleBlazorGrid.Core.$(PACKAGE_VERSION_CORE).nupkg'
-    ArtifactName: 'Core'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
     publishLocation: 'Container'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Entity Framework'
-  inputs:
-    PathtoPublish: '**\SimpleBlazorGrid.EntityFramework.$(PACKAGE_VERSION_EF).nupkg'
-    ArtifactName: 'Entity Framework'
-    publishLocation: 'Container'
-
