@@ -10,7 +10,7 @@ namespace SimpleBlazorGrid.Extensions
         /// </summary>
         public static bool IsNumericType(this Type type)
         {
-            Type[] numericTypes = { typeof(int), typeof(float), typeof(double), typeof(decimal) };
+            Type[] numericTypes = { typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort), typeof(float), typeof(double), typeof(decimal) };
             return numericTypes.Contains(type) || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) && Nullable.GetUnderlyingType(type).IsNumericType());
         }
 
