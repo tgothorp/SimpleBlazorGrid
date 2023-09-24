@@ -42,6 +42,7 @@
 .navbar {
   overflow: hidden;
   padding-bottom: 5px;
+  z-index: 999;
 }
 .navbar a {
   float: left;
@@ -51,6 +52,7 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+  background-color: #1D1B1B;
 }
 .navbar a:hover {
   background-color: #ff477e;
@@ -207,6 +209,62 @@
 .buttons div button:hover {
   cursor: pointer;
   background-color: #ff477e;
+}
+
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 50px;
+  background-color: #1D1B1B;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 30px;
+  border-right: #ff0a54 solid 5px;
+}
+.sidebar h3 {
+  padding-bottom: 30px;
+  text-align: center;
+}
+.sidebar a {
+  color: #FFF;
+  text-decoration: none;
+}
+.sidebar a.active {
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.sidebar hr {
+  margin-bottom: 35px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: solid 1px #ff0a54;
+}
+.sidebar p {
+  font-size: var(--fs--1);
+}
+.sidebar .content {
+  padding: 15px 10px 15px;
+}
+.sidebar .content:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  background-color: #ff477e;
+}
+.sidebar .nest-1 {
+  padding-left: 1em;
+}
+.sidebar .nest-2 {
+  padding-left: 2em;
+}
+.sidebar .nest-3 {
+  padding-left: 3em;
+}
+
+.documentation-content {
+  position: fixed;
+  left: 250px;
 }
 
 @font-face {

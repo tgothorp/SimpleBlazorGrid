@@ -1,12 +1,17 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid.Website.Pages
 
+@using SimpleBlazorGrid.Website.Pages.Shared
+
+@implements IDisposable
+
 @inject IJSRuntime JS
+@inject NavBarService NavBarService
 
 <div class="navbar" id="navbar">
-    <a href="/" class="active">Simple Blazor Grid</a>
-    <a href="/features">Features</a>
-    <a href="/documentation">Documentation</a>
+    <a href="/" class="@(NavSection == NavSection.Index ? "active": "")">Simple Blazor Grid</a>
+    <a href="/features" class="@(NavSection == NavSection.Features ? "active": "")">Features</a>
+    <a href="/documentation" class="@(NavSection == NavSection.Documentation ? "active": "")">Documentation</a>
     <a href="#">GitHub</a>
     <a href="javascript:void(0);" class="icon" @onclick="ToggleMobileMenu">
         <i class="fa fa-bars"></i>
@@ -15,9 +20,27 @@
 
 @code {
 
+    private NavSection NavSection { get; set; }
+
+    protected override void OnInitialized()
+    {
+        NavBarService.OnChanged += UpdateActiveNavBarLocation;
+        base.OnInitialized();
+    }
+
+    private void UpdateActiveNavBarLocation(object? sender, NavSection newNavSection)
+    {
+        NavSection = newNavSection;
+        StateHasChanged();
+    }
+    
     private async Task ToggleMobileMenu()
     {
         await JS.InvokeVoidAsync("toggleMobileMenu");
     }
 
+    public void Dispose()
+    {
+        NavBarService.OnChanged -= UpdateActiveNavBarLocation;
+    }
 }

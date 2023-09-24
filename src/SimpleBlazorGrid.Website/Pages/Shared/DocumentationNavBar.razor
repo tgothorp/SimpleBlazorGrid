@@ -1,0 +1,99 @@
+@namespace SimpleBlazorGrid.Website.Pages.Shared
+
+@inject NavBarService NavBarService
+
+@implements IDisposable
+
+<div class="sidebar">
+    <h3>
+        Simple Blazor Grid Docs
+    </h3>
+    <hr/>
+    <a href="/documentation" class="@(NavSection == DocumentationNavSection.Overview ? "active" : "")">
+        <div class="content">
+            <p>Overview</p>
+        </div>
+    </a>
+    <a href="/documentation/configuration" class="@(NavSection == DocumentationNavSection.Configuration ? "active" : "")">
+        <div class="content">
+            <p>Configuration</p>
+        </div>
+    </a>
+    <a href="/documentation/simple-grid" class="@(NavSection == DocumentationNavSection.SimpleGrid ? "active" : "")">
+        <div class="content">
+            <p>SimpleGrid&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/simple-grid/data-source" class="@(NavSection == DocumentationNavSection.SimpleGridDataSource ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleGridDataSource&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/simple-grid/simple-column" class="@(NavSection == DocumentationNavSection.SimpleColumn ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleColumn&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/filters" class="@(NavSection == DocumentationNavSection.SimpleFilters ? "active" : "")">
+        <div class="content">
+            <p>Filters</p>
+        </div>
+    </a>
+    <a href="/documentation/filters/date" class="@(NavSection == DocumentationNavSection.SimpleDateFilter ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleDateFilter&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/filters/date-range" class="@(NavSection == DocumentationNavSection.SimpleDateRangeFilter ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleDateRangeFilter&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/filters/enum" class="@(NavSection == DocumentationNavSection.SimpleEnumFilter ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleEnumFilter&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/filters/numeric" class="@(NavSection == DocumentationNavSection.SimpleNumericFilter ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleNumericFilter&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/filters/numeric-range" class="@(NavSection == DocumentationNavSection.SimpleNumericRangeFilter ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleNumericRangeFilter&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/filters/string" class="@(NavSection == DocumentationNavSection.SimpleStringFilter ? "active" : "")">
+        <div class="content nest-1">
+            <p>SimpleStringFilter&lt;T&gt;</p>
+        </div>
+    </a>
+    <a href="/documentation/entity-framework" class="@(NavSection == DocumentationNavSection.EntityFramework ? "active" : "")">
+        <div class="content">
+            <p>Entity Framework</p>
+        </div>
+    </a>
+</div>
+
+@code {
+    public DocumentationNavSection NavSection { get; set; }
+
+    protected override void OnInitialized()
+    {
+        NavBarService.OnDocumentationChanged += DocumentationSectionChanged;
+        base.OnInitialized();
+    }
+
+    private void DocumentationSectionChanged(object? sender, DocumentationNavSection newSection)
+    {
+        NavSection = newSection;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavBarService.OnDocumentationChanged -= DocumentationSectionChanged;
+    }
+
+}

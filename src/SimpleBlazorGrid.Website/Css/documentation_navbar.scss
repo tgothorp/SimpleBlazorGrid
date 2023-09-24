@@ -1,0 +1,67 @@
+@use "base";
+
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 50px;
+  background-color: base.$color-background;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 30px;
+  border-right: base.$color-primary solid 5px;
+  
+  h3 {
+    padding-bottom: 30px;
+    text-align: center;
+  }
+  
+  a {
+    color: base.$color-text;
+    text-decoration: none;
+  }
+  
+  a.active {
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-color: base.$color-primary;
+  }
+  
+  hr {
+    margin-bottom: 35px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: solid 1px base.$color-primary;
+  }
+  
+  p {
+    font-size: var(--fs--1);
+  }
+  
+  .content {
+    padding: 15px 10px 15px;
+  }
+  
+  .content:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    background-color: base.$color-secondary;
+  }
+  
+  .nest-1 {
+    padding-left: 1em;
+  }
+
+  .nest-2 {
+    padding-left: 2em;
+  }
+
+  .nest-3 {
+    padding-left: 3em;
+  }
+}
+
+.documentation-content {
+  position: fixed;
+  left: 250px;
+}
