@@ -1,0 +1,60 @@
+@use "base";
+
+.documentation-content {
+  position: fixed;
+  left: 250px;
+  height: 90vh;
+  overflow-y: scroll;
+}
+
+.documentation-wrapper {
+  padding-left: 2%;
+  padding-top: 1%;
+  width: 45%;
+  line-height: 1.5;
+  
+  @include base.tablet {
+    width: 70%;
+  }
+  
+  h1 {
+    font-size: var(--fs-3);
+    text-decoration: underline;
+    text-decoration-color: base.$color-primary;
+  }
+  
+  h2 {
+    font-size: var(--fs-2);
+    text-decoration: underline;
+    text-decoration-color: base.$color-primary;
+  }
+
+  h3 {
+    font-size: var(--fs-1);
+    text-decoration: underline;
+    text-decoration-color: base.$color-primary;
+  }
+  
+  p {
+    font-size: var(--fs-0);
+  }
+  
+  a {
+    color: base.$color-primary;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    cursor: pointer;
+    color: base.$color-secondary;
+  }
+  
+  pre {
+    background-color: white;
+    color: black;
+    width: fit-content;
+    padding: 0.5em;
+    border-radius: .2rem;
+    font-size: var(--fs-0);
+  }
+}

@@ -31,6 +31,7 @@ public enum NavSection
 public enum DocumentationNavSection
 {
     Overview,
+    GettingStarted,
     Configuration,
     SimpleGrid,
     SimpleGridDataSource,

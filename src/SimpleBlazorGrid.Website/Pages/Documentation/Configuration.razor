@@ -1,4 +1,4 @@
-@page "/documentation/configuration"
+﻿@page "/documentation/configuration"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
 
@@ -6,11 +6,53 @@
 
 @inject NavBarService NavBarService
 
+<h1>Configuration</h1>
+<br/>
+<p>Simple Blazor Grid can be configured to your needs, from the way the generated tables look, to how certain data types are displayed in the grid.</p>
+<br/>
+<p>Configuration is done at compile-time by passing in an a delegate or instance of <code>SimpleDataGridConfiguration</code> to <code>.AddSimpleBlazorGrid()</code> when configuring your services</p>
+<br/>
+<br/>
+<h3>Example</h3>
+<p>The following example configures the primary and secondary color for generated grids as well as sets the default currency symbol to '£'.</p>
+<br/>
+<pre>
+builder.Services.AddSimpleBlazorGrid(conf =>
+{
+    conf.PrimaryColour = "#ff0a54";
+    conf.SecondaryColour = "#ff477e";
+    conf.CurrencySymbol = "£";
+});
+</pre>
+<br/>
+<br/>
+<h3>SimpleDataGridConfiguration</h3>
+<br/>
+<table>
+    <thead>
+    <tr>
+        <th>Property</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>PrimaryColour</td>
+        <td>A Hex colour value that acts as the primary color of generated tables, will be applied to row separators, buttons etc. </td>
+        <td>#FF0A54</td>
+    </tr>
+    </tbody>
+</table>
+
+
 @code {
+
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);
         NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.Configuration);
         base.OnInitialized();
     }
+
 }

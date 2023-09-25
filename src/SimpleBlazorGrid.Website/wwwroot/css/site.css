@@ -211,8 +211,60 @@
   background-color: #ff477e;
 }
 
+.documentation-content {
+  position: fixed;
+  left: 250px;
+  height: 90vh;
+  overflow-y: scroll;
+}
+
+.documentation-wrapper {
+  padding-left: 2%;
+  padding-top: 1%;
+  width: 45%;
+  line-height: 1.5;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .documentation-wrapper {
+    width: 70%;
+  }
+}
+.documentation-wrapper h1 {
+  font-size: var(--fs-3);
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.documentation-wrapper h2 {
+  font-size: var(--fs-2);
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.documentation-wrapper h3 {
+  font-size: var(--fs-1);
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.documentation-wrapper p {
+  font-size: var(--fs-0);
+}
+.documentation-wrapper a {
+  color: #ff0a54;
+  text-decoration: underline;
+}
+.documentation-wrapper a:hover {
+  cursor: pointer;
+  color: #ff477e;
+}
+.documentation-wrapper pre {
+  background-color: white;
+  color: black;
+  width: fit-content;
+  padding: 0.5em;
+  border-radius: 0.2rem;
+  font-size: var(--fs-0);
+}
+
 .sidebar {
-  height: 100%;
   width: 250px;
   position: fixed;
   top: 50px;
@@ -221,6 +273,8 @@
   transition: 0.3s;
   padding-top: 30px;
   border-right: #ff0a54 solid 5px;
+  overflow-y: scroll;
+  height: 90vh;
 }
 .sidebar h3 {
   padding-bottom: 30px;
@@ -262,11 +316,6 @@
   padding-left: 3em;
 }
 
-.documentation-content {
-  position: fixed;
-  left: 250px;
-}
-
 @font-face {
   font-family: "IBMPlexSansCondensed";
   src: url("font/IBMPlexSansCondensed-Regular.ttf") format("truetype");
@@ -278,6 +327,28 @@
 * {
   margin: 0;
   padding: 0;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #ff0a54 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #1D1B1B;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ff0a54;
+  border-radius: 10px;
+  border: 3px solid #1D1B1B;
 }
 
 html {
@@ -298,6 +369,15 @@ img, picture, svg, video {
 
 input, textarea, button, select {
   font: inherit;
+}
+
+code {
+  background: white;
+  color: black;
+  word-wrap: break-word;
+  box-decoration-break: clone;
+  padding: 0.1rem 0.3rem 0.2rem;
+  border-radius: 0.2rem;
 }
 
 /*# sourceMappingURL=site.css.map */

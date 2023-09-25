@@ -2,10 +2,10 @@
 @namespace SimpleBlazorGrid.Internal
 
 @using SimpleBlazorGrid.Helpers
-@using SimpleBlazorGrid.Services
 @using System.Linq.Expressions
+@using SimpleBlazorGrid.Formatting
 
-@inject IFormattingService FormattingService
+@inject SimpleDataGridFormatter SimpleDataGridFormatter
 
 @typeparam TType
 
@@ -52,7 +52,7 @@
     private string GetRowDataForColumn(SimpleColumn<TType> column)
     {
         var obj = column.For.Compile().Invoke(Data);
-        return FormattingService.FormatProperty(obj, column.Format);
+        return SimpleDataGridFormatter.FormatProperty(obj, column.Format);
     }
 
     private async Task ItemSelected()

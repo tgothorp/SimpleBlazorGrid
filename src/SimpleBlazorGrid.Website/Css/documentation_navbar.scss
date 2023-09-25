@@ -1,7 +1,6 @@
 @use "base";
 
 .sidebar {
-  height: 100%;
   width: 250px;
   position: fixed;
   top: 50px;
@@ -10,6 +9,8 @@
   transition: 0.3s;
   padding-top: 30px;
   border-right: base.$color-primary solid 5px;
+  overflow-y: scroll;
+  height: 90vh;
   
   h3 {
     padding-bottom: 30px;
@@ -59,9 +60,4 @@
   .nest-3 {
     padding-left: 3em;
   }
-}
-
-.documentation-content {
-  position: fixed;
-  left: 250px;
 }

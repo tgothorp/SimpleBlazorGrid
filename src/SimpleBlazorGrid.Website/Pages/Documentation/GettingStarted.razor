@@ -1,0 +1,53 @@
+@page "/documentation/getting-started"
+
+@using SimpleBlazorGrid.Website.Pages.Shared
+
+@layout DocumentationLayout
+
+@inject NavBarService NavBarService
+
+<h1>Getting Started</h1>
+<br/>
+<p>Getting started with Simple Blazor Grid is easy...</p>
+<br/>
+<br/>
+<h3>1. Install via NuGet</h3>
+<p>The latest version can be found on <a>NuGet.</a> To add Simple Blazor Grid to your project, run the following command</p>
+<br/>
+<pre>
+dotnet add package SimpleBlazorGrid.Core
+</pre>
+
+<br/>
+<br/>
+<h3>2. .AddSimpleBlazorGrid()</h3>
+<p>Simple Blazor Grid provides configuration options that control the look of created tables as well as how certain data types are formatted. To get started quickly, add the following snipped to your <code>Program.cs</code> file, or, for a full overview, see the <a>Configuration</a> section.</p>
+<br/>
+<pre>
+builder.Services.AddSimpleBlazorGrid();
+</pre>
+
+<br/>
+<br/>
+<h3>3. Reference the StyleSheet</h3>
+<p>In your <code>_Host.cshtml</code> file, add the following snippet to import the required CSS classes for the data grid to function</p>
+<br/>
+<pre>
+    @StyleSheetSnippet
+</pre>
+
+<br/>
+<br/>
+<h3>4. Create your first table</h3>
+<p>Congratulations! You have successfully setup Simple Blazor Grid, Either skip ahead to <a>SimpleGrid&lt;T&gt;</a> to see how to create your first table, or go to the <a>next section (configuration)</a> to see how you can customise and configure the data grid.</p>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavBarService.SetNavBarSection(NavSection.Documentation);
+        NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.GettingStarted);
+        base.OnInitialized();
+    }
+
+    public string StyleSheetSnippet => "<link rel=\"stylesheet\" href=\"~/_content/SimpleBlazorGrid.Core/css/simpledatagrid.css\"/>";
+}
