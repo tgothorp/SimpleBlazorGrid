@@ -17,16 +17,10 @@
 * {
   margin: 0;
   padding: 0;
-}
-
-/* ===== Scrollbar CSS ===== */
-/* Firefox */
-* {
   scrollbar-width: auto;
   scrollbar-color: #ff0a54 #ffffff;
 }
 
-/* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 14px;
 }
@@ -39,6 +33,10 @@
   background-color: base.$color-primary;
   border-radius: 10px;
   border: 3px solid base.$color-background;
+}
+
+*::-webkit-scrollbar-corner {
+  background: base.$color-background;
 }
 
 html {

@@ -1,10 +1,15 @@
 @namespace SimpleBlazorGrid.Website.Pages.Shared
 
+@inject IJSRuntime JS
 @inject NavBarService NavBarService
 
 @implements IDisposable
 
-<div class="sidebar">
+<div class="sidebar-toggle" id="sidebar-toggle">
+    <a href="#" @onclick="ToggleCollapse" @onclick:preventDefault="true" @onclick:stopPropagation="true"><i>Toggle Menu...</i></a>
+</div>
+
+<div class="sidebar" id="sidebar">
     <h3>
         Simple Blazor Grid Docs
     </h3>
@@ -88,6 +93,11 @@
     {
         NavBarService.OnDocumentationChanged += DocumentationSectionChanged;
         base.OnInitialized();
+    }
+
+    private async Task ToggleCollapse()
+    {
+        await JS.InvokeVoidAsync("toggleDocumentationMenu");
     }
 
     private void DocumentationSectionChanged(object? sender, DocumentationNavSection newSection)

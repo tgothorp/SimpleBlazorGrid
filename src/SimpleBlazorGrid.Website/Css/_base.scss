@@ -1,9 +1,11 @@
 $tablet-width: 768px;
-$desktop-width: 1024px;
+$desktop-small-width: 1024px;
+$desktop-large-width: 1444px;
 
 $color-primary: #ff0a54;
 $color-secondary: #ff477e;
 $color-background: #1D1B1B;
+$color-nav: #1D1B1B;
 $color-text: #FFF;
 
 :root {
@@ -24,13 +26,19 @@ $color-text: #FFF;
 }
 
 @mixin tablet {
-  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-small-width - 1px}) {
     @content;
   }
 }
 
-@mixin desktop {
-  @media (min-width: #{$desktop-width}) {
+@mixin desktop-small {
+  @media  (min-width: #{$desktop-small-width}) and (max-width: #{$desktop-large-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop-large {
+  @media (min-width: #{$desktop-large-width}) {
     @content;
   }
 }
