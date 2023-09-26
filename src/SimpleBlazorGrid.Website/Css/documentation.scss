@@ -1,20 +1,32 @@
 @use "base";
 
 .documentation-content {
-  position: fixed;
-  left: 250px;
-  height: 90vh;
-  overflow-y: scroll;
+  display: flex;
+  padding-top: 1%;
 }
 
 .documentation-wrapper {
   padding-left: 2%;
   padding-top: 1%;
-  width: 45%;
+  padding-bottom: 1%;
+  padding-right: 2%;
   line-height: 1.5;
+  position: absolute;
+  left: 250px;
+  //width: 50%;
+  width: 50%;
+  overflow-y: scroll;
+  height: 90vh;
+  overflow-x: clip;
+  //noinspection CssInvalidPropertyValue
+  text-wrap: wrap;
   
   @include base.tablet {
     width: 70%;
+  }
+  
+  @include base.phone {
+    width: 100%;
   }
   
   h1 {
@@ -56,5 +68,39 @@
     padding: 0.5em;
     border-radius: .2rem;
     font-size: var(--fs-0);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    
+    tr {
+      border-left: none;
+      border-right: none;
+    }
+
+    td, th {
+      padding: 5px 2px;
+    }
+
+    thead {
+      border-bottom: 6px solid base.$color-primary;
+      
+      th {
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+
+    tbody {
+      tr, td {
+        border-bottom: 1px solid base.$color-primary;
+        white-space: initial;
+        padding: 0.5em;
+      }
+    }
   }
 }

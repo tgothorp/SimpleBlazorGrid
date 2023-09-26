@@ -27,20 +27,71 @@ builder.Services.AddSimpleBlazorGrid(conf =>
 <br/>
 <br/>
 <h3>SimpleDataGridConfiguration</h3>
+<p>The table below shows all possible configuration values that can be set. Date and time formatting values will default to the current culture unless overridden.</p>
 <br/>
 <table>
     <thead>
     <tr>
         <th>Property</th>
+        <th>Type</th>
         <th>Description</th>
         <th>Default Value</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td>PrimaryColour</td>
-        <td>A Hex colour value that acts as the primary color of generated tables, will be applied to row separators, buttons etc. </td>
+        <td><code>PrimaryColour</code></td>
+        <td><code>string</code></td>
+        <td>Hex primary color of generated tables, will be applied to row separators, buttons etc. </td>
         <td>#FF0A54</td>
+    </tr>
+    <tr>
+        <td><code>SecondaryColour</code></td>
+        <td><code>string</code></td>
+        <td>Hex secondary color of generated tables, will be applied to selected rows, button hovers etc. </td>
+        <td>#FF0A54</td>
+    </tr>
+    <tr>
+        <td><code>GlyphColour</code></td>
+        <td><code>string</code></td>
+        <td>A Hex colour value that is applied to filter icons in table head</td>
+        <td>#FF0A54</td>
+    </tr>
+    <tr>
+        <td><code>TimeOnlyFormat</code></td>
+        <td><code>string</code></td>
+        <td>How time values should be formatted, example: "HH:mm:ss"</td>
+        <td><i>CurrentCulture.DateTimeFormat.ShortTimePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>ShortDateFormat</code></td>
+        <td><code>string</code></td>
+        <td>How short dates should be formatted, example: "dd/MM/yyyy"</td>
+        <td><i>CurrentCulture.DateTimeFormat.ShortDatePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>LongDateFormat</code></td>
+        <td><code>string</code></td>
+        <td>How longer dates should be formatted, example: "dd MMMM yyyy"</td>
+        <td><i>CurrentCulture.DateTimeFormat.LongDatePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>FullDateTimeFormat</code></td>
+        <td><code>string</code></td>
+        <td>How date and times values should be formatted, example: "dd-MM-yy HH:mm:ss"</td>
+        <td><i>CurrentCulture.DateTimeFormat.FullDateTimePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>CurrencySymbol</code></td>
+        <td><code>string</code></td>
+        <td>What the default currency symbol should be when formatting decimals, example: "£"</td>
+        <td><i>CurrentCulture.NumberFormat.CurrencySymbol</i></td>
+    </tr>
+    <tr>
+        <td><code>DefaultDecimalPlaces</code></td>
+        <td><code>int</code></td>
+        <td></td>
+        <td>4</td>
     </tr>
     </tbody>
 </table>
