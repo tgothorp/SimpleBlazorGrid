@@ -2,6 +2,8 @@
 @use "blazor";
 @use "navbar";
 @use "index";
+@use "documentation";
+@use "documentation_navbar";
 
 @font-face {
   font-family: 'IBMPlexSansCondensed';
@@ -15,6 +17,26 @@
 * {
   margin: 0;
   padding: 0;
+  scrollbar-width: auto;
+  scrollbar-color: #ff0a54 #ffffff;
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: base.$color-background;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: base.$color-primary;
+  border-radius: 10px;
+  border: 3px solid base.$color-background;
+}
+
+*::-webkit-scrollbar-corner {
+  background: base.$color-background;
 }
 
 html {
@@ -35,4 +57,13 @@ img, picture, svg, video {
 
 input, textarea, button, select {
   font: inherit;
+}
+
+code {
+  background: white;
+  color: black;
+  word-wrap: break-word;
+  box-decoration-break: clone;
+  padding: .1rem .3rem .2rem;
+  border-radius: .2rem;
 }

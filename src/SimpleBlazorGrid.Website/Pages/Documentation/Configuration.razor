@@ -1,0 +1,109 @@
+﻿@page "/documentation/configuration"
+
+@using SimpleBlazorGrid.Website.Pages.Shared
+
+@layout DocumentationLayout
+
+@inject NavBarService NavBarService
+
+<h1>Configuration</h1>
+<br/>
+<p>Simple Blazor Grid can be configured to your needs, from the way the generated tables look, to how certain data types are displayed in the grid.</p>
+<br/>
+<p>Configuration is done at compile-time by passing in an a delegate or instance of <code>SimpleDataGridConfiguration</code> to <code>.AddSimpleBlazorGrid()</code> when configuring your services</p>
+<br/>
+<br/>
+<h3>Example</h3>
+<p>The following example configures the primary and secondary color for generated grids as well as sets the default currency symbol to '£'.</p>
+<br/>
+<pre>
+builder.Services.AddSimpleBlazorGrid(conf =>
+{
+    conf.PrimaryColour = "#ff0a54";
+    conf.SecondaryColour = "#ff477e";
+    conf.CurrencySymbol = "£";
+});
+</pre>
+<br/>
+<br/>
+<h3>SimpleDataGridConfiguration</h3>
+<p>The table below shows all possible configuration values that can be set. Date and time formatting values will default to the current culture unless overridden.</p>
+<br/>
+<table>
+    <thead>
+    <tr>
+        <th>Property</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>PrimaryColour</code></td>
+        <td><code>string</code></td>
+        <td>Hex primary color of generated tables, will be applied to row separators, buttons etc. </td>
+        <td>#FF0A54</td>
+    </tr>
+    <tr>
+        <td><code>SecondaryColour</code></td>
+        <td><code>string</code></td>
+        <td>Hex secondary color of generated tables, will be applied to selected rows, button hovers etc. </td>
+        <td>#FF0A54</td>
+    </tr>
+    <tr>
+        <td><code>GlyphColour</code></td>
+        <td><code>string</code></td>
+        <td>A Hex colour value that is applied to filter icons in table head</td>
+        <td>#FF0A54</td>
+    </tr>
+    <tr>
+        <td><code>TimeOnlyFormat</code></td>
+        <td><code>string</code></td>
+        <td>How time values should be formatted, example: "HH:mm:ss"</td>
+        <td><i>CurrentCulture.DateTimeFormat.ShortTimePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>ShortDateFormat</code></td>
+        <td><code>string</code></td>
+        <td>How short dates should be formatted, example: "dd/MM/yyyy"</td>
+        <td><i>CurrentCulture.DateTimeFormat.ShortDatePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>LongDateFormat</code></td>
+        <td><code>string</code></td>
+        <td>How longer dates should be formatted, example: "dd MMMM yyyy"</td>
+        <td><i>CurrentCulture.DateTimeFormat.LongDatePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>FullDateTimeFormat</code></td>
+        <td><code>string</code></td>
+        <td>How date and times values should be formatted, example: "dd-MM-yy HH:mm:ss"</td>
+        <td><i>CurrentCulture.DateTimeFormat.FullDateTimePattern</i></td>
+    </tr>
+    <tr>
+        <td><code>CurrencySymbol</code></td>
+        <td><code>string</code></td>
+        <td>What the default currency symbol should be when formatting decimals, example: "£"</td>
+        <td><i>CurrentCulture.NumberFormat.CurrencySymbol</i></td>
+    </tr>
+    <tr>
+        <td><code>DefaultDecimalPlaces</code></td>
+        <td><code>int</code></td>
+        <td></td>
+        <td>4</td>
+    </tr>
+    </tbody>
+</table>
+
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        NavBarService.SetNavBarSection(NavSection.Documentation);
+        NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.Configuration);
+        base.OnInitialized();
+    }
+
+}

@@ -1,7 +1,7 @@
 using System;
 using SimpleBlazorGrid.Configuration;
-using SimpleBlazorGrid.Services;
 using Microsoft.Extensions.DependencyInjection;
+using SimpleBlazorGrid.Formatting;
 
 namespace SimpleBlazorGrid.Extensions
 {
@@ -12,7 +12,7 @@ namespace SimpleBlazorGrid.Extensions
             var defaultOptions = new DefaultConfiguration();
             
             serviceCollection.AddSingleton<SimpleDataGridConfiguration>(defaultOptions);
-            serviceCollection.AddSingleton<IFormattingService, FormattingService>();
+            serviceCollection.AddSingleton<SimpleDataGridFormatter>();
 
             return serviceCollection;
         }
@@ -26,13 +26,14 @@ namespace SimpleBlazorGrid.Extensions
             configuration.PrimaryColour ??= defaultOptions.PrimaryColour;
             configuration.SecondaryColour ??= defaultOptions.SecondaryColour;
             configuration.CurrencySymbol ??= defaultOptions.CurrencySymbol;
-            configuration.LongDateTimeFormat ??= defaultOptions.LongDateTimeFormat;
-            configuration.ShortDateTimeFormat ??= defaultOptions.ShortDateTimeFormat;
+            configuration.LongDateFormat ??= defaultOptions.LongDateFormat;
+            configuration.ShortDateFormat ??= defaultOptions.ShortDateFormat;
             configuration.TimeOnlyFormat ??= defaultOptions.TimeOnlyFormat;
+            configuration.FullDateTimeFormat ??= defaultOptions.FullDateTimeFormat;
             configuration.DefaultDecimalPlaces ??= defaultOptions.DefaultDecimalPlaces;
 
             serviceCollection.AddSingleton<SimpleDataGridConfiguration>(configuration);
-            serviceCollection.AddSingleton<IFormattingService, FormattingService>();
+            serviceCollection.AddSingleton<SimpleDataGridFormatter>();
 
             return serviceCollection;
         }

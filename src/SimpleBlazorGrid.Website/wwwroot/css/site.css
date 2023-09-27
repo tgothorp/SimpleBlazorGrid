@@ -42,6 +42,8 @@
 .navbar {
   overflow: hidden;
   padding-bottom: 5px;
+  z-index: 999;
+  background-color: #1D1B1B;
 }
 .navbar a {
   float: left;
@@ -51,6 +53,7 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+  background-color: #1D1B1B;
 }
 .navbar a:hover {
   background-color: #ff477e;
@@ -209,6 +212,185 @@
   background-color: #ff477e;
 }
 
+.documentation-content {
+  display: flex;
+  padding-top: 1%;
+}
+
+.documentation-wrapper {
+  padding-left: 2%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-right: 2%;
+  line-height: 1.5;
+  position: absolute;
+  left: 250px;
+  width: 50%;
+  overflow-y: scroll;
+  height: 90vh;
+  overflow-x: clip;
+  text-wrap: wrap;
+}
+@media (min-width: 1024px) and (max-width: 1443px) {
+  .documentation-wrapper {
+    overflow: scroll;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .documentation-wrapper {
+    width: 70%;
+    overflow: scroll;
+    padding-top: 5%;
+  }
+}
+@media (max-width: 767px) {
+  .documentation-wrapper {
+    width: 100%;
+    overflow: scroll;
+    padding-top: 5%;
+  }
+}
+.documentation-wrapper h1 {
+  font-size: var(--fs-3);
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.documentation-wrapper h2 {
+  font-size: var(--fs-2);
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.documentation-wrapper h3 {
+  font-size: var(--fs-1);
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.documentation-wrapper p {
+  font-size: var(--fs-0);
+}
+.documentation-wrapper a {
+  color: #ff0a54;
+  text-decoration: underline;
+}
+.documentation-wrapper a:hover {
+  cursor: pointer;
+  color: #ff477e;
+}
+.documentation-wrapper pre {
+  background-color: white;
+  color: black;
+  width: fit-content;
+  padding: 0.5em;
+  border-radius: 0.2rem;
+  font-size: var(--fs-0);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.documentation-wrapper table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+.documentation-wrapper table tr {
+  border-left: none;
+  border-right: none;
+}
+.documentation-wrapper table td, .documentation-wrapper table th {
+  padding: 5px 2px;
+}
+.documentation-wrapper table thead {
+  border-bottom: 6px solid #ff0a54;
+}
+.documentation-wrapper table thead th {
+  font-weight: bold;
+  text-align: left;
+}
+.documentation-wrapper table tbody tr, .documentation-wrapper table tbody td {
+  border-bottom: 1px solid #ff0a54;
+  white-space: initial;
+  padding: 0.5em;
+}
+
+.documentation-wrapper-collapsed {
+  left: 0;
+}
+@media (min-width: 1024px) and (max-width: 1443px) {
+  .documentation-wrapper-collapsed {
+    width: 60%;
+  }
+}
+
+.sidebar {
+  width: 250px;
+  position: fixed;
+  background-color: #1D1B1B;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 30px;
+  border-right: #ff0a54 solid 5px;
+  overflow-y: scroll;
+  height: 90vh;
+  z-index: 999;
+}
+.sidebar h3 {
+  padding-bottom: 30px;
+  text-align: center;
+}
+.sidebar a {
+  color: #FFF;
+  text-decoration: none;
+}
+.sidebar a.active {
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-color: #ff0a54;
+}
+.sidebar hr {
+  margin-bottom: 35px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: solid 1px #ff0a54;
+}
+.sidebar p {
+  font-size: var(--fs--1);
+}
+.sidebar .content {
+  padding: 15px 10px 15px;
+}
+.sidebar .content:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  background-color: #ff477e;
+}
+.sidebar .nest-1 {
+  padding-left: 1em;
+}
+.sidebar .nest-2 {
+  padding-left: 2em;
+}
+.sidebar .nest-3 {
+  padding-left: 3em;
+}
+
+.sidebar-collapsed {
+  left: -250px;
+}
+
+.sidebar-toggle {
+  position: fixed;
+  left: 250px;
+  z-index: 9999;
+  background-color: #1D1B1B;
+}
+.sidebar-toggle a {
+  padding-left: 1em;
+  color: #FFF;
+}
+
+.sidebar-toggle-collapsed {
+  left: 0;
+}
+
 @font-face {
   font-family: "IBMPlexSansCondensed";
   src: url("font/IBMPlexSansCondensed-Regular.ttf") format("truetype");
@@ -220,6 +402,26 @@
 * {
   margin: 0;
   padding: 0;
+  scrollbar-width: auto;
+  scrollbar-color: #ff0a54 #ffffff;
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #1D1B1B;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ff0a54;
+  border-radius: 10px;
+  border: 3px solid #1D1B1B;
+}
+
+*::-webkit-scrollbar-corner {
+  background: #1D1B1B;
 }
 
 html {
@@ -240,6 +442,15 @@ img, picture, svg, video {
 
 input, textarea, button, select {
   font: inherit;
+}
+
+code {
+  background: white;
+  color: black;
+  word-wrap: break-word;
+  box-decoration-break: clone;
+  padding: 0.1rem 0.3rem 0.2rem;
+  border-radius: 0.2rem;
 }
 
 /*# sourceMappingURL=site.css.map */

@@ -1,11 +1,11 @@
-﻿namespace SimpleBlazorGrid.Enums
+﻿namespace SimpleBlazorGrid.Formatting
 {
-    // TODO - Refactor this
     public enum Format
     {
         None,
         ShortDate,
         LongDate,
+        FullDateTime,
         Time,
         Money,
     }

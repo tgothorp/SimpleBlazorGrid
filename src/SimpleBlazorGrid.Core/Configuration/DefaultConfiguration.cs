@@ -15,8 +15,9 @@ namespace SimpleBlazorGrid.Configuration
             var numberFormatInfo = currentCulture.NumberFormat;
 
             TimeOnlyFormat = dateFormatInfo.ShortTimePattern;
-            ShortDateTimeFormat = dateFormatInfo.ShortDatePattern;
-            LongDateTimeFormat = dateFormatInfo.LongDatePattern;
+            ShortDateFormat = dateFormatInfo.ShortDatePattern;
+            LongDateFormat = dateFormatInfo.LongDatePattern;
+            FullDateTimeFormat = dateFormatInfo.FullDateTimePattern;
 
             CurrencySymbol = numberFormatInfo.CurrencySymbol;
             DefaultDecimalPlaces = 4;

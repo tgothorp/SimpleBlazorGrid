@@ -1,10 +1,11 @@
 ﻿@page "/"
 @using SimpleBlazorGrid.Website.Data
 @using SimpleBlazorGrid.DataSource
-@using System.Text.Encodings.Web
 @using Humanizer
+@using SimpleBlazorGrid.Website.Pages.Shared
 
 @inject VideoGameRepo VideoGameRepo
+@inject NavBarService NavBarService
 
 <div class="top">
     <h1>SIMPLE BLAZOR GRID</h1>
@@ -27,13 +28,18 @@
 
             <div class="buttons">
                 <div>
-                    <button>Download from Nuget</button>
+                    <a>
+                        <button type="button">Download from Nuget</button>
+                    </a>
                 </div>
                 <div>
-                    <button>Documentation</button>
+                    <a href="/documentation">
+                        <button type="button">Documentation</button>
+                    </a>
                 </div>
             </div>
         </div>
+
         <div class="table">
             <SimpleGrid
                 TType="VideoGame"
@@ -80,3 +86,12 @@
         </div>
     </div>
 </div>
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        NavBarService.SetNavBarSection(NavSection.Index);
+        base.OnInitialized();
+    }
+}
