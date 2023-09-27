@@ -41,3 +41,10 @@ steps:
     projects: '**/SimpleBlazorGrid.Website.csproj'
     arguments: '-c Release --no-build'
     modifyOutputPath: false
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
