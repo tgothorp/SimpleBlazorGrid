@@ -1,12 +1,64 @@
 @page "/documentation/filters/date"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Formatting
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
 
+<h1>Simple Date Filter</h1>
+<p>The <code>SimpleDateFilter&lt;T&gt;</code> filter can be applied to <code>DateTime</code> and <code>DateOnly</code> properties as well as their nullable versions.</p>
+<br/>
+
+<SimpleGrid TType="DateFilterData" ItemsPerPage="50" SimpleGridDataSource="@(new SimpleGridEnumerableDataSource<DateFilterData>(Data))">
+    <Filters>
+        <SimpleDateFilter TType="DateFilterData" For="@(x => x.DateTime)" IncludeTime="@false" />
+        <SimpleDateFilter TType="DateFilterData" For="@(x => x.DateAndTime)" IncludeTime="@true" />
+        <SimpleDateFilter TType="DateFilterData" For="@(x => x.DateOnly)" />
+    </Filters>
+    <Columns>
+        <SimpleColumn TType="DateFilterData" For="@(x => x.Rank)" Heading="Id" Sortable="true" Width="7"/>
+        <SimpleColumn TType="DateFilterData" For="@(x => x.DateTime)" Heading="DateTime (No Time)" Sortable="true" Format="Format.ShortDate"/>
+        <SimpleColumn TType="DateFilterData" For="@(x => x.DateAndTime)" Heading="DateTime" Sortable="true" Format="Format.FullDateTime"/>
+        <SimpleColumn TType="DateFilterData" For="@(x => x.DateOnly)" Heading="DateOnly" Sortable="true" Format="Format.LongDate"/>
+    </Columns>
+</SimpleGrid>
+
 @code {
+    
+    public class DateFilterData
+    {
+        public DateFilterData(int rank, DateTime dateTime)
+        {
+            Rank = rank;
+            DateTime = dateTime;
+            DateAndTime = DateTime;
+            DateOnly = DateOnly.FromDateTime(dateTime);
+        }
+        
+        public int Rank { get; private set; }
+        public DateTime DateTime { get; private set; }
+        public DateTime DateAndTime { get; private set; }
+        public DateOnly DateOnly { get; private set; }
+    }
+
+    private readonly List<DateFilterData> Data = new()
+    {
+        { new DateFilterData(1, new DateTime(2023, 09, 10, 08, 11, 0)) },
+        { new DateFilterData(2, new DateTime(2022, 10, 06, 12, 02, 0)) },
+        { new DateFilterData(3, new DateTime(2020, 09, 19, 11, 43, 0)) },
+        { new DateFilterData(4, new DateTime(2001, 08, 30, 23, 52, 0)) },
+        { new DateFilterData(5, new DateTime(1994, 07, 22, 20, 08, 0)) },
+        { new DateFilterData(6, new DateTime(1991, 03, 11, 16, 33, 0)) },
+        { new DateFilterData(7, new DateTime(1985, 11, 03, 09, 21, 0)) },
+        { new DateFilterData(8, new DateTime(1979, 02, 08, 01, 12, 0)) },
+        { new DateFilterData(9, new DateTime(1963, 05, 15, 07, 47, 0)) },
+        { new DateFilterData(10, new DateTime(1945, 12, 09, 10, 29,0)) },
+    };
+    
+    
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);

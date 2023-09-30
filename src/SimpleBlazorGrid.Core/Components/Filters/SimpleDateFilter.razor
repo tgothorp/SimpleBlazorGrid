@@ -55,4 +55,14 @@
     public bool IncludeTime { get; set; }
 
     public DateTime? Value { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var type = For.Body.Type;
+        if ((Nullable.GetUnderlyingType(type) ?? type) == typeof(DateOnly))
+            IncludeTime = false;
+        
+        base.OnInitialized();
+    }
+
 }
