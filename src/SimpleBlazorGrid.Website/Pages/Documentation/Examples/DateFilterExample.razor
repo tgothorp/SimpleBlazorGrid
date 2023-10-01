@@ -1,0 +1,21 @@
+ @* ReSharper disable once CheckNamespace *@
+ @namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+<pre style="font-size: var(--fs--1); width: 100%">
+&lt;SimpleGrid 
+    TType=&quot;DateFilterData&quot; 
+    ItemsPerPage=&quot;50&quot; 
+    SimpleGridDataSource=&quot;@@(new SimpleGridEnumerableDataSource&lt;DateFilterData&gt;(Data))&quot;&gt;
+    &lt;Filters&gt;
+        &lt;SimpleDateFilter TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.DateTime)&quot; IncludeTime=&quot;@false&quot; /&gt;
+        &lt;SimpleDateFilter TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.DateAndTime)&quot; IncludeTime=&quot;@true&quot; /&gt;
+        &lt;SimpleDateFilter TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.DateOnly)&quot; /&gt;
+    &lt;/Filters&gt;
+    &lt;Columns&gt;
+        &lt;SimpleColumn TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.Rank)&quot; Heading=&quot;Id&quot; Sortable=&quot;true&quot; Width=&quot;7&quot;/&gt;
+        &lt;SimpleColumn TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.DateTime)&quot; Heading=&quot;DateTime (No Time)&quot; Sortable=&quot;true&quot; Format=&quot;Format.ShortDate&quot;/&gt;
+        &lt;SimpleColumn TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.DateAndTime)&quot; Heading=&quot;DateTime&quot; Sortable=&quot;true&quot; Format=&quot;Format.FullDateTime&quot;/&gt;
+        &lt;SimpleColumn TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.DateOnly)&quot; Heading=&quot;DateOnly&quot; Sortable=&quot;true&quot; Format=&quot;Format.LongDate&quot;/&gt;
+    &lt;/Columns&gt;
+&lt;/SimpleGrid&gt;
+</pre>

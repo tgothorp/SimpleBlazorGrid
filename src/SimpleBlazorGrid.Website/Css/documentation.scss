@@ -13,8 +13,7 @@
   line-height: 1.5;
   position: absolute;
   left: 250px;
-  //width: 50%;
-  width: 50%;
+  width: 65%;
   overflow-y: scroll;
   height: 90vh;
   overflow-x: clip;
@@ -78,6 +77,10 @@
     font-size: var(--fs-0);
     white-space: pre-wrap;
     word-wrap: break-word;
+    
+    .small {
+      font-size: var(--fs--1);
+    }
   }
 
   table {

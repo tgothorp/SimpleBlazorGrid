@@ -1,10 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
+        <Title>Simple Blazor Grid</Title>
+        <Description>A simple, standalone Blazor datagrid</Description>
+        <RepositoryUrl>https://github.com/tgothorp/SimpleBlazorGrid</RepositoryUrl>
+        <Authors>tgothorp</Authors>
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>SimpleBlazorGrid</RootNamespace>
     </PropertyGroup>
-
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
@@ -13,9 +16,6 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.22" />
     </ItemGroup>
-
-
-
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
       <Exec Command="sass $(ProjectDir)Css\_main.scss:$(ProjectDir)wwwroot\css\simpledatagrid.css" />

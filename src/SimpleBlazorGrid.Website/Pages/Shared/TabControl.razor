@@ -1,0 +1,36 @@
+<div class="tab-control-buttons">
+    @foreach (var tab in TabPages)
+    {
+        <button type="button" class="@(ActivePage == tab ? "active" : "") " @onclick="@(() => ActivateTabPage(tab))">@tab.TabName</button>
+    }
+</div>
+
+<CascadingValue Value="@this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public TabPage ActivePage { get; set; }
+
+    private List<TabPage> TabPages { get; set; } = new();
+
+    internal void AddPage(TabPage tabPage)
+    {
+        TabPages.Add(tabPage);
+
+        if (TabPages.Count == 1)
+        {
+            ActivePage = tabPage;
+        }
+        
+        StateHasChanged();
+    }
+
+    private void ActivateTabPage(TabPage tabPage)
+    {
+        ActivePage = tabPage;
+    }
+}

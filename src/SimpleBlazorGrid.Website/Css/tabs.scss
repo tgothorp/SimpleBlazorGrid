@@ -1,0 +1,25 @@
+@use "base";
+
+.tab-control-buttons {
+  button {
+    border: none;
+    height: 35px;
+    border-radius: 5px;
+    padding: 0;
+    background-color: base.$color-secondary;
+    width: 100px;
+    font-weight: bold;
+    font-size: var(--fs-0);
+    margin-right: 1em;
+    margin-bottom: 1em;
+  }
+  
+  button.active {
+    background-color: base.$color-primary;
+  }
+  
+  button:hover {
+    cursor: pointer;
+    background-color: base.$color-primary;
+  }
+}
