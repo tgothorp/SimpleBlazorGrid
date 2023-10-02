@@ -32,7 +32,10 @@
     width: 100%;
     margin-bottom: 1rem
   }
-
+  
+  small {
+    padding-top: .5em;
+  }
 }
 
 div.sdg-filter-inputs {
@@ -58,6 +61,13 @@ div.sdg-filter-inputs {
     option:checked {
       background-color: var(--secondary-colour);
     }
+  }
+  
+  div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 1%;
   }
 }
 

@@ -1,16 +1,120 @@
 @page "/documentation/filters/date-range"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Formatting
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
 
+<h1>Simple Date Range Filter</h1>
+<p>The <code>SimpleDateRangeFilter&lt;T&gt;</code> filter can be applied to <code>DateTime</code> and <code>DateOnly</code> properties as well as their nullable versions. It will return all records where the date on the target property falls between two values provided by the user. For a more detailed example, you can view the source code of this page <a target="_blank" href="https://github.com/tgothorp/SimpleBlazorGrid/blob/main/src/SimpleBlazorGrid.Website/Pages/Documentation/DateFilter.razor">here.</a></p>
+<br/>
+
+<TabControl>
+    <TabPage TabName="Example">
+        <SimpleGrid TType="DateRangeFilterData" ItemsPerPage="50" SimpleGridDataSource="@(new SimpleGridEnumerableDataSource<DateRangeFilterData>(Data))">
+            <Filters>
+                <SimpleDateRangeFilter TType="DateRangeFilterData" For="@(x => x.DateTime)" Inclusive="true" IncludeTime="false" ForHeading="DateTime (Inclusive)" />
+                <SimpleDateRangeFilter TType="DateRangeFilterData" For="@(x => x.DateTime)" Inclusive="false" IncludeTime="true" ForHeading="Date And Time" />
+                <SimpleDateRangeFilter TType="DateRangeFilterData" For="@(x => x.DateOnly)" Inclusive="false" IncludeTime="false" />
+            </Filters>
+            <Columns>
+                <SimpleColumn TType="DateRangeFilterData" For="@(x => x.Rank)" Heading="Id" Sortable="true" Width="7"/>
+                <SimpleColumn TType="DateRangeFilterData" For="@(x => x.DateTime)" Heading="DateTime (Inclusive)" Sortable="true" Format="Format.ShortDate"/>
+                <SimpleColumn TType="DateRangeFilterData" For="@(x => x.DateTime)" Heading="Date And Time" Sortable="true" Format="Format.FullDateTime"/>
+                <SimpleColumn TType="DateRangeFilterData" For="@(x => x.DateOnly)" Heading="DateOnly (Not Inclusive)" Sortable="true" Format="Format.LongDate"/>
+            </Columns>
+        </SimpleGrid>
+    </TabPage>
+    <TabPage TabName="Code">
+        <DateRangeFilterExample/>
+    </TabPage>
+</TabControl>
+
+<br/>
+<br/>
+<h3>Parameters</h3>
+<p>The following parameters can be set for each <code>SimpleDateFilter&lt;T&gt;</code></p>
+<table>
+    <thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>DefaultValue</code></td>
+        <td><code>DateTime?</code></td>
+        <td>If set, this filter wil be active when the table loads and will filter the target property with the provided value</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>Min</code></td>
+        <td><code>DateTime?</code></td>
+        <td>Will set the <code>min</code> property on the filter date input</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>Max</code></td>
+        <td><code>DateTime?</code></td>
+        <td>Will set the <code>max</code> property on the filter date input</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>IncludeTime</code></td>
+        <td><code>bool</code></td>
+        <td>Determines if time should be included when applying the filter as well as sets the filters input type to <code>datetime-local</code> is true. <i>(This will always be false for <code>DateOnly</code> properties).</i></td>
+        <td><code>false</code></td>
+    </tr>
+    <tr>
+        <td><code>Inclusive</code></td>
+        <td><code>bool</code></td>
+        <td>Determines if the filter should be either a Greater/Less-Than filter (false) or Greater/Less-Than-Or-Equal filter (true)</td>
+        <td><code>false</code></td>
+    </tr>
+    </tbody>
+</table>
+
 @code {
+
+    public class DateRangeFilterData
+    {
+        public DateRangeFilterData(int rank, DateTime dateTime)
+        {
+            Rank = rank;
+            DateTime = dateTime;
+            DateOnly = DateOnly.FromDateTime(dateTime);
+        }
+
+        public int Rank { get; private set; }
+        public DateTime DateTime { get; private set; }
+        public DateOnly DateOnly { get; private set; }
+    }
+
+    private readonly List<DateRangeFilterData> Data = new()
+    {
+        { new DateRangeFilterData(1, new DateTime(2023, 09, 10, 08, 11, 0)) },
+        { new DateRangeFilterData(2, new DateTime(2022, 10, 06, 12, 02, 0)) },
+        { new DateRangeFilterData(3, new DateTime(2020, 09, 19, 11, 43, 0)) },
+        { new DateRangeFilterData(4, new DateTime(2001, 08, 30, 23, 52, 0)) },
+        { new DateRangeFilterData(5, new DateTime(1994, 07, 22, 20, 08, 0)) },
+        { new DateRangeFilterData(6, new DateTime(1991, 03, 11, 16, 33, 0)) },
+        { new DateRangeFilterData(7, new DateTime(1985, 11, 03, 09, 21, 0)) },
+        { new DateRangeFilterData(8, new DateTime(1979, 02, 08, 01, 12, 0)) },
+        { new DateRangeFilterData(9, new DateTime(1963, 05, 15, 07, 47, 0)) },
+        { new DateRangeFilterData(10, new DateTime(1945, 12, 09, 10, 29, 0)) },
+    };
+
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);
         NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.SimpleDateRangeFilter);
         base.OnInitialized();
     }
+
 }

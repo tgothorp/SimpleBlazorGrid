@@ -51,7 +51,17 @@
 
                             @foreach (var column in DataGridColumns)
                             {
-                                var simpleFilter = SimpleFilters.SingleOrDefault(x => x.PropertyName == column.PropertyName);
+                                //Filter<TType> simpleFilter = null;
+                                
+                                //var simpleFilter = SimpleFilters.SingleOrDefault(x => x.PropertyName == column.PropertyName);
+                                var filterCountForColumnProperty = SimpleFilters.Count(x => x.PropertyName == column.PropertyName);
+                                var simpleFilter = filterCountForColumnProperty switch
+                                {
+                                    1 => SimpleFilters.Single(x => x.PropertyName == column.PropertyName),
+                                    > 1 => SimpleFilters.FirstOrDefault(x => x.PropertyName == column.PropertyName && x.ForHeading == column.Heading),
+                                    _ => null
+                                };
+
 
                                 <_DataGridHeading TType="TType"
                                                   Column="column"
@@ -135,8 +145,8 @@
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
 
     // Table Data
+    public List<SimpleColumn<TType>> DataGridColumns { get; set; } = new();
     private TType[] Items { get; set; } = { };
-    private List<SimpleColumn<TType>> DataGridColumns { get; set; } = new();
     private List<Filter<TType>> SimpleFilters { get; set; } = new();
 
     // Filtering etc
@@ -219,8 +229,11 @@
 
     public Task AddSimpleFilter(Filter<TType> filter)
     {
-        if (SimpleFilters.All(x => x.PropertyName != filter.PropertyName))
+        if (SimpleFilters.All(x => x.Id != filter.Id))
             SimpleFilters.Add(filter);
+        
+        // if (SimpleFilters.All(x => x.PropertyName != filter.PropertyName))
+        //     SimpleFilters.Add(filter);
 
         StateHasChanged();
         return Task.CompletedTask;

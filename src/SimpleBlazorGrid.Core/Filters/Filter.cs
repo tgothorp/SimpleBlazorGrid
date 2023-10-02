@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -11,10 +12,13 @@ public abstract class Filter<T> : ComponentBase
     [CascadingParameter]
     public SimpleGrid<T> SimpleGrid { get; set; }
 
-    public Guid Id { get; protected set; }
+    public Guid Id { get; protected set; } = Guid.Empty;
 
     [Parameter]
     public Expression<Func<T, object>> For { get; set; }
+
+    [Parameter]
+    public string ForHeading { get; set; }
 
     public bool FilterActive { get; private set; }
 
@@ -31,10 +35,40 @@ public abstract class Filter<T> : ComponentBase
 
     protected override void OnInitialized()
     {
-        Id = Guid.NewGuid();
-        SimpleGrid.AddSimpleFilter(this);
+        if (Id == Guid.Empty)
+            Id = Guid.NewGuid();
 
+        SimpleGrid.AddSimpleFilter(this);
         base.OnInitialized();
+    }
+
+    private string _headingName = null;
+    protected string HeadingName
+    {
+        get
+        {
+            if (_headingName is not null)
+                return _headingName;
+
+            var columnsForProperty = SimpleGrid.DataGridColumns.Where(x => x.PropertyName == PropertyName).ToArray();
+            switch (columnsForProperty.Length)
+            {
+                case 0:
+                    _headingName = PropertyName;
+                    break;
+                case 1:
+                    _headingName = columnsForProperty[0].Heading;
+                    break;
+                default:
+                {
+                    var target = SimpleGrid.DataGridColumns.FirstOrDefault(x => x.PropertyName == PropertyName && x.Heading == ForHeading);
+                    _headingName = target?.Heading ?? PropertyName;
+                    break;
+                }
+            }
+
+            return _headingName;
+        }
     }
 
     protected string GetPropertyName()

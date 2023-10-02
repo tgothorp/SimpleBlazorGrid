@@ -9,7 +9,7 @@
 {
     <div class="sdg-filter">
         <div class="sdg-filter-container">
-            <h2>Filter by @PropertyName</h2>
+            <h2>Filter by @HeadingName</h2>
             <div class="sdg-filter-inputs">
                 @if (IncludeTime)
                 {
@@ -17,7 +17,7 @@
                            min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
                            max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
                            @bind-value="Value" 
-                           placeholder="@PropertyName"/>
+                           placeholder="@HeadingName"/>
                 }
                 else
                 {
@@ -25,7 +25,7 @@
                            min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")" 
                            max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")" 
                            @bind-value="Value" 
-                           placeholder="@PropertyName"/>
+                           placeholder="@HeadingName"/>
                 }
             </div>
             <div class="sdg-filter-buttons">

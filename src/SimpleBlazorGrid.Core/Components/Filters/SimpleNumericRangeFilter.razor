@@ -12,10 +12,20 @@
 {
     <div class="sdg-filter">
         <div class="sdg-filter-container">
-            <h2>Filter by @PropertyName</h2>
+            <h2>Filter by @HeadingName</h2>
             <div class="sdg-filter-inputs">
-                <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="LowValue" placeholder="Minimum @PropertyName"/>
-                <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="HighValue" placeholder="Maximum @PropertyName"/>
+                <div>
+                    <label>
+                        <small>Minimum</small>
+                    </label>
+                    <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="LowValue" placeholder="Minimum @HeadingName"/>
+                </div>
+                <div>
+                    <label>
+                        <small>Maximum</small>
+                    </label>
+                    <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="HighValue" placeholder="Maximum @HeadingName"/>
+                </div>
             </div>
             <div class="sdg-filter-buttons">
                 <div class="clear">

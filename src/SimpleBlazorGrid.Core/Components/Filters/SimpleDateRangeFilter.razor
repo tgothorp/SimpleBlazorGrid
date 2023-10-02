@@ -9,35 +9,55 @@
 {
     <div class="sdg-filter">
         <div class="sdg-filter-container">
-            <h2>Filter by @PropertyName</h2>
+            <h2>Filter by @HeadingName</h2>
             <div class="sdg-filter-inputs">
                 @if (IncludeTime)
                 {
-                    <input type="datetime-local" 
-                           min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
-                           max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
-                           @bind-value="LowValue" 
-                           placeholder="@PropertyName"/>
-                                                      
-                    <input type="datetime-local" 
-                           min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
-                           max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")" 
-                           @bind-value="HighValue" 
-                           placeholder="@PropertyName"/>
+                    <div>
+                        <label>
+                            <small>Minimum</small>
+                        </label>
+                        <input type="datetime-local"
+                               min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
+                               max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
+                               @bind-value="LowValue"
+                               placeholder="@HeadingName"/>
+                    </div>
+
+                    <div>
+                        <label>
+                            <small>Maximum</small>
+                        </label>
+                        <input type="datetime-local"
+                               min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
+                               max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
+                               @bind-value="HighValue"
+                               placeholder="@HeadingName"/>
+                    </div>
                 }
                 else
                 {
-                    <input type="date" 
-                           min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")" 
-                           max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")" 
-                           @bind-value="LowValue" 
-                           placeholder="@PropertyName"/>
-                                                      
-                    <input type="date" 
-                           min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")" 
-                           max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")" 
-                           @bind-value="HighValue" 
-                           placeholder="@PropertyName"/>
+                    <div>
+                        <label>
+                            <small>Minimum</small>
+                        </label>
+                        <input type="date"
+                               min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")"
+                               max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")"
+                               @bind-value="LowValue"
+                               placeholder="@HeadingName"/>
+                    </div>
+
+                    <div>
+                        <label>
+                            <small>Maximum</small>
+                        </label>
+                        <input type="date"
+                               min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")"
+                               max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")"
+                               @bind-value="HighValue"
+                               placeholder="@HeadingName"/>
+                    </div>
                 }
             </div>
             <div class="sdg-filter-buttons">
@@ -68,7 +88,7 @@
 
     [Parameter]
     public bool Inclusive { get; set; }
-    
+
     public DateTime? LowValue { get; set; }
     public DateTime? HighValue { get; set; }
 
@@ -76,7 +96,7 @@
     {
         if (LowValue is null || HighValue is null)
             return Task.CompletedTask;
-        
+
         return base.Apply();
     }
 
@@ -84,7 +104,8 @@
     {
         LowValue = null;
         HighValue = null;
-        
+
         return base.Clear();
     }
+
 }
