@@ -63,6 +63,10 @@ table.sdg-table td.sdg-selectable input[type=checkbox]:checked {
 table.sdg-table td.sdg-selectable input[type=checkbox]:hover {
   cursor: pointer;
 }
+table.sdg-table td.hidden {
+  width: 0;
+  overflow: hidden;
+}
 table.sdg-table th.sdg-selectable input {
   border-color: var(--secondary-colour);
 }
@@ -126,6 +130,11 @@ div.sdg-table-title-container p {
 }
 .sdg-heading-container div.sdg-heading-text :hover {
   cursor: pointer;
+}
+
+.sdg-heading-container-hidden {
+  width: 0;
+  overflow: hidden;
 }
 
 .sdg-no-data {
@@ -295,12 +304,13 @@ div.sdg-filter-buttons div.apply button:hover {
 
 div.sdg-search {
   width: 20%;
-  padding: 1rem 0.5rem 1rem 1rem;
+  padding: 1rem 0 1rem 1rem;
 }
 div.sdg-search input {
   width: 100%;
   height: 20px;
   margin: 1%;
+  padding: 1em;
   border: none;
   border-bottom: var(--primary-colour) 5px solid;
   transition: 0.2s;

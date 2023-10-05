@@ -3,6 +3,7 @@
 
 @using SimpleBlazorGrid.Configuration
 @using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Helpers
 @using SimpleBlazorGrid.Options
@@ -71,7 +72,8 @@
                                               SortAscending="SortAscending"
                                               SortOptions="SortOptions"
                                               Width="@column.Width"
-                                              SimpleFilter="simpleFilter"/>
+                                              SimpleFilter="simpleFilter"
+                                              Hidden="@column.Hidden"/>
                         }
                     </tr>
                     </thead>
@@ -275,6 +277,9 @@
 
     private async Task SearchTable(string query)
     {
+        if (SearchOptions.Query == query)
+            return;
+
         SearchOptions.Query = query;
         await ReloadData();
     }

@@ -8,7 +8,7 @@
 @typeparam TType
 
 <th style="@(ColumnWidth())">
-    <div class="sdg-heading-container">
+    <div class="sdg-heading-container @(Hidden ? "sdg-heading-container-hidden" : "")">
 
         @if (SimpleFilter is not null)
         {
@@ -42,6 +42,9 @@
 
     [Parameter]
     public int? Width { get; set; }
+
+    [Parameter]
+    public bool Hidden { get; set; }
 
     private async Task Sort()
     {

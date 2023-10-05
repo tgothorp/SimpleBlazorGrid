@@ -72,7 +72,6 @@
     
     .table {
       width: 55%;
-      overflow-x: auto;
 
       @include base.tablet {
         width: 100%;
