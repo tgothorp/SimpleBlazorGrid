@@ -34,6 +34,14 @@
                     </div>
                 }
 
+                @if (Searchable)
+                {
+                    <div>
+                        <input type="text" @bind="SearchOptions.Query"/>
+                        <button @onclick="Search">Search</button>
+                    </div>
+                }
+
                 <table class="sdg-table" style="--primary-colour: @Configuration.PrimaryColour; 
             --secondary-colour: @Configuration.SecondaryColour; 
             --glyph-colour: @Configuration.GlyphColour ">
@@ -51,9 +59,6 @@
 
                             @foreach (var column in DataGridColumns)
                             {
-                                //Filter<TType> simpleFilter = null;
-                                
-                                //var simpleFilter = SimpleFilters.SingleOrDefault(x => x.PropertyName == column.PropertyName);
                                 var filterCountForColumnProperty = SimpleFilters.Count(x => x.PropertyName == column.PropertyName);
                                 var simpleFilter = filterCountForColumnProperty switch
                                 {
@@ -61,7 +66,6 @@
                                     > 1 => SimpleFilters.FirstOrDefault(x => x.PropertyName == column.PropertyName && x.ForHeading == column.Heading),
                                     _ => null
                                 };
-
 
                                 <_DataGridHeading TType="TType"
                                                   Column="column"
@@ -142,6 +146,9 @@
     public bool Selectable { get; set; }
 
     [Parameter]
+    public bool Searchable { get; set; }
+
+    [Parameter]
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
 
     // Table Data
@@ -152,6 +159,7 @@
     // Filtering etc
     public PageOptions PageOptions { get; set; } = new();
     public SortOptions SortOptions { get; set; } = new();
+    public SearchOptions SearchOptions { get; set; } = new();
     private List<Filter<TType>> AllSimpleFilters { get; set; }
     private List<Filter<TType>> ActiveSimpleFilters { get; set; } = new();
     private Filter<TType> ActiveSimpleFilter { get; set; } = null;
@@ -185,7 +193,7 @@
         SortOptions.Ascending = sortAscending;
         SortAscending = !SortAscending;
 
-    // Go back to the first page when sorting
+        // Go back to the first page when sorting
         PageOptions.CurrentPage = 0;
 
         SelectedItems = new List<TType>();
@@ -231,9 +239,6 @@
     {
         if (SimpleFilters.All(x => x.Id != filter.Id))
             SimpleFilters.Add(filter);
-        
-        // if (SimpleFilters.All(x => x.PropertyName != filter.PropertyName))
-        //     SimpleFilters.Add(filter);
 
         StateHasChanged();
         return Task.CompletedTask;
@@ -255,6 +260,7 @@
 
         SimpleGridDataSource.SortOptions = SortOptions;
         SimpleGridDataSource.PageOptions = PageOptions;
+        SimpleGridDataSource.SearchOptions = SearchOptions;
 
         SimpleGridDataSource.Filters = SimpleFilters
             .Where(x => x.FilterActive);
@@ -265,4 +271,13 @@
         StateHasChanged();
     }
 
+    private async Task Search()
+    {
+        SearchOptions.Columns = DataGridColumns
+            .Where(x => x.Searchable)
+            .Select(x => x.PropertyName)
+            .ToHashSet();
+
+        await ReloadData();
+    }
 }

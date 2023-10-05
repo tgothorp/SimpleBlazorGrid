@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using SimpleBlazorGrid.Extensions;
 using SimpleBlazorGrid.Filters;
+using SimpleBlazorGrid.Helpers;
 using SimpleBlazorGrid.Options;
 
 namespace SimpleBlazorGrid.DataSource
@@ -13,10 +17,10 @@ namespace SimpleBlazorGrid.DataSource
     {
         private IEnumerable<T> Source { get; }
         private EnumerableFilterExpressionBuilder FilterExpressionBuilder { get; }
-
         public IEnumerable<Filter<T>> Filters { get; set; }
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
+        public SearchOptions SearchOptions { get; set; } = new();
 
         public SimpleGridEnumerableDataSource(IEnumerable<T> source)
         {
@@ -50,7 +54,52 @@ namespace SimpleBlazorGrid.DataSource
 
         private IEnumerable<T> ApplySearch(IEnumerable<T> items)
         {
-            // TODO
+            if (SearchOptions.Query.IsNullOrEmpty() || SearchOptions.Columns.Count == 0)
+                return items;
+
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var query = Expression.Constant(SearchOptions.Query, typeof(string));
+            var comparison = Expression.Constant(StringComparison.OrdinalIgnoreCase, typeof(StringComparison));
+
+            var checks = new List<ConditionalExpression>();
+            foreach (var column in SearchOptions.Columns)
+            {
+                var property = ExpressionHelper.PropertyAccess<T>(column, parameter);
+                var propertyIsNotNull = Expression.NotEqual(property, Expression.Constant(null));
+
+                var contains = Expression.Condition(
+                    propertyIsNotNull,
+                    Expression.Call(property,
+                        typeof(string).GetMethod("Contains", new[] { typeof(string), typeof(StringComparison) })!,
+                        query,
+                        comparison),
+                    Expression.Constant(false));
+
+                checks.Add(contains);
+            }
+
+            if (checks.Count > 1)
+            {
+                BinaryExpression or = null;
+
+                for (int i = 1; i < checks.Count; i++)
+                {
+                    or = or is null 
+                        ? Expression.OrElse(checks[i - 1], checks[i]) 
+                        : Expression.OrElse(or, checks[i]);
+                }
+                
+                var lambda = Expression.Lambda<Func<T, bool>>(or, parameter);
+                items = items.Where(lambda.Compile());
+            }
+            else
+            {
+                var check = checks.First();
+                var lambda = Expression.Lambda<Func<T, bool>>(check, parameter);
+
+                items = items.Where(lambda.Compile());
+            }
+            
             return items;
         }
 
