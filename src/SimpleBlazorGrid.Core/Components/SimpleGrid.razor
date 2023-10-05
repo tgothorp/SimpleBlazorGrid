@@ -182,8 +182,11 @@
     public Task AddColumn(SimpleColumn<TType> column)
     {
         DataGridColumns.Add(column);
-        StateHasChanged();
+        
+        if (column.Searchable)
+            SearchOptions.Columns.Add(column.PropertyName);
 
+        StateHasChanged();
         return Task.CompletedTask;
     }
 
@@ -273,11 +276,6 @@
 
     private async Task Search()
     {
-        SearchOptions.Columns = DataGridColumns
-            .Where(x => x.Searchable)
-            .Select(x => x.PropertyName)
-            .ToHashSet();
-
         await ReloadData();
     }
 }

@@ -41,7 +41,7 @@ namespace SimpleBlazorGrid.DataSource
 
         private IEnumerable<T> ApplyFiltering(IEnumerable<T> items)
         {
-            if (Filters.Any())
+            if (Filters is not null && Filters.Any())
             {
                 var filters = Filters
                     .Select(x => FilterExpressionBuilder.GetFilterExpression(x));
@@ -116,7 +116,7 @@ namespace SimpleBlazorGrid.DataSource
                 return obj;
             }
 
-            if (!string.IsNullOrEmpty(SortOptions.Property))
+            if (SortOptions.Property.IsNotNullOrEmpty())
             {
                 string[] propertyNames = SortOptions.Property.Split('.');
                 Type targetType = typeof(T);
