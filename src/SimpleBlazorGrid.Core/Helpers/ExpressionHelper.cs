@@ -6,6 +6,17 @@ namespace SimpleBlazorGrid.Helpers
 {
     public static class ExpressionHelper
     {
+        public static Expression PropertyAccess<T>(string propertyName, ParameterExpression parameter)
+        {
+            Expression propertyAccess = parameter;
+            foreach (var property in propertyName.Split('.'))
+            {
+                propertyAccess = Expression.Property(propertyAccess, property);
+            }
+
+            return propertyAccess;
+        }
+        
         public static Expression PropertyAccess<T>(Filter<T> numericRangeFilter, ParameterExpression parameter)
         {
             Expression propertyAccess = parameter;

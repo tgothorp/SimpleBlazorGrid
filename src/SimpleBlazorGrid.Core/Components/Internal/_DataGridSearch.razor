@@ -1,0 +1,53 @@
+﻿@using System.Timers
+@using SimpleBlazorGrid.Configuration
+@using SimpleBlazorGrid.Extensions
+
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@implements IDisposable
+
+@inject SimpleDataGridConfiguration Configuration
+
+<div class="sdg-search">
+    <input type="text" 
+           @bind="@Query" 
+           @bind:event="oninput" 
+           @onkeyup="@ResetTimer" 
+           placeholder="Search..." 
+           style="--primary-colour: @Configuration.PrimaryColour; --secondary-colour: @Configuration.SecondaryColour"/>
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private string Query { get; set; } = string.Empty;
+    private Timer Timer = default!;
+
+    protected override void OnInitialized()
+    {
+        Timer = new Timer(300);
+        Timer.Elapsed += Search;
+        Timer.AutoReset = false;
+
+        base.OnInitialized();
+    }
+
+    private void ResetTimer()
+    {
+        Timer.Stop();
+        Timer.Start();
+    }
+
+    private async void Search(object sender, ElapsedEventArgs e)
+    {
+        await InvokeAsync(async () => await OnSearch.InvokeAsync(Query));
+    }
+
+    public void Dispose()
+    {
+        Timer?.Dispose();
+    }
+}

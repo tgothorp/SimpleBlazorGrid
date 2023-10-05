@@ -34,7 +34,13 @@
     public bool Sortable { get; set; }
 
     [Parameter]
+    public bool Searchable { get; set; }
+
+    [Parameter]
     public int? Width { get; set; }
+
+    [Parameter]
+    public bool Hidden { get; set; }
 
     protected override void OnInitialized()
     {
@@ -45,6 +51,10 @@
     protected override void OnParametersSet()
     {
         Heading ??= PropertyName;
+
+        if (Hidden)
+            Width = 0;
+
         base.OnParametersSet();
     }
 

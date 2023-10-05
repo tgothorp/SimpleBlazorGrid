@@ -45,6 +45,7 @@
                 TType="VideoGame"
                 Title="Metacritic™ Top 100 Video Games of All Time"
                 Subtitle="Game releases by user score"
+                Searchable="true"
                 SimpleGridDataSource="new SimpleGridEnumerableDataSource<VideoGame>(VideoGameRepo.GetAllVideoGames())"
                 ItemsPerPage="10">
                 <Filters>
@@ -55,7 +56,7 @@
                 </Filters>
                 <Columns>
                     <SimpleColumn TType="VideoGame" For="@(x => x.Rank)" Sortable="@true" Width="10"/>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Name)" Sortable="@true"/>
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Name)" Sortable="@true" Searchable="true"/>
                     <SimpleColumn TType="VideoGame" For="@(x => x.ReleaseDate)" Sortable="@true" Width="15"/>
                     <SimpleColumn TType="VideoGame" For="@(x => x.Platform)" Width="12">
                         <SimpleColumnTemplate Context="item">
@@ -74,7 +75,7 @@
                             }
                         </SimpleColumnTemplate>
                     </SimpleColumn>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)" Width="25">
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)" Width="25" Searchable="true">
                         <SimpleColumnTemplate Context="item">
                             @item.Developer
                             <br/>
@@ -82,6 +83,7 @@
                         </SimpleColumnTemplate>
                     </SimpleColumn>
                     <SimpleColumn TType="VideoGame" For="@(x => x.Metascore)" Sortable="@true" />
+                    <SimpleColumn TType="VideoGame" For="@(x => x.Publisher)" Searchable="true" Width="0" Hidden="true" />
                 </Columns>
             </SimpleGrid>
         </div>

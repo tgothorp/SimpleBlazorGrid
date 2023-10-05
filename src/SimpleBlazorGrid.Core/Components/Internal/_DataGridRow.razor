@@ -20,7 +20,7 @@
 
     @foreach (var column in Columns)
     {
-        <td>
+        <td class="@(column.Hidden ? "hidden" : "")">
             @if (column.SimpleColumnTemplate is not null)
             {
                 @column.SimpleColumnTemplate(Data)

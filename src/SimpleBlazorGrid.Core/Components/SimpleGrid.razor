@@ -3,6 +3,7 @@
 
 @using SimpleBlazorGrid.Configuration
 @using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Helpers
 @using SimpleBlazorGrid.Options
@@ -20,19 +21,26 @@
         @if (DataGridColumns.Any())
         {
             <div>
-                @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
-                {
-                    <div class="sdg-table-title-container">
-                        @if (!string.IsNullOrEmpty(Title))
-                        {
-                            <h1>@Title</h1>
-                        }
-                        @if (!string.IsNullOrEmpty(Subtitle))
-                        {
-                            <p>@Subtitle</p>
-                        }
-                    </div>
-                }
+                <div class="sdg-table-heading">
+                    @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
+                    {
+                        <div class="sdg-table-title-container">
+                            @if (!string.IsNullOrEmpty(Title))
+                            {
+                                <h1>@Title</h1>
+                            }
+                            @if (!string.IsNullOrEmpty(Subtitle))
+                            {
+                                <p>@Subtitle</p>
+                            }
+                        </div>
+                    }
+
+                    @if (Searchable)
+                    {
+                        <_DataGridSearch OnSearch="SearchTable"/>
+                    }
+                </div>
 
                 <table class="sdg-table" style="--primary-colour: @Configuration.PrimaryColour; 
             --secondary-colour: @Configuration.SecondaryColour; 
@@ -41,69 +49,66 @@
                     @Filters
 
                     <thead>
-                        <tr>
-                            @if (Selectable)
-                            {
-                                <th class="sdg-selectable">
-                                    <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
-                                </th>
-                            }
+                    <tr>
+                        @if (Selectable)
+                        {
+                            <th class="sdg-selectable">
+                                <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
+                            </th>
+                        }
 
-                            @foreach (var column in DataGridColumns)
+                        @foreach (var column in DataGridColumns)
+                        {
+                            var filterCountForColumnProperty = SimpleFilters.Count(x => x.PropertyName == column.PropertyName);
+                            var simpleFilter = filterCountForColumnProperty switch
                             {
-                                //Filter<TType> simpleFilter = null;
-                                
-                                //var simpleFilter = SimpleFilters.SingleOrDefault(x => x.PropertyName == column.PropertyName);
-                                var filterCountForColumnProperty = SimpleFilters.Count(x => x.PropertyName == column.PropertyName);
-                                var simpleFilter = filterCountForColumnProperty switch
-                                {
-                                    1 => SimpleFilters.Single(x => x.PropertyName == column.PropertyName),
-                                    > 1 => SimpleFilters.FirstOrDefault(x => x.PropertyName == column.PropertyName && x.ForHeading == column.Heading),
-                                    _ => null
+                                1 => SimpleFilters.Single(x => x.PropertyName == column.PropertyName),
+                                > 1 => SimpleFilters.FirstOrDefault(x => x.PropertyName == column.PropertyName && x.ForHeading == column.Heading),
+                                _ => null
                                 };
 
-
-                                <_DataGridHeading TType="TType"
-                                                  Column="column"
-                                                  SortAscending="SortAscending"
-                                                  SortOptions="SortOptions"
-                                                  Width="@column.Width"
-                                                  SimpleFilter="simpleFilter"/>
-                            }
-                        </tr>
+                            <_DataGridHeading TType="TType"
+                                              Column="column"
+                                              SortAscending="SortAscending"
+                                              SortOptions="SortOptions"
+                                              Width="@column.Width"
+                                              SimpleFilter="simpleFilter"
+                                              Hidden="@column.Hidden"/>
+                        }
+                    </tr>
                     </thead>
                     <tbody>
-                        @if (Loading)
+                    @if (Loading)
+                    {
+                        <tr>
+                            <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
+                                <div class="sdg-loading">
+                                    <h2>Loading</h2>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @if (Items.Any())
+                        {
+                            @foreach (var item in Items)
+                            {
+                                var selected = SelectedItems.Contains(item);
+                                <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                            }
+                        }
+                        else
                         {
                             <tr>
                                 <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                    <div class="sdg-loading">
-                                        <h2>Loading</h2>
+                                    <div class="sdg-no-data">
+                                        <h2>No records!</h2>
                                     </div>
                                 </td>
                             </tr>
                         }
-                        else
-                        {
-                            @if (Items.Any())
-                            {
-                                @foreach (var item in Items)
-                                {
-                                    var selected = SelectedItems.Contains(item);
-                                    <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                        <div class="sdg-no-data">
-                                            <h2>No records!</h2>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
+                    }
                     </tbody>
                     <tfoot>
                     <tr>
@@ -142,6 +147,9 @@
     public bool Selectable { get; set; }
 
     [Parameter]
+    public bool Searchable { get; set; }
+
+    [Parameter]
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
 
     // Table Data
@@ -152,6 +160,7 @@
     // Filtering etc
     public PageOptions PageOptions { get; set; } = new();
     public SortOptions SortOptions { get; set; } = new();
+    public SearchOptions SearchOptions { get; set; } = new();
     private List<Filter<TType>> AllSimpleFilters { get; set; }
     private List<Filter<TType>> ActiveSimpleFilters { get; set; } = new();
     private Filter<TType> ActiveSimpleFilter { get; set; } = null;
@@ -174,8 +183,11 @@
     public Task AddColumn(SimpleColumn<TType> column)
     {
         DataGridColumns.Add(column);
-        StateHasChanged();
+        
+        if (column.Searchable)
+            SearchOptions.Columns.Add(column.PropertyName);
 
+        StateHasChanged();
         return Task.CompletedTask;
     }
 
@@ -185,7 +197,7 @@
         SortOptions.Ascending = sortAscending;
         SortAscending = !SortAscending;
 
-    // Go back to the first page when sorting
+        // Go back to the first page when sorting
         PageOptions.CurrentPage = 0;
 
         SelectedItems = new List<TType>();
@@ -231,9 +243,6 @@
     {
         if (SimpleFilters.All(x => x.Id != filter.Id))
             SimpleFilters.Add(filter);
-        
-        // if (SimpleFilters.All(x => x.PropertyName != filter.PropertyName))
-        //     SimpleFilters.Add(filter);
 
         StateHasChanged();
         return Task.CompletedTask;
@@ -255,6 +264,7 @@
 
         SimpleGridDataSource.SortOptions = SortOptions;
         SimpleGridDataSource.PageOptions = PageOptions;
+        SimpleGridDataSource.SearchOptions = SearchOptions;
 
         SimpleGridDataSource.Filters = SimpleFilters
             .Where(x => x.FilterActive);
@@ -265,4 +275,12 @@
         StateHasChanged();
     }
 
+    private async Task SearchTable(string query)
+    {
+        if (SearchOptions.Query == query)
+            return;
+
+        SearchOptions.Query = query;
+        await ReloadData();
+    }
 }

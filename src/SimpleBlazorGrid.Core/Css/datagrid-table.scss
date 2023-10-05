@@ -75,6 +75,11 @@ table.sdg-table {
   td.sdg-selectable input[type=checkbox]:hover {
     cursor: pointer;
   }
+  
+  td.hidden {
+    width: 0;
+    overflow: hidden;
+  }
 
   th.sdg-selectable input {
     border-color: var(--secondary-colour);
@@ -92,4 +97,9 @@ table.sdg-table {
 
 .sdg-selectable {
   width: 50px;
+}
+
+div.sdg-table-heading {
+  display: flex;
+  align-items: flex-end;
 }

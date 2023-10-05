@@ -20,6 +20,7 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
 
         public SortOptions SortOptions { get; set; } = new();
         public PageOptions PageOptions { get; set; } = new();
+        public SearchOptions SearchOptions { get; set; } = new();
         public IEnumerable<Filter<T>> Filters { get; set; }
         public EntityFrameworkFilterExpressionBuilder FilterExpressionBuilder { get; }
 
