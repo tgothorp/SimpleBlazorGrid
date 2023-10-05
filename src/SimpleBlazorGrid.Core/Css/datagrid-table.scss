@@ -93,3 +93,8 @@ table.sdg-table {
 .sdg-selectable {
   width: 50px;
 }
+
+div.sdg-table-heading {
+  display: flex;
+  align-items: flex-end;
+}

@@ -20,27 +20,26 @@
         @if (DataGridColumns.Any())
         {
             <div>
-                @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
-                {
-                    <div class="sdg-table-title-container">
-                        @if (!string.IsNullOrEmpty(Title))
-                        {
-                            <h1>@Title</h1>
-                        }
-                        @if (!string.IsNullOrEmpty(Subtitle))
-                        {
-                            <p>@Subtitle</p>
-                        }
-                    </div>
-                }
+                <div class="sdg-table-heading">
+                    @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
+                    {
+                        <div class="sdg-table-title-container">
+                            @if (!string.IsNullOrEmpty(Title))
+                            {
+                                <h1>@Title</h1>
+                            }
+                            @if (!string.IsNullOrEmpty(Subtitle))
+                            {
+                                <p>@Subtitle</p>
+                            }
+                        </div>
+                    }
 
-                @if (Searchable)
-                {
-                    <div>
-                        <input type="text" @bind="SearchOptions.Query"/>
-                        <button @onclick="Search">Search</button>
-                    </div>
-                }
+                    @if (Searchable)
+                    {
+                        <_DataGridSearch OnSearch="SearchTable"/>
+                    }
+                </div>
 
                 <table class="sdg-table" style="--primary-colour: @Configuration.PrimaryColour; 
             --secondary-colour: @Configuration.SecondaryColour; 
@@ -49,65 +48,65 @@
                     @Filters
 
                     <thead>
-                        <tr>
-                            @if (Selectable)
-                            {
-                                <th class="sdg-selectable">
-                                    <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
-                                </th>
-                            }
+                    <tr>
+                        @if (Selectable)
+                        {
+                            <th class="sdg-selectable">
+                                <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
+                            </th>
+                        }
 
-                            @foreach (var column in DataGridColumns)
+                        @foreach (var column in DataGridColumns)
+                        {
+                            var filterCountForColumnProperty = SimpleFilters.Count(x => x.PropertyName == column.PropertyName);
+                            var simpleFilter = filterCountForColumnProperty switch
                             {
-                                var filterCountForColumnProperty = SimpleFilters.Count(x => x.PropertyName == column.PropertyName);
-                                var simpleFilter = filterCountForColumnProperty switch
-                                {
-                                    1 => SimpleFilters.Single(x => x.PropertyName == column.PropertyName),
-                                    > 1 => SimpleFilters.FirstOrDefault(x => x.PropertyName == column.PropertyName && x.ForHeading == column.Heading),
-                                    _ => null
+                                1 => SimpleFilters.Single(x => x.PropertyName == column.PropertyName),
+                                > 1 => SimpleFilters.FirstOrDefault(x => x.PropertyName == column.PropertyName && x.ForHeading == column.Heading),
+                                _ => null
                                 };
 
-                                <_DataGridHeading TType="TType"
-                                                  Column="column"
-                                                  SortAscending="SortAscending"
-                                                  SortOptions="SortOptions"
-                                                  Width="@column.Width"
-                                                  SimpleFilter="simpleFilter"/>
-                            }
-                        </tr>
+                            <_DataGridHeading TType="TType"
+                                              Column="column"
+                                              SortAscending="SortAscending"
+                                              SortOptions="SortOptions"
+                                              Width="@column.Width"
+                                              SimpleFilter="simpleFilter"/>
+                        }
+                    </tr>
                     </thead>
                     <tbody>
-                        @if (Loading)
+                    @if (Loading)
+                    {
+                        <tr>
+                            <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
+                                <div class="sdg-loading">
+                                    <h2>Loading</h2>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @if (Items.Any())
+                        {
+                            @foreach (var item in Items)
+                            {
+                                var selected = SelectedItems.Contains(item);
+                                <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                            }
+                        }
+                        else
                         {
                             <tr>
                                 <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                    <div class="sdg-loading">
-                                        <h2>Loading</h2>
+                                    <div class="sdg-no-data">
+                                        <h2>No records!</h2>
                                     </div>
                                 </td>
                             </tr>
                         }
-                        else
-                        {
-                            @if (Items.Any())
-                            {
-                                @foreach (var item in Items)
-                                {
-                                    var selected = SelectedItems.Contains(item);
-                                    <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                        <div class="sdg-no-data">
-                                            <h2>No records!</h2>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
+                    }
                     </tbody>
                     <tfoot>
                     <tr>
@@ -274,8 +273,9 @@
         StateHasChanged();
     }
 
-    private async Task Search()
+    private async Task SearchTable(string query)
     {
+        SearchOptions.Query = query;
         await ReloadData();
     }
 }
