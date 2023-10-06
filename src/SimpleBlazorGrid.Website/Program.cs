@@ -1,4 +1,4 @@
-using SimpleBlazorGrid.Extensions;
+using Microsoft.AspNetCore.StaticFiles;using SimpleBlazorGrid.Extensions;
 using SimpleBlazorGrid.Website.Data;
 using SimpleBlazorGrid.Website.Pages.Shared;
 
@@ -21,6 +21,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+new FileExtensionContentTypeProvider();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
