@@ -2,9 +2,10 @@
 @using SimpleBlazorGrid.Website.Data
 @using SimpleBlazorGrid.DataSource
 @using Humanizer
+@using SimpleBlazorGrid.Formatting
 @using SimpleBlazorGrid.Website.Pages.Shared
 
-@inject VideoGameRepo VideoGameRepo
+@inject MovieRepo MovieRepo
 @inject NavBarService NavBarService
 
 <div class="top">
@@ -25,7 +26,6 @@
                 <li>Entity Framework integration available</li>
             </ul>
 
-
             <div class="buttons">
                 <div>
                     <a>
@@ -42,48 +42,30 @@
 
         <div class="table">
             <SimpleGrid
-                TType="VideoGame"
-                Title="Metacritic™ Top 100 Video Games of All Time"
-                Subtitle="Game releases by user score"
+                TType="Movie"
+                Title="IMDB Top 100 Movies"
+                Subtitle="by user rating"
                 Searchable="true"
-                SimpleGridDataSource="new SimpleGridEnumerableDataSource<VideoGame>(VideoGameRepo.GetAllVideoGames())"
-                ItemsPerPage="10">
+                SimpleGridDataSource="new SimpleGridEnumerableDataSource<Movie>(MovieRepo.FetchAllMovies())"
+                ItemsPerPage="15">
                 <Filters>
-                    <SimpleStringFilter TType="VideoGame" For="@(x => x.Name)" IgnoreCase="@true"/>
-                    <SimpleDateRangeFilter TType="VideoGame" For="@(x => x.ReleaseDate)"/>
-                    <SimpleEnumFilter TType="VideoGame" TEnum="Platform" For="@(x => x.Platform)" AllowMultiple="@true"/>
-                    <SimpleNumericFilter TType="VideoGame" Step="1" For="@(x => x.Metascore)" Min="94" Max="99" />
+                    <SimpleStringFilter TType="Movie" For="@(x => x.Name)" IgnoreCase="true" />
+                    <SimpleDateRangeFilter TType="Movie" For="@(x => x.Released)" Inclusive="true" IncludeTime="false"/>
+                    <SimpleNumericRangeFilter TType="Movie" For="@(x => x.Gross)" Step="1" />
+                    <SimpleStringFilter TType="Movie" For="@(x => x.Genre)" IgnoreCase="true" />
                 </Filters>
                 <Columns>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Rank)" Sortable="@true" Width="10"/>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Name)" Sortable="@true" Searchable="true"/>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.ReleaseDate)" Sortable="@true" Width="15"/>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Platform)" Width="12">
+                    <SimpleColumn TType="Movie" For="@(x => x.Rank)" Sortable="true" Width="5" />
+                    <SimpleColumn TType="Movie" For="@(x => x.Name)" Sortable="true" Searchable="true" />
+                    <SimpleColumn TType="Movie" For="@(x => x.Released)" Sortable="true" Format="Format.ShortDate" Width="15" />
+                    <SimpleColumn TType="Movie" For="@(x => x.Director)" Searchable="true" Width="15" />
+                    <SimpleColumn TType="Movie" For="@(x => x.Runtime)" Sortable="true" Width="10">
                         <SimpleColumnTemplate Context="item">
-                            @switch (item.Platform)
-                            {
-                                case Platform._3DS:
-                                    <span>3 DS</span>
-                                    break;
-                                case Platform.GameCube:
-                                    <span>GameCube</span>
-                                    break;
-                                default:
-                                    @item.Platform.Humanize(LetterCasing.Title)
-                                    break;
-                                    
-                            }
+                            <span>@item.Runtime mins</span>
                         </SimpleColumnTemplate>
                     </SimpleColumn>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Developer)" Width="25" Searchable="true">
-                        <SimpleColumnTemplate Context="item">
-                            @item.Developer
-                            <br/>
-                            <small>Published by: @item.Publisher</small>
-                        </SimpleColumnTemplate>
-                    </SimpleColumn>
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Metascore)" Sortable="@true" />
-                    <SimpleColumn TType="VideoGame" For="@(x => x.Publisher)" Searchable="true" Width="0" Hidden="true" />
+                    <SimpleColumn TType="Movie" For="@(x => x.Gross)" Format="Format.Money" Sortable="true" Heading="Box Office" Width="15"/>
+                    <SimpleColumn TType="Movie" For="@(x => x.Genre)" Width="20" Searchable="true" />
                 </Columns>
             </SimpleGrid>
         </div>

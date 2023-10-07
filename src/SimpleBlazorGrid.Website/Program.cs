@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<NavBarService>();
-builder.Services.AddScoped<VideoGameRepo>();
+builder.Services.AddScoped<MovieRepo>();
 builder.Services.AddSimpleBlazorGrid(conf =>
 {
     conf.PrimaryColour = "#ff0a54";
