@@ -141,7 +141,7 @@
     public ISimpleGridDataSource<TType> SimpleGridDataSource { get; set; }
 
     [Parameter]
-    public int ItemsPerPage { get; set; } = 5;
+    public int ItemsPerPage { get; set; } = 15;
 
     [Parameter]
     public bool Selectable { get; set; }
@@ -183,9 +183,12 @@
     public Task AddColumn(SimpleColumn<TType> column)
     {
         DataGridColumns.Add(column);
-        
+
         if (column.Searchable)
+        {
+            Searchable = true;
             SearchOptions.Columns.Add(column.PropertyName);
+        }
 
         StateHasChanged();
         return Task.CompletedTask;

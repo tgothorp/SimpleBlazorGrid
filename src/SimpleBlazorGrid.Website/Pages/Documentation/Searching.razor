@@ -1,0 +1,70 @@
+@page "/documentation/searching"
+
+@using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.Formatting
+@using SimpleBlazorGrid.DataSource
+
+@layout DocumentationLayout
+
+@inject NavBarService NavBarService
+
+<h1>Searching</h1>
+<p>Any <code>string</code> properties can be included in the table search option. To enable the search feature, set <code>Searchable="true"</code> on your <code>&lt;SimpleGrid&gt;</code>. Next, mark the columns that should be included in the search by adding <code>Seacrhable="true"</code> to the <code>&lt;SimpleColumn&gt;</code>. see the example below for more details.</p>
+<br/>
+<p><i>Note: Any active filters will be applied first before searching is carried out.</i></p>
+<br/>
+
+<TabControl>
+    <TabPage TabName="Example">
+        <SimpleGrid TType="SearchingData"
+                    Subtitle="Try searching by name, developer or publisher"
+                    SimpleGridDataSource="@(new SimpleGridEnumerableDataSource<SearchingData>(Data))"
+                    Searchable="true">
+            <Columns>
+                <SimpleColumn TType="SearchingData" For="@(x => x.Name)" Searchable="true" />
+                <SimpleColumn TType="SearchingData" For="@(x => x.Developer)" Searchable="true" />
+                <SimpleColumn TType="SearchingData" For="@(x => x.Publisher)" Searchable="true" />
+                <SimpleColumn TType="SearchingData" For="@(x => x.Released)" Format="Format.ShortDate"/>
+            </Columns>
+        </SimpleGrid>
+    </TabPage>
+    <TabPage TabName="Code">
+        <SearchingExample/>
+    </TabPage>
+</TabControl>
+
+@code {
+    
+    public class SearchingData
+    {
+        public SearchingData(string name, string developer, string publisher, DateOnly released)
+        {
+            Name = name;
+            Developer = developer;
+            Publisher = publisher;
+            Released = released;
+        }
+
+        public string Name { get; set; }
+        public string Developer { get; private set; }
+        public string Publisher { get; private set; }
+        public DateOnly Released { get; private set; }
+    }
+
+    private readonly List<SearchingData> Data = new()
+    {
+        new("The Witcher 3: Wild Hunt", "CD Projekt Red", "CD Projekt", new DateOnly(2015, 05, 15)),
+        new("BioShock", "Irrational Games", "2K Games", new DateOnly(2007, 08, 21)),
+        new("Dead Space", "EA Redwood Shores", "Electronic Arts", new DateOnly(2008, 10, 13)),
+        new("S.T.A.L.K.E.R.: Shadow of Chernobyl", "GSC Game World", "THQ", new DateOnly(2007, 03, 20)),
+        new("Dark Souls III", "FromSoftware", "Bandai Namco Entertainment", new DateOnly(2016, 04, 12)),
+        new("Control", "Remedy Entertainment", "505 Games", new DateOnly(2019, 08, 27)),
+    };
+    
+    protected override void OnInitialized()
+    {
+        NavBarService.SetNavBarSection(NavSection.Documentation);
+        NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.Searching);
+        base.OnInitialized();
+    }
+}

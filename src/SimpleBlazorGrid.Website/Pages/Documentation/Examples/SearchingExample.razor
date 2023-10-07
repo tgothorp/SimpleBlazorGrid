@@ -1,0 +1,17 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+<pre style="font-size: var(--fs--1); width: 100%">
+&lt;SimpleGrid TType=&quot;SearchingData&quot; 
+            SimpleGridDataSource=&quot;@@(new SimpleGridEnumerableDataSource&lt;SearchingData&gt;(Data))&quot;
+            Searchable=&quot;true&quot;
+            Title=&quot;Video Game Search Example&quot;
+            Subtitle=&quot;Try searching by name, developer or publisher&quot;&gt;
+    &lt;Columns&gt;
+        &lt;SimpleColumn TType=&quot;SearchingData&quot; For=&quot;@@(x =&gt; x.Name)&quot; Searchable=&quot;true&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;SearchingData&quot; For=&quot;@@(x =&gt; x.Developer)&quot; Searchable=&quot;true&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;SearchingData&quot; For=&quot;@@(x =&gt; x.Publisher)&quot; Searchable=&quot;true&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;SearchingData&quot; For=&quot;@@(x =&gt; x.Released)&quot; Format=&quot;Format.ShortDate&quot;/&gt;
+    &lt;/Columns&gt;
+&lt;/SimpleGrid&gt;
+</pre>

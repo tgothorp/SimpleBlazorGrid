@@ -44,4 +44,5 @@ public enum DocumentationNavSection
     SimpleNumericRangeFilter,
     SimpleStringFilter,
     EntityFramework,
+    Searching
 }
