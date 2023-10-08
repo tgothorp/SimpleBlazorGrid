@@ -9,6 +9,7 @@ builder.Services.AddScoped<NavBarService>();
 builder.Services.AddScoped<MovieRepo>();
 builder.Services.AddSimpleBlazorGrid(conf =>
 {
+    conf.CurrencySymbol = "£";
     conf.PrimaryColour = "#ff0a54";
     conf.SecondaryColour = "#ff477e";
     conf.GlyphColour = "#ffffff";

@@ -1,10 +1,68 @@
 @page "/documentation"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.Website.Data
+@using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Formatting
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
+@inject MovieRepo MovieRepo
+
+<style>
+    .sdg-table-title-container h1 {
+        font-size: var(--fs-1);
+    }
+</style>
+
+<h1>Overview</h1>
+<br/>
+<p>Simple Blazor Grid offers the ability to easily create rich and interactive data grids with out-of-the-box support for searching, filtering and pagination. The following documentation details each component as well as their properties.</p>
+<br/>
+<p>The table below showcases some of the features that Simple Blazor Grid offers, including; searching, selecting (with callback), filtering and pagination. Select the 'code' button to see the simple code that powers this grid.</p>
+<br/>
+<br/>
+
+<TabControl>
+    <TabPage TabName="Example">
+        <SimpleGrid
+            TType="Movie"
+            Title="IMDB Top 100 Movies"
+            Subtitle="by user rating"
+            Searchable="true"
+            Selectable="true"
+            OnSelectionChanged="SelectionChanged"
+            SimpleGridDataSource="new SimpleGridEnumerableDataSource<Movie>(MovieRepo.FetchAllMovies())"
+            ItemsPerPage="15">
+            <Filters>
+                <SimpleStringFilter TType="Movie" For="@(x => x.Name)" IgnoreCase="true" />
+                <SimpleDateRangeFilter TType="Movie" For="@(x => x.Released)" Inclusive="true" IncludeTime="false"/>
+                <SimpleNumericRangeFilter TType="Movie" For="@(x => x.Gross)" Step="1" />
+                <SimpleStringFilter TType="Movie" For="@(x => x.Genre)" IgnoreCase="true" />
+            </Filters>
+            <Columns>
+                <SimpleColumn TType="Movie" For="@(x => x.Rank)" Sortable="true" Width="5" />
+                <SimpleColumn TType="Movie" For="@(x => x.Name)" Sortable="true" Searchable="true" />
+                <SimpleColumn TType="Movie" For="@(x => x.Released)" Sortable="true" Format="Format.ShortDate" Width="15" />
+                <SimpleColumn TType="Movie" For="@(x => x.Director)" Searchable="true" Width="15" />
+                <SimpleColumn TType="Movie" For="@(x => x.Runtime)" Sortable="true" Width="10">
+                    <SimpleColumnTemplate Context="item">
+                        <span>@item.Runtime mins</span>
+                    </SimpleColumnTemplate>
+                </SimpleColumn>
+                <SimpleColumn TType="Movie" For="@(x => x.Gross)" Format="Format.Money" Sortable="true" Heading="Box Office" Width="15"/>
+                <SimpleColumn TType="Movie" For="@(x => x.Genre)" Width="20" Searchable="true" />
+            </Columns>
+        </SimpleGrid>
+        
+        <p>Selected Movies: @_selectedMovies</p>
+    </TabPage>
+    <TabPage TabName="Code">
+        <IndexExample/>
+    </TabPage>
+</TabControl>
+
 
 @code {
     protected override void OnInitialized()
@@ -12,5 +70,11 @@
         NavBarService.SetNavBarSection(NavSection.Documentation);
         NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.Overview);
         base.OnInitialized();
+    }
+
+    private string _selectedMovies = string.Empty;
+    private void SelectionChanged(List<Movie> movies)
+    {
+        _selectedMovies = string.Join(", ", movies.Select(x => x.Name));
     }
 }

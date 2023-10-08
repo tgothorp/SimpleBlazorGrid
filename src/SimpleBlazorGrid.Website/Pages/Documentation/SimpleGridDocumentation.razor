@@ -1,12 +1,146 @@
 @page "/documentation/simple-grid"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
 
+<h1>SimpleGrid&lt;T&gt;</h1>
+<br/>
+<p>All Simple Blazor Grids start with the <code>SimpleGrid&lt;T&gt;</code> component. This component is responsible for creating and configuring the grid, all columns and filters must appear inside this component. The example below shows the minimum required to create a data grid. </p>
+<br/>
+
+<TabControl>
+    <TabPage TabName="Example">
+        <SimpleGrid
+            TType="Data"
+            SimpleGridDataSource="new SimpleGridEnumerableDataSource<Data>(_data)">
+            <Columns>
+                <SimpleColumn TType="Data" For="@(x => x.Id)" />
+                <SimpleColumn TType="Data" For="@(x => x.Name)" />
+            </Columns>
+        </SimpleGrid>
+    </TabPage>
+    <TabPage TabName="Code">
+        <SimpleGridExample/>
+    </TabPage>
+</TabControl>
+
+<br/>
+<h3>SimpleGrid&lt;T&gt; Properties</h3>
+<br/>
+<p>The simple grid component has a range of properties that can be configured to add features to your table. The table below lists them all in detail.</p>
+<br/>
+<table>
+    <thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>TType</code></td>
+        <td><code>Type</code></td>
+        <td>✅</td>
+        <td>Type parameter, should be the type of data the grid is displaying</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>Columns</code></td>
+        <td><code>RenderFragment</code></td>
+        <td>✅</td>
+        <td>All <code>SimpleColumn&lt;T&gt;</code>s should be wrapped by this render fragment, see the example code at the top of the page.</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td><code>Filters</code></td>
+        <td><code>RenderFragment</code></td>
+        <td>✅ / ❌</td>
+        <td>All filters should be wrapped by this render fragment (Not required when no filters are used)</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>Title</code></td>
+        <td><code>string</code></td>
+        <td>❌</td>
+        <td>Adds a <code>&lt;h1&gt;</code> title to the table</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>Subtitle</code></td>
+        <td><code>string</code></td>
+        <td>❌</td>
+        <td>Adds a <code>&lt;p&gt;</code> subtitle to the table</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>SimpleGridDataSource</code></td>
+        <td><code>ISimpleGridDataSource&lt;T&gt;</code></td>
+        <td>✅</td>
+        <td>The <code>SimpleGridDataSource</code> powers the filtering, searching and sorting of the data grid. See <a href="/documentation/simple-grid/data-source">DataSource</a> for full details.</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>ItemsPerPage</code></td>
+        <td><code>int</code></td>
+        <td>❌</td>
+        <td>How many items should be displayed per page</td>
+        <td><code>15</code></td>
+    </tr>
+    <tr>
+        <td><code>Selectable</code></td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>Allows selection of individual rows as well as the entire page, combine with the <code>OnSelectionChanged</code> callback for powerful interactivity</td>
+        <td><code>false</code></td>
+    </tr>
+    <tr>
+        <td><code>Searchable</code></td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>Enables the search bar for the table, columns must be marked as <code>Searchable</code> in order to be included in the search, see <a href="/documentation/simple-grid/simple-column">SimpleColumn&lt;T&gt;</a> for more details</td>
+        <td><code>false</code></td>
+    </tr>
+    <tr>
+        <td><code>OnSelectionChanged</code></td>
+        <td><code>EventCallback&lt;List&lt;T&gt;&gt;</code></td>
+        <td>❌</td>
+        <td>If <code>Selectable</code> is set to <code>true</code>. Then whenever the selected items in the table are changed, this callback will be fired and will contain all selected rows</td>
+        <td><code>null</code></td>
+    </tr>
+    </tbody>
+</table>
+
 @code {
+    
+    public class Data
+    {
+        public Data(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public int Id { get; }
+        public string Name { get; }
+    }
+
+    private readonly List<Data> _data = new()
+    {
+        new(1, "Fred Jones"),
+        new(2, "Daphne Blake"),
+        new(3, "Velma Dinkley"),
+        new(4, "Shaggy Rodgers"),
+        new(5, "Scoobert 'Scooby' Doo"),
+    };
+
+    
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);

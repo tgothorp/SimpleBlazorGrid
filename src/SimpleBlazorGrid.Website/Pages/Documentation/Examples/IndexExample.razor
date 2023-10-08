@@ -1,0 +1,47 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+<pre style="font-size: var(--fs--1); width: 100%">
+@@inject MovieRepo MovieRepo
+
+&lt;SimpleGrid
+     TType=&quot;Movie&quot;
+     Title=&quot;IMDB Top 100 Movies&quot;
+     Subtitle=&quot;by user rating&quot;
+     Searchable=&quot;true&quot;
+     Selectable=&quot;true&quot;
+     OnSelectionChanged=&quot;SelectionChanged&quot;
+     SimpleGridDataSource=&quot;new SimpleGridEnumerableDataSource&lt;Movie&gt;(MovieRepo.FetchAllMovies())&quot;
+     ItemsPerPage=&quot;15&quot;&gt;
+         &lt;Filters&gt;
+             &lt;SimpleStringFilter TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Name)&quot; IgnoreCase=&quot;true&quot; /&gt;
+             &lt;SimpleDateRangeFilter TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Released)&quot; Inclusive=&quot;true&quot; IncludeTime=&quot;false&quot;/&gt;
+             &lt;SimpleNumericRangeFilter TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Gross)&quot; Step=&quot;1&quot; /&gt;
+             &lt;SimpleStringFilter TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Genre)&quot; IgnoreCase=&quot;true&quot; /&gt;
+         &lt;/Filters&gt;
+         &lt;Columns&gt;
+             &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Rank)&quot; Sortable=&quot;true&quot; Width=&quot;5&quot; /&gt;
+             &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Name)&quot; Sortable=&quot;true&quot; Searchable=&quot;true&quot; /&gt;
+             &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Released)&quot; Sortable=&quot;true&quot; Format=&quot;Format.ShortDate&quot; Width=&quot;15&quot; /&gt;
+             &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Director)&quot; Searchable=&quot;true&quot; Width=&quot;15&quot; /&gt;
+             &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Runtime)&quot; Sortable=&quot;true&quot; Width=&quot;10&quot;&gt;
+                 &lt;SimpleColumnTemplate Context=&quot;item&quot;&gt;
+                     &lt;span&gt;@@item.Runtime mins&lt;/span&gt;
+                 &lt;/SimpleColumnTemplate&gt;
+             &lt;/SimpleColumn&gt;
+             &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Gross)&quot; Format=&quot;Format.Money&quot; Sortable=&quot;true&quot; Heading=&quot;Box Office&quot; Width=&quot;15&quot;/&gt;
+             &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Genre)&quot; Width=&quot;20&quot; Searchable=&quot;true&quot; /&gt;
+         &lt;/Columns&gt;
+&lt;/SimpleGrid&gt;
+        
+&lt;p&gt;Selected Movies: @@_selectedMovies&lt;/p&gt;
+
+@@code {
+
+    private string _selectedMovies = string.Empty;
+    private void SelectionChanged(List&lt;Movie&gt; movies)
+    {
+        _selectedMovies = string.Join(&quot;, &quot;, movies.Select(x =&gt; x.Name));
+    }
+}
+</pre>

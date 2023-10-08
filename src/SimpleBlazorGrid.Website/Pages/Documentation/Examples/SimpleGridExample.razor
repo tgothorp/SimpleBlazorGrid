@@ -1,0 +1,37 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+<pre style="font-size: var(--fs--1); width: 100%">
+&lt;SimpleGrid
+    TType=&quot;Data&quot;
+    SimpleGridDataSource=&quot;new SimpleGridEnumerableDataSource&lt;Data&gt;(_data)&quot;&gt;
+        &lt;Columns&gt;
+            &lt;SimpleColumn TType=&quot;Data&quot; For=&quot;@@(x =&gt; x.Id)&quot; /&gt;
+            &lt;SimpleColumn TType=&quot;Data&quot; For=&quot;@@(x =&gt; x.Name)&quot; /&gt;
+        &lt;/Columns&gt;
+&lt;/SimpleGrid&gt;
+
+@@code {
+    
+    public class Data
+    {
+        public Data(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public int Id { get; }
+        public string Name { get; }
+    }
+
+    private readonly List&lt;Data&gt; _data = new()
+    {
+        new(1, &quot;Fred Jones&quot;),
+        new(2, &quot;Daphne Blake&quot;),
+        new(3, &quot;Velma Dinkley&quot;),
+        new(4, &quot;Shaggy Rodgers&quot;),
+        new(5, &quot;Scoobert 'Scooby' Doo&quot;),
+    };
+}
+</pre>
