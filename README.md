@@ -4,7 +4,7 @@
 
 Simple Blazor Grid provides a simple and effective way to easily create data grids in Blazor with searching, sorting, paging and filtering all supported out-of-the-box.
 
-[Website](https://simpleblazorgrid.com) | [Documentation](https://simpleblazorgrid.com/documentation)
+[Website](https://simpleblazorgrid.com) | [Documentation](https://simpleblazorgrid.com/documentation) | [NuGet](https://www.nuget.org/packages/SimpleBlazorGrid.Core)
 
 ## Getting Started
 
