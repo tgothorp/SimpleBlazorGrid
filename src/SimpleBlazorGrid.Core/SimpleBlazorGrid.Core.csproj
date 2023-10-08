@@ -4,9 +4,12 @@
         <Title>Simple Blazor Grid</Title>
         <Description>A simple, standalone Blazor datagrid</Description>
         <RepositoryUrl>https://github.com/tgothorp/SimpleBlazorGrid</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageProjectUrl>https://simpleblazorgrid.com</PackageProjectUrl>
         <Authors>tgothorp</Authors>
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>SimpleBlazorGrid</RootNamespace>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
