@@ -29,6 +29,23 @@ public class EnumerableFilterExpressionBuilder
 
         var value = Expression.Constant(stringFilter.Value, typeof(string));
 
+        if (!stringFilter.Exact)
+        {
+            var comparison = Expression.Constant(stringFilter.IgnoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal, typeof(StringComparison));
+            var propertyIsNotNull = Expression.NotEqual(propertyAccess, Expression.Constant(null));
+
+            var contains = Expression.Condition(
+                propertyIsNotNull,
+                Expression.Call(propertyAccess,
+                    typeof(string).GetMethod("Contains", new[] { typeof(string), typeof(StringComparison) })!,
+                    value,
+                    comparison),
+                Expression.Constant(false));
+
+            // x => x.Property.Contains(FilterValue, StringComparison)
+            return Expression.Lambda<Func<T, bool>>(contains, parameter);
+        }
+
         if (stringFilter.IgnoreCase)
         {
             var equalsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string), typeof(StringComparison) });

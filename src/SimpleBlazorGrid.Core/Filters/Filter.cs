@@ -14,9 +14,15 @@ public abstract class Filter<T> : ComponentBase
 
     public Guid Id { get; protected set; } = Guid.Empty;
 
+    /// <summary>
+    /// The property the filter is targeting, for example: <code>@(x => x.MyProperty)</code>
+    /// </summary>
     [Parameter]
     public Expression<Func<T, object>> For { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public string ForHeading { get; set; }
 
@@ -31,6 +37,14 @@ public abstract class Filter<T> : ComponentBase
     {
         get => _propertyName ?? GetPropertyName();
         protected set => _propertyName = value;
+    }
+    
+    // Cache property type
+    private Type _propertyType = null;
+    public Type PropertyType
+    {
+        get => _propertyType ?? GetPropertyType();
+        protected set => _propertyType = value;
     }
 
     protected override void OnInitialized()
@@ -75,6 +89,17 @@ public abstract class Filter<T> : ComponentBase
     {
         _propertyName = ExpressionHelper.GetPropertyName(For);
         return _propertyName;
+    }
+
+    protected Type GetPropertyType()
+    {
+        if (For.Body is UnaryExpression unaryExpression)
+        {
+            _propertyType = unaryExpression.Operand.Type;
+            return _propertyType;
+        }
+
+        return For.Body.Type;
     }
 
     protected virtual async Task Apply()

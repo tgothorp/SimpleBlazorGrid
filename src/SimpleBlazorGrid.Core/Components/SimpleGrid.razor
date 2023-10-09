@@ -125,30 +125,63 @@
 
 @code {
 
+    /// <summary>
+    /// Adds a <code>&lt;h1&gt;</code> element to the table that displays the provided title
+    /// </summary>
     [Parameter]
     public string Title { get; set; }
 
+    /// <summary>
+    /// Adds a <code>&lt;p&gt;</code> element to the table that displays the provided subtitle
+    /// </summary>
     [Parameter]
     public string Subtitle { get; set; }
 
+    /// <summary>
+    /// All columns should be wrapper in the <code>&lt;Columns&gt;</code> render fragment
+    /// </summary>
     [Parameter]
     public RenderFragment Columns { get; set; }
 
+    /// <summary>
+    /// All filters should be wrapper in the <code>&lt;Filters&gt;</code> render fragment
+    /// </summary>
     [Parameter]
     public RenderFragment Filters { get; set; }
 
+    /// <summary>
+    /// The ISimpleGridDataSource that will be used as the data provider for this table.
+    /// </summary>
     [Parameter]
     public ISimpleGridDataSource<TType> SimpleGridDataSource { get; set; }
 
+    /// <summary>
+    /// How many individual rows will be displayed per page (default: 15)
+    /// </summary>
     [Parameter]
     public int ItemsPerPage { get; set; } = 15;
 
+    /// <summary>
+    /// Allows each individual row to be selectable if set (default: false) 
+    /// </summary>
     [Parameter]
     public bool Selectable { get; set; }
 
+    /// <summary>
+    /// Enables the search box that allows for table-wide searching
+    /// </summary>
+    /// <remarks>
+    /// Individual columns will need to be marked as searchable, see the documentation for more info 
+    /// </remarks>
     [Parameter]
     public bool Searchable { get; set; }
 
+    ///<summary>
+    /// Callback fired whenever a new row is selected or deselected, will contain a list of all selected rows 
+    /// </summary>
+    /// <remarks>
+    /// Selected items could be empty in the event the user selected and then deselected a row. Requires the <code>Selectable</code> parameter to be true
+    /// </remarks>
     [Parameter]
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
 

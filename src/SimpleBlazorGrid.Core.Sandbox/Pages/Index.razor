@@ -16,11 +16,10 @@
                 OnSelectionChanged="SelectedItemsChanged"
                 Title="2024 Product Catalogue"
                 Subtitle="All of Globex Corporation's upcoming products for sale in 2024">
-
         <Filters>
-            <SimpleStringFilter TType="Product" For="@(x => x.Name)" IgnoreCase="@true" ForHeading="Name"/>
+            <SimpleStringFilter TType="Product" For="@(x => x.Name)" IgnoreCase="@true" ForHeading="Name" Exact="false" />
             <SimpleStringFilter TType="Product" For="@(x => x.Name)" IgnoreCase="@true" ForHeading="Name2"/>
-            <SimpleNumericRangeFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="10000" Step="0.01" />
+            <SimpleNumericRangeFilter TType="Product" For="@(x => x.CostInGbp)" Min="0" Max="10000" Step="0.01"  />
             <SimpleEnumFilter TType="Product" TEnum="Currency" For="@(x => x.LocalCurrency)" AllowMultiple="true" />
             <SimpleDateRangeFilter TType="Product" For="@(x => x.LastOrderedOn)" IncludeTime="false" Min="DateTime.Today.AddYears(-5)" />
         </Filters>

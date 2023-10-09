@@ -33,23 +33,47 @@
 
 @code {
 
+    /// <summary>
+    /// Should the case of the query string and property matter?
+    /// </summary>
+    /// <remarks>
+    /// Default: false
+    /// </remarks>
     [Parameter]
     public bool IgnoreCase { get; set; }
 
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with the value provided here.
+    /// </summary>
     [Parameter]
     public string DefaultValue { get; set; }
 
+    /// <summary>
+    /// By default this filter will try to match a string exactly (eg. MyProperty == "Query"), setting this to false
+    /// will check to see if query appears as a substring in the target property.
+    /// </summary>
+    /// <remarks>
+    /// Setting this to 'false' may have an adverse effect on performance if used on large data sets, consider using the search feature instead, Default: true
+    /// </remarks>
+    [Parameter]
+    public bool Exact { get; set; } = true;
+
     public string Value { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Value = DefaultValue;
+        if (PropertyType != typeof(string))
+            throw new SimpleGridFilterException<TType>(this, $"Cannot apply string filter to property '{typeof(TType)}.{PropertyName}' as is not a string!");
 
-        var type = For.Body.Type;
-        if (type != typeof(string))
-            throw new SimpleGridFilterException<TType>(this, $"Cannot apply 'Simple String Filter' to property '{typeof(TType)}.{PropertyName}' as is not a string!");
+        if (DefaultValue.IsNotNullOrEmpty())
+        {
+            Value = DefaultValue;
+            DefaultValue = null;
 
-        base.OnInitialized();
+            await Apply();
+        }
+
+        await base.OnInitializedAsync();
     }
 
     protected override Task Apply()
@@ -59,4 +83,9 @@
             : Clear();
     }
 
+    protected override async Task Clear()
+    {
+        Value = null;
+        await base.Clear();
+    }
 }
