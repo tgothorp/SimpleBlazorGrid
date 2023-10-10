@@ -29,6 +29,23 @@ public class EnumerableFilterExpressionBuilder
 
         var value = Expression.Constant(stringFilter.Value, typeof(string));
 
+        if (!stringFilter.Exact)
+        {
+            var comparison = Expression.Constant(stringFilter.IgnoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal, typeof(StringComparison));
+            var propertyIsNotNull = Expression.NotEqual(propertyAccess, Expression.Constant(null));
+
+            var contains = Expression.Condition(
+                propertyIsNotNull,
+                Expression.Call(propertyAccess,
+                    typeof(string).GetMethod("Contains", new[] { typeof(string), typeof(StringComparison) })!,
+                    value,
+                    comparison),
+                Expression.Constant(false));
+
+            // x => x.Property.Contains(FilterValue, StringComparison)
+            return Expression.Lambda<Func<T, bool>>(contains, parameter);
+        }
+
         if (stringFilter.IgnoreCase)
         {
             var equalsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string), typeof(StringComparison) });
@@ -64,8 +81,8 @@ public class EnumerableFilterExpressionBuilder
         var propertyAccess = ExpressionHelper.PropertyAccess(numericRangeFilter, parameter);
         var propertyType = propertyAccess.Type;
 
-        var lowValue = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericRangeFilter.LowValue, propertyType), propertyType);
-        var highValue = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericRangeFilter.HighValue, propertyType), propertyType);
+        var lowValue = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericRangeFilter.StartValue, propertyType), propertyType);
+        var highValue = Expression.Constant(NumericHelper.ConvertStringToNumericType(numericRangeFilter.EndValue, propertyType), propertyType);
 
         var greaterThanLowValue = Expression.GreaterThanOrEqual(propertyAccess, lowValue);
         var lessThanHighValue = Expression.LessThanOrEqual(propertyAccess, highValue);
@@ -117,12 +134,12 @@ public class EnumerableFilterExpressionBuilder
             propertyAccess = Expression.Property(propertyAccess, "Date");
 
         var low = (propertyType == typeof(DateOnly) || propertyType == typeof(DateOnly?))
-            ? Expression.Constant(DateOnly.FromDateTime(dateRangeFilter.LowValue.Value), typeof(DateOnly))
-            : Expression.Constant(dateRangeFilter.LowValue.Value, typeof(DateTime));
+            ? Expression.Constant(DateOnly.FromDateTime(dateRangeFilter.StartValue.Value), typeof(DateOnly))
+            : Expression.Constant(dateRangeFilter.StartValue.Value, typeof(DateTime));
         
         var high = (propertyType == typeof(DateOnly) || propertyType == typeof(DateOnly?))
-            ? Expression.Constant(DateOnly.FromDateTime(dateRangeFilter.HighValue.Value), typeof(DateOnly))
-            : Expression.Constant(dateRangeFilter.HighValue.Value, typeof(DateTime));
+            ? Expression.Constant(DateOnly.FromDateTime(dateRangeFilter.EndValue.Value), typeof(DateOnly))
+            : Expression.Constant(dateRangeFilter.EndValue.Value, typeof(DateTime));
 
         var greaterThanLow = dateRangeFilter.Inclusive
             ? Expression.GreaterThanOrEqual(propertyAccess, low)

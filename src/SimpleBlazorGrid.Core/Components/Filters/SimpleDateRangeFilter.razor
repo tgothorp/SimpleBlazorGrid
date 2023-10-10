@@ -3,6 +3,8 @@
 
 @typeparam TType;
 
+@using SimpleBlazorGrid.Extensions
+@using SimpleBlazorGrid.Exceptions
 @inherits SimpleBlazorGrid.Filters.Filter<TType>
 
 @if (ShouldShowFilter)
@@ -20,7 +22,7 @@
                         <input type="datetime-local"
                                min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
                                max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
-                               @bind-value="LowValue"
+                               @bind-value="StartValue"
                                placeholder="@HeadingName"/>
                     </div>
 
@@ -31,7 +33,7 @@
                         <input type="datetime-local"
                                min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
                                max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
-                               @bind-value="HighValue"
+                               @bind-value="EndValue"
                                placeholder="@HeadingName"/>
                     </div>
                 }
@@ -44,7 +46,7 @@
                         <input type="date"
                                min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")"
                                max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")"
-                               @bind-value="LowValue"
+                               @bind-value="StartValue"
                                placeholder="@HeadingName"/>
                     </div>
 
@@ -55,7 +57,7 @@
                         <input type="date"
                                min="@(Min.HasValue ? @Min.Value.ToString("yyyy-MM-dd") : "")"
                                max="@(Max.HasValue ? @Max.Value.ToString("yyyy-MM-dd") : "")"
-                               @bind-value="HighValue"
+                               @bind-value="EndValue"
                                placeholder="@HeadingName"/>
                     </div>
                 }
@@ -74,27 +76,76 @@
 
 @code {
 
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with this value as the start value
+    /// </summary>
+    /// <remarks>
+    /// <code>DefaultEndValue</code> must also be set for this to take effect
+    /// </remarks>
     [Parameter]
-    public DateTime DefaultValue { get; set; }
+    public DateTime? DefaultStartValue { get; set; }
+    
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with this value as the end value
+    /// </summary>
+    /// <remarks>
+    /// <code>DefaultStartValue</code> must also be set for this to take effect
+    /// </remarks>
+    [Parameter]
+    public DateTime? DefaultEndValue { get; set; }
 
+    /// <summary>
+    /// Sets the 'min' value on the inputs
+    /// </summary>
     [Parameter]
     public DateTime? Min { get; set; }
 
+    /// <summary>
+    /// Sets the 'max' value on the inputs
+    /// </summary>
     [Parameter]
     public DateTime? Max { get; set; }
 
+    /// <summary>
+    /// Determines if the time should be included when applying the filter
+    /// </summary>
     [Parameter]
     public bool IncludeTime { get; set; }
 
+    /// <summary>
+    /// Should the start and end values be included in the filter 
+    /// </summary>
     [Parameter]
     public bool Inclusive { get; set; }
 
-    public DateTime? LowValue { get; set; }
-    public DateTime? HighValue { get; set; }
+    public DateTime? StartValue { get; set; }
+    public DateTime? EndValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!PropertyType.IsDateType())
+            throw new SimpleGridFilterException<TType>(this, $"Cannot apply date range filter to property '{typeof(TType)}.{PropertyName}' as is not a DateTime/DateOnly");
+        
+        if ((Nullable.GetUnderlyingType(PropertyType) ?? PropertyType) == typeof(DateOnly))
+            IncludeTime = false;
+
+        if (DefaultStartValue != null && DefaultEndValue != null)
+        {
+            StartValue = DefaultStartValue;
+            EndValue = DefaultEndValue;
+
+            DefaultStartValue = null;
+            DefaultEndValue = null;
+
+            await Apply();
+        }
+
+        await base.OnInitializedAsync();
+    }
 
     protected override Task Apply()
     {
-        if (LowValue is null || HighValue is null)
+        if (StartValue is null || EndValue is null)
             return Task.CompletedTask;
 
         return base.Apply();
@@ -102,10 +153,9 @@
 
     protected override Task Clear()
     {
-        LowValue = null;
-        HighValue = null;
+        StartValue = null;
+        EndValue = null;
 
         return base.Clear();
     }
-
 }

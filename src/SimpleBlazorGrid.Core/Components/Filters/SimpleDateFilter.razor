@@ -3,6 +3,8 @@
 
 @typeparam TType;
 
+@using SimpleBlazorGrid.Extensions
+@using SimpleBlazorGrid.Exceptions
 @inherits SimpleBlazorGrid.Filters.Filter<TType>
 
 @if (ShouldShowFilter)
@@ -42,27 +44,48 @@
 
 @code {
 
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with this value as the filter value
+    /// </summary>
     [Parameter]
-    public DateTime DefaultValue { get; set; }
+    public DateTime? DefaultValue { get; set; }
 
+    /// <summary>
+    /// Sets the 'min' value on the inputs
+    /// </summary>
     [Parameter]
     public DateTime? Min { get; set; }
 
+    /// <summary>
+    /// Sets the 'max' value on the inputs
+    /// </summary>
     [Parameter]
     public DateTime? Max { get; set; }
 
+    /// <summary>
+    /// Determines if the time should be included when applying the filter
+    /// </summary>
     [Parameter]
     public bool IncludeTime { get; set; }
 
     public DateTime? Value { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        var type = For.Body.Type;
-        if ((Nullable.GetUnderlyingType(type) ?? type) == typeof(DateOnly))
+        if (!PropertyType.IsDateType())
+            throw new SimpleGridFilterException<TType>(this, $"Cannot apply date filter to property '{typeof(TType)}.{PropertyName}' as is not a DateTime/DateOnly"); 
+        
+        if ((Nullable.GetUnderlyingType(PropertyType) ?? PropertyType) == typeof(DateOnly))
             IncludeTime = false;
         
-        base.OnInitialized();
-    }
+        if (DefaultValue != null)
+        {
+            Value = DefaultValue;
+            DefaultValue = null;
 
+            await Apply();
+        }
+
+        await base.OnInitializedAsync();
+    }
 }

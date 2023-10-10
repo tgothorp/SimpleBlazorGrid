@@ -2,6 +2,7 @@
 @namespace SimpleBlazorGrid
 
 @using System.Linq.Expressions
+@using SimpleBlazorGrid.Exceptions
 @using SimpleBlazorGrid.Extensions
 
 @typeparam TType;
@@ -30,24 +31,45 @@
 
 @code {
 
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with this value as the filter value 
+    /// </summary>
     [Parameter]
-    public object DefaultValue { get; set; }
+    public string DefaultValue { get; set; }
     
+    /// <summary>
+    /// Sets the 'min' value on the inputs
+    /// </summary>
     [Parameter]
     public string Min { get; set; }
 
+    /// <summary>
+    /// Sets the 'max' value on the inputs
+    /// </summary>
     [Parameter]
     public string Max { get; set; }
 
+    /// <summary>
+    /// /// Sets the 'step' value on the inputs (eg. 0.01)
+    /// </summary>
     [Parameter]
     public string Step { get; set; }
 
-    public string Value { get; set; } = null;
+    public string Value { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // TODO Validation
-        Value = DefaultValue?.ToString();
+        if (!PropertyType.IsNumericType())
+            throw new SimpleGridFilterException<TType>(this, $"Cannot apply numeric filter to property '{typeof(TType)}.{PropertyName}' as is not a numeric type!");
+
+        if (DefaultValue.IsNotNullOrEmpty())
+        {
+            Value = DefaultValue;
+            DefaultValue = null;
+
+            await Apply();
+        }
+        
         base.OnInitialized();
     }
 
