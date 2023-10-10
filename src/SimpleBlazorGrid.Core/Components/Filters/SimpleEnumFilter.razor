@@ -50,19 +50,27 @@
 
 @code {
 
+    /// <summary>
+    /// Allows for only certain enum values to be allowed to be selected, if not set then all enum values are eligible
+    /// </summary>
     [Parameter]
-    public IEnumerable<TEnum> PermittedValues { get; set; }
+    public List<TEnum> PermittedValues { get; set; } = new();
 
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with the provided values
+    /// </summary>
     [Parameter]
-    public IEnumerable<TEnum> DefaultValues { get; set; }
+    public List<TEnum> DefaultValues { get; set; } = new();
     
+    /// <summary>
+    /// Allows for multiple or single values to be selected, default: false
+    /// </summary>
     [Parameter]
     public override bool AllowMultiple { get; set; }
 
     public override List<string> SelectedValues { get; set; }
-    
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         EnumType = typeof(TEnum);
         
@@ -71,8 +79,14 @@
             var values = Enum.GetValues(typeof(TEnum));
             PermittedValues = values.Cast<TEnum>().ToList();
         }
+
+        if (DefaultValues.Any())
+        {
+            SelectedValues = DefaultValues.Select(x => x.ToString()).ToList();
+            await Apply();
+        }
         
-        return base.OnInitializedAsync();
+        await base.OnInitializedAsync();
     }
 
     private void SelectionChanged(ChangeEventArgs obj)

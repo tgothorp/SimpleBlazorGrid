@@ -19,13 +19,13 @@
                     <label>
                         <small>Start:</small>
                     </label>
-                    <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="LowValue" placeholder="Minimum @HeadingName"/>
+                    <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="StartValue" placeholder="Minimum @HeadingName"/>
                 </div>
                 <div>
                     <label>
                         <small>End:</small>
                     </label>
-                    <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="HighValue" placeholder="Maximum @HeadingName"/>
+                    <input type="number" min="@Min" max="@Max" step="@Step" @bind-value="EndValue" placeholder="Maximum @HeadingName"/>
                 </div>
             </div>
             <div class="sdg-filter-buttons">
@@ -43,23 +43,44 @@
 
 @code {
 
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with this value as the start value 
+    /// </summary>
+    /// <remarks>
+    /// <code>DefaultEndValue</code> must also be set for this to take effect
+    /// </remarks>
     [Parameter]
     public string DefaultStartValue { get; set; }
     
+    /// <summary>
+    /// If set, the filter will be enabled when the table loads with this value as the end value 
+    /// </summary>
+    /// <remarks>
+    /// <code>DefaultStartValue</code> must also be set for this to take effect
+    /// </remarks>
     [Parameter]
     public string DefaultEndValue { get; set; }
 
+    /// <summary>
+    /// Sets the 'min' value on the inputs
+    /// </summary>
     [Parameter]
     public string Min { get; set; }
 
+    /// <summary>
+    /// Sets the 'max' value on the inputs
+    /// </summary>
     [Parameter]
     public string Max { get; set; }
 
+    /// <summary>
+    /// /// Sets the 'step' value on the inputs (eg. 0.01)
+    /// </summary>
     [Parameter]
     public string Step { get; set; }
 
-    public string LowValue { get; private set; }
-    public string HighValue { get; private set; }
+    public string StartValue { get; private set; }
+    public string EndValue { get; private set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,8 +89,8 @@
         
         if (DefaultStartValue.IsNotNullOrEmpty() && DefaultEndValue.IsNotNullOrEmpty())
         {
-            LowValue = DefaultStartValue;
-            HighValue = DefaultEndValue;
+            StartValue = DefaultStartValue;
+            EndValue = DefaultEndValue;
 
             DefaultStartValue = null;
             DefaultEndValue = null;
@@ -82,15 +103,15 @@
 
     protected override Task Apply()
     {
-        return LowValue.IsNotNullOrEmpty() && HighValue.IsNotNullOrEmpty()
+        return StartValue.IsNotNullOrEmpty() && EndValue.IsNotNullOrEmpty()
             ? base.Apply()
             : Clear();
     }
 
     protected override Task Clear()
     {
-        LowValue = null;
-        HighValue = null;
+        StartValue = null;
+        EndValue = null;
 
         return base.Clear();
     }

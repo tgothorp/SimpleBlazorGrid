@@ -52,7 +52,7 @@
                     <SimpleStringFilter TType="Movie" For="@(x => x.Name)" IgnoreCase="true" />
                     <SimpleDateRangeFilter TType="Movie" For="@(x => x.Released)" Inclusive="true" IncludeTime="false"/>
                     <SimpleNumericRangeFilter TType="Movie" For="@(x => x.Gross)" Step="1" />
-                    <SimpleStringFilter TType="Movie" For="@(x => x.Genre)" IgnoreCase="true" />
+                    <SimpleStringFilter TType="Movie" For="@(x => x.Genre)" IgnoreCase="true" Exact="false" />
                 </Filters>
                 <Columns>
                     <SimpleColumn TType="Movie" For="@(x => x.Rank)" Sortable="true" Width="5" />

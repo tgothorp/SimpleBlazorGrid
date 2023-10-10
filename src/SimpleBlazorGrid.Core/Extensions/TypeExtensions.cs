@@ -15,6 +15,15 @@ namespace SimpleBlazorGrid.Extensions
         }
 
         /// <summary>
+        /// Determines if a given types is a DateTime or DateOnly or a nullable version of these types
+        /// </summary>
+        public static bool IsDateType(this Type type)
+        {
+            Type[] dateTypes = { typeof(DateOnly), typeof(DateTime) };
+            return dateTypes.Contains(type) || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) && Nullable.GetUnderlyingType(type).IsDateType());
+        }
+
+        /// <summary>
         /// Determines if the given type is a nullable type, eg. decimal?
         /// </summary>
         public static bool IsNullable(this Type type)
