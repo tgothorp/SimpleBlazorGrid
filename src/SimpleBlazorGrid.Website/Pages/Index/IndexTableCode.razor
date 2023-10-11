@@ -1,5 +1,5 @@
-@* ReSharper disable once CheckNamespace *@
-@namespace SimpleBlazorGrid.Website.Pages.Documentation
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Index
 
 @inject IJSRuntime Js;
 
@@ -34,17 +34,6 @@
         &lt;SimpleColumn TType=&quot;Movie&quot; For=&quot;@@(x =&gt; x.Genre)&quot; Width=&quot;20&quot; Searchable=&quot;true&quot; /&gt;
     &lt;/Columns&gt;
 &lt;/SimpleGrid&gt;
-        
-&lt;p&gt;Selected Movies: @@_selectedMovies&lt;/p&gt;
-
-@@code {
-
-    private string _selectedMovies = string.Empty;
-    private void SelectionChanged(List&lt;Movie&gt; movies)
-    {
-        _selectedMovies = string.Join(&quot;, &quot;, movies.Select(x =&gt; x.Name));
-    }
-}
 </code>
 </pre>
 

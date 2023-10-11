@@ -56,6 +56,15 @@
   
   p {
     font-size: var(--fs-0);
+
+    code {
+      background: white;
+      color: black;
+      word-wrap: break-word;
+      box-decoration-break: clone;
+      padding: .1rem .3rem .2rem;
+      border-radius: .2rem;
+    }
   }
   
   a {
