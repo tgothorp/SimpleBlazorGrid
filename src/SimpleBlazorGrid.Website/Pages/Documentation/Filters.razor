@@ -8,6 +8,104 @@
 
 <PageTitle>Simple Blazor Grid | Filters</PageTitle>
 
+<h1>Filters</h1>
+<br/>
+<p>Simple Blazor Grid comes with several filters than can be applied to columns to allow end users to refine their data. The table below lists all available filters are well as the types they can be applied to, click the filter name to see more details.</p>
+<br/>
+
+<table>
+    <thead>
+    <tr>
+        <th>Filter</th>
+        <th>Types</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><a href="/documentation/filters/date">Date Filter</a></td>
+        <td><code>DateTime</code>, <code>DateOnly</code></td>
+        <td>Filter by date / time and date</td>
+    </tr>
+    <tr>
+        <td><a href="/documentation/filters/date-range">Date Range Filter</a></td>
+        <td><code>DateTime</code>, <code>DateOnly</code> as well their nullable counterparts</td>
+        <td>Filter by date / time and date between a two input date</td>
+    </tr>
+    <tr>
+        <td><a href="/documentation/filters/enum">Enum Filter</a></td>
+        <td><code>Enum</code>, <code>string</code></td>
+        <td>Filter a property by either a single or multiple enum value(s)</td>
+    </tr>
+    <tr>
+        <td><a href="/documentation/filters/numeric">Numeric Filter</a></td>
+        <td><code>int</code>, <code>uint</code>, <code>long</code>, <code>ulong</code>, <code>short</code>, <code>ushort</code>, <code>float</code>, <code>double</code>, <code>decimal</code> as well as their nullable counterparts </td>
+        <td>Filter a numeric property by matching value</td>
+    </tr>
+    <tr>
+        <td><a href="/documentation/filters/numeric-range">Numeric Range Filter</a></td>
+        <td><code>int</code>, <code>uint</code>, <code>long</code>, <code>ulong</code>, <code>short</code>, <code>ushort</code>, <code>float</code>, <code>double</code>, <code>decimal</code> as well as their nullable counterparts </td>
+        <td>Filter a numeric property where it falls between two values</td>
+    </tr>
+    <tr>
+        <td><a href="/documentation/filters/string">String Filter</a></td>
+        <td><code>string</code></td>
+        <td>Filter by a property by a string, includes case-sensitive and partial matching</td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<h2>Filter Properties</h2>
+<br/>
+<p>All filters have a few properties that are shared regardless of their type, the table below lists these properties</p>
+<br/>
+<table>
+    <thead>
+    <tr>
+        <th>Property</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <code>TType</code>
+        </td>
+        <td><code>Type</code></td>
+        <td>✅</td>
+        <td>Type parameter, must match the type parameter specified by the surrounding grid.</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>For</code>
+        </td>
+        <td><code>Expression&lt;Func&lt;bool,T&gt;&gt;</code></td>
+        <td>✅</td>
+        <td>The property that this filter is for, example: <code>For="@@(x => x.MyProperty)"</code>.</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>ForHeading</code>
+        </td>
+        <td><code>string</code></td>
+        <td>❌</td>
+        <td>In the event that your grid has two columns that are for the same property, this can be used to determine which column has the filter applied to it, this should match the <code>Heading</code> property on the column you want the filter to apply to</td>
+        <td><code>null</code></td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<h2>Using Filters</h2>
+<br/>
+<p>All filters <strong>must</strong> be wrapper by the <code>Filters</code> render fragment provided by the Simple Blazor Grid. The table below gives an example of how to use filters.</p>
+
 @code {
     protected override void OnInitialized()
     {
