@@ -91,6 +91,30 @@
       font-size: var(--fs--1);
     }
   }
+  
+  code:not(.razor)
+  {
+    background: white;
+    color: black;
+    word-wrap: break-word;
+    box-decoration-break: clone;
+    padding: .1rem .3rem .2rem;
+    border-radius: .2rem;
+  }
+
+  ul {
+    font-size: var(--fs--1);
+    padding-left: 2em;
+
+    li {
+      margin-top: 10px;
+      padding-left: 2em;
+    }
+    
+    li::marker {
+      color: base.$color-primary;
+    }
+  }
 
   table {
     width: 100%;
@@ -130,5 +154,38 @@
   
   @include base.desktop-small {
     width: 60%;
+  }
+}
+
+.border-glow {
+  border: 2px solid blue;
+  animation: 4s infinite glow;
+}
+@keyframes glow {
+  0% {
+    border-color: red;
+  }
+  25% {
+    border-color: blue;
+  }
+  75% {
+    border-color: yellow;
+  }
+  100% {
+    border-color: purple;
+  }
+}
+@-webkit-keyframes glow {
+  0% {
+    border-color: red;
+  }
+  25% {
+    border-color: blue;
+  }
+  75% {
+    border-color: yellow;
+  }
+  100% {
+    border-color: purple;
   }
 }

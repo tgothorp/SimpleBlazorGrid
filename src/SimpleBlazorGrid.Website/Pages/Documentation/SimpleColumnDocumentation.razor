@@ -1,16 +1,183 @@
 @page "/documentation/simple-grid/simple-column"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
 
+<PageTitle>Simple Blazor Grid | Simple Column</PageTitle>
+
+<h1>SimpleColumn&lt;T&gt;</h1>
+<br/>
+<p>The <code>SimpleColumn&lt;T&gt;</code> component represents a single column in the grid. The column is responsible for displaying and formatting your data in addition to other abilities, see the example below or the properties table at the bottom of the page for full details</p>
+<br/>
+
+<h2>Data Formatting</h2>
+<br/>
+<p>The <code>Format</code> property on SimpleColumn&lt;T&gt; provides an easy way to format data in your grid. The following options are provided;</p>
+<ul>
+    <li>None <i>(Default option)</i></li>
+    <li>ShortDate</li>
+    <li>LongDate</li>
+    <li>FullDateTime</li>
+    <li>Time</li>
+    <li>Money</li>
+</ul>
+<br/>
+
+<h3>Custom Formatting</h3>
+<br/>
+<p>If you want full control over the formatting of a column or need other properties / data from your object, then you should use <code>SimpleColumnTemplate</code>, see the example below</p>
+<br/>
+<TabControl>
+    <TabPage TabName="Code">
+        <ColumnCustomFormat/>
+    </TabPage>
+    <TabPage TabName="Table">
+        <SimpleGrid
+            TType="Data"
+            SimpleGridDataSource="new SimpleGridEnumerableDataSource<Data>(_data)">
+            <Columns>
+                <SimpleColumn TType="Data" For="@(x => x.Id)" />
+                <SimpleColumn TType="Data" For="@(x => x.Name)">
+                    <SimpleColumnTemplate Context="item">
+                        <div class="border-glow">
+                            <span><strong>Name: </strong>@item.Name</span>
+                            <br/>
+                            <span><strong>Id: #</strong>@(item.Id + 1_000_000)</span>
+                            <br/>
+                            <br/>
+                            <span><strong>Current Date:</strong>@(DateTime.Now.Date.ToShortDateString())</span>
+                            <br/>
+                            <small>Data Provided By: Mystery Machine Inc.™️</small>
+                        </div>
+                    </SimpleColumnTemplate>
+                </SimpleColumn>
+            </Columns>
+        </SimpleGrid>
+    </TabPage>
+</TabControl>
+<br/>
+
+<h2>SimpleColumn&lt;T&gt; Properties</h2>
+<p>The simple column component has a range of properties that can be configured to add features to your grid. The table below lists them all in detail.</p>
+<br/>
+<table>
+    <thead>
+    <tr>
+        <th>Property</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <code>For</code>
+        </td>
+        <td><code>Expression&lt;Func&lt;bool,T&gt;&gt;</code></td>
+        <td>✅</td>
+        <td>The property that this column is for, example: <code>For="@@(x => x.MyProperty)"</code>.</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Heading</code>
+        </td>
+        <td><code>string</code></td>
+        <td>❌</td>
+        <td>Column heading, will use the property name if not provided.</td>
+        <td><i>Name of property specified in <code>For</code></i></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Format</code>
+        </td>
+        <td><code>Enum&lt;Format&gt;</code></td>
+        <td>❌</td>
+        <td>Formatting to apply to property value, see 'Data Formatting' above for more info.</td>
+        <td><code>Format.None</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>SimpleColumnTemplate</code>
+        </td>
+        <td><code>RenderFragment&lt;T&gt;</code></td>
+        <td>❌</td>
+        <td>Custom formatting for column, see 'Custom Formatting' above for more info.</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Sortable</code>
+        </td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>If true, it will be possible to sort the grid based on this column (alphabetically, numerically etc.) This will essentially do an <code>.OrderBy(x => x.MyProperty)</code> on your data.</td>
+        <td><code>false</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Searchable</code>
+        </td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>If true, this column will be included in <a href="/documentation/searching">searches</a>. Your property <strong>MUST</strong> be a <code>string</code> for this to be enabled.</td>
+        <td><code>false</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Width</code>
+        </td>
+        <td><code>int?</code></td>
+        <td>❌</td>
+        <td>Specifies the width of the column as a percentage, for example; a value of '50' will result in this column taking up 50% of the grid. Useful if you need fine control over column sizes</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Hidden</code>
+        </td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>If true, this column will not be visible, this is useful if you want to include a property in <a href="/documentation/searching">table searching</a> without actually presenting the data.</td>
+        <td><code>false</code></td>
+    </tr>
+    </tbody>
+</table>
+
 @code {
+
+    public class Data
+    {
+        public Data(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public int Id { get; }
+        public string Name { get; }
+    }
+
+    private readonly List<Data> _data = new()
+    {
+        new(1, "Fred Jones"),
+        new(2, "Daphne Blake"),
+        new(3, "Velma Dinkley"),
+        new(4, "Shaggy Rodgers"),
+        new(5, "Scoobert 'Scooby' Doo"),
+    };
+    
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);
         NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.SimpleColumn);
         base.OnInitialized();
     }
+
 }
