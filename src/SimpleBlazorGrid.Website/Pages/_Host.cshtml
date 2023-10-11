@@ -13,7 +13,9 @@
     <link href="css/site.css" rel="stylesheet"/>
     <link href="SimpleBlazorGrid.Website.styles.css"/>
     <link rel="stylesheet" href="~/_content/SimpleBlazorGrid.Core/css/simpledatagrid.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" asp-fallback-href="~/css/font-awesome.min.css">
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/atom-one-dark-reasonable.min.css" asp-fallback-href="~/css/default.min.css"> *@
+    <link rel="stylesheet" href="https://unpkg.com/@@highlightjs/cdn-assets@11.4.0/styles/base16/unikitty-dark.min.css" asp-fallback-href="~/css/default.min.css">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,6 +25,7 @@
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered"/>
 </head>
 <body>
+
 <component type="typeof(App)" render-mode="ServerPrerendered"/>
 
 <div id="blazor-error-ui">
@@ -38,5 +41,18 @@
 
 <script src="_framework/blazor.server.js"></script>
 <script src="~/js/navbar.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js" asp-fallback-src="~/js/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/languages/csharp.min.js" asp-fallback-src="~/js/languages_csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/languages/css.min.js" asp-fallback-src="~/js/languages_css.min.js"></script>
+
+<script>
+    window.highlightSnippet = function(){
+        document.querySelectorAll('pre code').forEach((el)=>{
+            hljs.highlightBlock(el);
+        });
+    }
+</script>
+
 </body>
 </html>

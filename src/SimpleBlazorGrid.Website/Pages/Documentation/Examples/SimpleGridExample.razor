@@ -1,7 +1,10 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid.Website.Pages.Documentation
 
-<pre style="font-size: var(--fs--1); width: 100%">
+@inject IJSRuntime Js;
+
+<pre class="code" style="font-size: var(--fs--1); width: 100%">
+<code class="razor">
 &lt;SimpleGrid
     TType=&quot;Data&quot;
     SimpleGridDataSource=&quot;new SimpleGridEnumerableDataSource&lt;Data&gt;(_data)&quot;&gt;
@@ -34,4 +37,15 @@
         new(5, &quot;Scoobert 'Scooby' Doo&quot;),
     };
 }
+</code>
 </pre>
+
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("highlightSnippet");
+    }
+
+}

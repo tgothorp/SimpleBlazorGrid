@@ -1,7 +1,10 @@
 ﻿@* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid.Website.Pages.Documentation
 
-<pre style="font-size: var(--fs--1); width: 100%">
+@inject IJSRuntime Js;
+
+<pre class="code" style="font-size: var(--fs--1); width: 100%">
+<code class="razor">
 &lt;SimpleGrid TType=&quot;DateRangeFilterData&quot; ItemsPerPage=&quot;50&quot; SimpleGridDataSource=&quot;@@(new SimpleGridEnumerableDataSource&lt;DateRangeFilterData&gt;(Data))&quot;&gt;
 &lt;Filters&gt;
     &lt;SimpleDateRangeFilter TType=&quot;DateRangeFilterData&quot; For=&quot;@@(x =&gt; x.DateTime)&quot; Inclusive=&quot;true&quot; IncludeTime=&quot;false&quot; ForHeading=&quot;DateTime (Inclusive)&quot; /&gt;
@@ -14,4 +17,14 @@
     &lt;SimpleColumn TType=&quot;DateRangeFilterData&quot; For=&quot;@@(x =&gt; x.DateTime)&quot; Heading=&quot;Date And Time&quot; Sortable=&quot;true&quot; Format=&quot;Format.FullDateTime&quot;/&gt;
     &lt;SimpleColumn TType=&quot;DateRangeFilterData&quot; For=&quot;@@(x =&gt; x.DateOnly)&quot; Heading=&quot;DateOnly (Not Inclusive)&quot; Sortable=&quot;true&quot; Format=&quot;Format.LongDate&quot;/&gt;
 &lt;/Columns&gt;
+</code>
 </pre>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("highlightSnippet");
+    }
+
+}

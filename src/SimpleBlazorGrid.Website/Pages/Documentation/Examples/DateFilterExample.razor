@@ -1,7 +1,10 @@
- @* ReSharper disable once CheckNamespace *@
- @namespace SimpleBlazorGrid.Website.Pages.Documentation
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
 
-<pre style="font-size: var(--fs--1); width: 100%">
+@inject IJSRuntime Js;
+
+<pre class="code" style="font-size: var(--fs--1); width: 100%">
+<code class="razor">
 &lt;SimpleGrid 
     TType=&quot;DateFilterData&quot; 
     ItemsPerPage=&quot;50&quot; 
@@ -18,4 +21,14 @@
         &lt;SimpleColumn TType=&quot;DateFilterData&quot; For=&quot;@@(x =&gt; x.DateOnly)&quot; Heading=&quot;DateOnly&quot; Sortable=&quot;true&quot; Format=&quot;Format.LongDate&quot;/&gt;
     &lt;/Columns&gt;
 &lt;/SimpleGrid&gt;
+</code>
 </pre>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("highlightSnippet");
+    }
+
+}

@@ -1,7 +1,6 @@
 ﻿@page "/"
 @using SimpleBlazorGrid.Website.Data
 @using SimpleBlazorGrid.DataSource
-@using Humanizer
 @using SimpleBlazorGrid.Formatting
 @using SimpleBlazorGrid.Website.Pages.Shared
 
@@ -41,33 +40,40 @@
         </div>
 
         <div class="table">
-            <SimpleGrid
-                TType="Movie"
-                Title="IMDB Top 100 Movies"
-                Subtitle="by user rating"
-                Searchable="true"
-                SimpleGridDataSource="new SimpleGridEnumerableDataSource<Movie>(MovieRepo.FetchAllMovies())"
-                ItemsPerPage="15">
-                <Filters>
-                    <SimpleStringFilter TType="Movie" For="@(x => x.Name)" IgnoreCase="true" />
-                    <SimpleDateRangeFilter TType="Movie" For="@(x => x.Released)" Inclusive="true" IncludeTime="false"/>
-                    <SimpleNumericRangeFilter TType="Movie" For="@(x => x.Gross)" Step="1" />
-                    <SimpleStringFilter TType="Movie" For="@(x => x.Genre)" IgnoreCase="true" Exact="false" />
-                </Filters>
-                <Columns>
-                    <SimpleColumn TType="Movie" For="@(x => x.Rank)" Sortable="true" Width="5" />
-                    <SimpleColumn TType="Movie" For="@(x => x.Name)" Sortable="true" Searchable="true" />
-                    <SimpleColumn TType="Movie" For="@(x => x.Released)" Sortable="true" Format="Format.ShortDate" Width="15" />
-                    <SimpleColumn TType="Movie" For="@(x => x.Director)" Searchable="true" Width="15" />
-                    <SimpleColumn TType="Movie" For="@(x => x.Runtime)" Sortable="true" Width="10">
-                        <SimpleColumnTemplate Context="item">
-                            <span>@item.Runtime mins</span>
-                        </SimpleColumnTemplate>
-                    </SimpleColumn>
-                    <SimpleColumn TType="Movie" For="@(x => x.Gross)" Format="Format.Money" Sortable="true" Heading="Box Office" Width="15"/>
-                    <SimpleColumn TType="Movie" For="@(x => x.Genre)" Width="20" Searchable="true" />
-                </Columns>
-            </SimpleGrid>
+            <TabControl>
+                <TabPage TabName="Table">
+                    <SimpleGrid
+                        TType="Movie"
+                        Title="IMDB Top 100 Movies"
+                        Subtitle="by user rating"
+                        Searchable="true"
+                        SimpleGridDataSource="new SimpleGridEnumerableDataSource<Movie>(MovieRepo.FetchAllMovies())"
+                        ItemsPerPage="15">
+                        <Filters>
+                            <SimpleStringFilter TType="Movie" For="@(x => x.Name)" IgnoreCase="true"/>
+                            <SimpleDateRangeFilter TType="Movie" For="@(x => x.Released)" Inclusive="true" IncludeTime="false"/>
+                            <SimpleNumericRangeFilter TType="Movie" For="@(x => x.Gross)" Step="1"/>
+                            <SimpleStringFilter TType="Movie" For="@(x => x.Genre)" IgnoreCase="true" Exact="false"/>
+                        </Filters>
+                        <Columns>
+                            <SimpleColumn TType="Movie" For="@(x => x.Rank)" Sortable="true" Width="5"/>
+                            <SimpleColumn TType="Movie" For="@(x => x.Name)" Sortable="true" Searchable="true"/>
+                            <SimpleColumn TType="Movie" For="@(x => x.Released)" Sortable="true" Format="Format.ShortDate" Width="15"/>
+                            <SimpleColumn TType="Movie" For="@(x => x.Director)" Searchable="true" Width="15"/>
+                            <SimpleColumn TType="Movie" For="@(x => x.Runtime)" Sortable="true" Width="10">
+                                <SimpleColumnTemplate Context="item">
+                                    <span>@item.Runtime mins</span>
+                                </SimpleColumnTemplate>
+                            </SimpleColumn>
+                            <SimpleColumn TType="Movie" For="@(x => x.Gross)" Format="Format.Money" Sortable="true" Heading="Box Office" Width="15"/>
+                            <SimpleColumn TType="Movie" For="@(x => x.Genre)" Width="20" Searchable="true"/>
+                        </Columns>
+                    </SimpleGrid>
+                </TabPage>
+                <TabPage TabName="Code">
+                    <IndexTableCode/>
+                </TabPage>
+            </TabControl>
         </div>
     </div>
 </div>
