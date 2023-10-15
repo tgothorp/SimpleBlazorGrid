@@ -14,28 +14,58 @@
     <div class="sdg-filter">
         <div class="sdg-filter-container">
             <h2>Filter by @HeadingName</h2>
-            <div class="sdg-filter-inputs">
-                @if (AllowMultiple)
-                {
-                    <select @onchange="SelectionChanged" multiple="multiple">
-                        @foreach (var item in PermittedValues)
-                        {
-                            <option value="@item">@item.ToString()</option>
-                        }
-                    </select>
-                }
-                else
-                {
-                    <select @onchange="SelectionChanged">
-                        <option>Select @PropertyName to filter by...</option>
 
+            @if (AllowMultiple)
+            {
+                <div>
+                    @if (SelectedValues.Any())
+                    {
+                        <p>Selected Values:</p>
+                    }
+                    <div class="sdg-filter-enum">
+                        @foreach (var selectedValue in SelectedValues)
+                        {
+                            <div class="item">
+                                <div class="value">
+                                    @selectedValue
+                                </div>
+                                <div class="value-remove" @onclick="@(() => RemoveSelectedValue(selectedValue))">
+                                    X
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="sdg-filter-inputs">
+                    <select @onchange="SelectionChangedMultiple">
+                        <option disabled selected>Select @PropertyName ...</option>
                         @foreach (var item in PermittedValues)
                         {
                             <option value="@item">@item.ToString()</option>
                         }
                     </select>
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <div class="sdg-filter-inputs">
+                    <select @onchange="SelectionChangedSingle">
+                        <option disabled selected>Select @PropertyName ...</option>
+                        @foreach (var item in PermittedValues)
+                        {
+                            if (SelectedValues.FirstOrDefault() == item.ToString())
+                            {
+                                <option selected value="@item">@item.ToString()</option>
+                            }
+                            else
+                            {
+                                <option value="@item">@item.ToString()</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+
             <div class="sdg-filter-buttons">
                 <div class="clear">
                     <button @onclick="Clear">Clear</button>
@@ -61,19 +91,19 @@
     /// </summary>
     [Parameter]
     public List<TEnum> DefaultValues { get; set; } = new();
-    
+
     /// <summary>
     /// Allows for multiple or single values to be selected, default: false
     /// </summary>
     [Parameter]
     public override bool AllowMultiple { get; set; }
 
-    public override List<string> SelectedValues { get; set; }
+    public override List<string> SelectedValues { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         EnumType = typeof(TEnum);
-        
+
         if (PermittedValues == null || !PermittedValues.Any())
         {
             var values = Enum.GetValues(typeof(TEnum));
@@ -85,29 +115,39 @@
             SelectedValues = DefaultValues.Select(x => x.ToString()).ToList();
             await Apply();
         }
-        
+
         await base.OnInitializedAsync();
     }
 
-    private void SelectionChanged(ChangeEventArgs obj)
+    protected override Task Clear()
     {
         SelectedValues = new List<string>();
+        return base.Clear();
+    }
 
-        switch (obj.Value)
+    private void SelectionChangedMultiple(ChangeEventArgs obj)
+    {
+        if (obj.Value is string selectedValue && !SelectedValues.Contains(selectedValue))
         {
-            case string[] selectedValues:
-            {
-                foreach (var selectedValue in selectedValues)
-                {
-                    SelectedValues.Add(selectedValue);
-                }
-                break;
-            }
-            case string selectedValue:
-                SelectedValues.Add(selectedValue);
-                break;
-            case null:
-                break;
+            SelectedValues.Add(selectedValue);
         }
     }
+
+    private void SelectionChangedSingle(ChangeEventArgs obj)
+    {
+        if (obj.Value is string selectedValue)
+        {
+            SelectedValues = new List<string> { selectedValue };
+        }
+        else
+        {
+            SelectedValues = null;
+        }
+    }
+
+    private void RemoveSelectedValue(string selectedValue)
+    {
+        SelectedValues.Remove(selectedValue);
+    }
+
 }

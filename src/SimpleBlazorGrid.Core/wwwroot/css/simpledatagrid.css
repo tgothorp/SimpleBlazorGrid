@@ -234,7 +234,7 @@ div.sdg-filter-inputs input, div.sdg-filter-inputs select {
   margin: 1%;
 }
 div.sdg-filter-inputs select {
-  height: 50px;
+  height: 35px;
 }
 div.sdg-filter-inputs select option {
   padding: 0.5em;
@@ -300,6 +300,28 @@ div.sdg-filter-buttons div.apply button {
 }
 div.sdg-filter-buttons div.apply button:hover {
   cursor: pointer;
+}
+
+.sdg-filter-enum {
+  display: flex;
+  padding-bottom: 1em;
+}
+.sdg-filter-enum .item {
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: var(--primary-colour);
+  border-radius: 25px;
+  margin: 0.5em;
+}
+.sdg-filter-enum .value {
+  padding: 0.5em;
+  color: #FFF;
+}
+.sdg-filter-enum .value-remove {
+  padding: 0.5em;
+  cursor: pointer;
+  border-left: solid 2px var(--secondary-colour);
+  user-select: none;
 }
 
 div.sdg-search {

@@ -52,7 +52,7 @@ div.sdg-filter-inputs {
   }
   
   select {
-    height: 50px;
+    height: 35px;
     
     option {
       padding: 0.5em;
@@ -124,5 +124,30 @@ div.sdg-filter-buttons {
     button:hover {
       cursor: pointer;
     }
+  }
+}
+
+.sdg-filter-enum {
+  display: flex;
+  padding-bottom: 1em;
+  
+  .item {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: var(--primary-colour);
+    border-radius: 25px;
+    margin: 0.5em;
+  }
+  
+  .value {
+    padding: 0.5em;
+    color: #FFF;
+  }
+  
+  .value-remove {
+    padding: 0.5em;
+    cursor: pointer;
+    border-left: solid 2px var(--secondary-colour);
+    user-select: none;
   }
 }
