@@ -45,6 +45,7 @@
     <tr>
         <th>Parameter</th>
         <th>Type</th>
+        <th>Required</th>
         <th>Description</th>
         <th>Default Value</th>
     </tr>
@@ -53,18 +54,21 @@
     <tr>
         <td><code>DefaultValue</code></td>
         <td><code>string</code></td>
+        <td>❌</td>
         <td>If set, this filter wil be active when the table loads and will filter the target property with the provided value</td>
         <td><code>null</code></td>
     </tr>
     <tr>
         <td><code>IgnoreCase</code></td>
         <td><code>bool</code></td>
+        <td>❌</td>
         <td>Case will be ignored when comparing the input string to the target property</td>
         <td><code>false</code></td>
     </tr>
     <tr>
         <td><code>Exact</code></td>
         <td><code>bool</code></td>
+        <td>❌</td>
         <td>Instead of attempting to match the input string to the target property exactly, the filter will check to see if the input string exists as a substring of the target property. <i>Note: This can have a noticeable effect on performance on large data sets.</i></td>
         <td><code>true</code></td>
     </tr>

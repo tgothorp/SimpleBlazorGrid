@@ -1,0 +1,63 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+@inject IJSRuntime Js;
+
+<pre class="code" style="font-size: var(--fs--1); width: 100%">
+<code class="razor">
+&lt;SimpleGrid TType=&quot;EnumFilterData&quot; SimpleGridDataSource=&quot;new SimpleGridEnumerableDataSource&lt;EnumFilterData&gt;(Data)&quot;&gt;
+    &lt;Filters&gt;
+        &lt;SimpleEnumFilter TType=&quot;EnumFilterData&quot; TEnum=&quot;EnumFilterExample&quot; For=&quot;@@(x =&gt; x.EnumValue)&quot; ForHeading=&quot;Filter (Multiple)&quot; AllowMultiple=&quot;true&quot;  /&gt;
+        &lt;SimpleEnumFilter TType=&quot;EnumFilterData&quot; TEnum=&quot;EnumFilterExample&quot; For=&quot;@@(x =&gt; x.EnumValue)&quot; ForHeading=&quot;Filter (Multiple, Restricted)&quot; AllowMultiple=&quot;true&quot; PermittedValues=&quot;@@(new List&lt;EnumFilterExample&gt; { EnumFilterExample.North , EnumFilterExample.South})&quot;  /&gt;
+        &lt;SimpleEnumFilter TType=&quot;EnumFilterData&quot; TEnum=&quot;EnumFilterExample&quot; For=&quot;@@(x =&gt; x.EnumValue)&quot; ForHeading=&quot;Filter (Single)&quot; /&gt;
+    &lt;/Filters&gt;
+    &lt;Columns&gt;
+        &lt;SimpleColumn TType=&quot;EnumFilterData&quot; For=&quot;@@(x =&gt; x.Id)&quot; Heading=&quot;Id&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;EnumFilterData&quot; For=&quot;@@(x =&gt; x.EnumValue)&quot; Heading=&quot;No Filter&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;EnumFilterData&quot; For=&quot;@@(x =&gt; x.EnumValue)&quot; Heading=&quot;Filter (Multiple)&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;EnumFilterData&quot; For=&quot;@@(x =&gt; x.EnumValue)&quot; Heading=&quot;Filter (Multiple, Restricted)&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;EnumFilterData&quot; For=&quot;@@(x =&gt; x.EnumValue)&quot; Heading=&quot;Filter (Single)&quot; /&gt;
+    &lt;/Columns&gt;
+&lt;/SimpleGrid&gt;
+
+@@code {
+    
+    public class EnumFilterData
+    {
+        public EnumFilterData(EnumFilterExample enumValue, int id)
+        {
+            EnumValue = enumValue;
+            Id = id;
+        }
+
+        public int Id { get; }
+        public EnumFilterExample EnumValue { get; }
+    }
+    
+    public enum EnumFilterExample
+    {
+        North,
+        South,
+        East,
+        West,
+    }
+
+    public List&lt;EnumFilterData&gt; Data = new()
+    {
+        new EnumFilterData(EnumFilterExample.North, 1),
+        new EnumFilterData(EnumFilterExample.South, 2),
+        new EnumFilterData(EnumFilterExample.East, 3),
+        new EnumFilterData(EnumFilterExample.West, 4),
+    };
+    }
+</code>
+</pre>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("highlightSnippet");
+    }
+
+}
