@@ -119,6 +119,11 @@
         await base.OnInitializedAsync();
     }
 
+    protected override Task Apply()
+    {
+        return !SelectedValues.Any() ? Clear() : base.Apply();
+    }
+
     protected override Task Clear()
     {
         SelectedValues = new List<string>();
