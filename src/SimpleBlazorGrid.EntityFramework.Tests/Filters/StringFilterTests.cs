@@ -103,4 +103,23 @@ public class StringFilterTests
         result.ShouldNotBeEmpty();
         result.SingleOrDefault(x => x.CustomerId == orderAndCustomer.CustomerId).ShouldNotBeNull();
     }
+
+    [Fact]
+    public async Task StringFilter_NonExact_MatchesWithPartialValue()
+    {
+        var orderAndCustomer = await DatabaseSetup.AddOrder();
+        var context = DatabaseSetup.CreateDatabaseContext();
+
+        var filter = new SimpleStringFilter<Order>()
+        {
+            For = x => x.Customer.ContactName,
+            Exact = false,
+            Value = $"{orderAndCustomer.Customer.ContactName[0]}{orderAndCustomer.Customer.ContactName[1]}"
+        };
+
+        var source = TestSetup.CreateDataSource(context.Orders.Include(x => x.Customer), filter);
+        var result = await source.Items(CancellationToken.None);
+        result.ShouldNotBeEmpty();
+        result.SingleOrDefault(x => x.CustomerId == orderAndCustomer.CustomerId).ShouldNotBeNull();
+    }
 }
