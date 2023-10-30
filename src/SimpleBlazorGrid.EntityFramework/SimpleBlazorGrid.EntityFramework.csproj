@@ -10,8 +10,8 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>SimpleBlazorGrid</RootNamespace>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
-
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
@@ -31,9 +31,8 @@
       <ProjectReference Include="..\SimpleBlazorGrid.Core\SimpleBlazorGrid.Core.csproj" />
     </ItemGroup>
 
-
     <ItemGroup>
-      <Folder Include="Helpers\" />
+        <None Update="Icon\icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
