@@ -1,0 +1,56 @@
+trigger:
+- none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet'
+
+- task: Npm@1
+  displayName: 'Install SASS'
+  inputs:
+    command: 'custom'
+    customCommand: 'install -g sass'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    projects: '**/*.sln'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: 'build'
+    projects: '**/*.sln'
+    arguments: '-c Release -v minimal --no-restore'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test [EF]'
+  inputs:
+    command: 'test'
+    projects: '**/SimpleBlazorGrid.EntityFramework.Tests.csproj'
+    testRunTitle: 'EntityFramework'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack [EF]'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/SimpleBlazorGrid.EntityFramework.csproj'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'PACKAGE_VERSION_EF'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
