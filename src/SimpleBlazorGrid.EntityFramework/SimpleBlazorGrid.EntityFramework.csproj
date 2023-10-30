@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Icon\icon.png" Pack="true" PackagePath="\" />
+        <None Include="Icon\icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
