@@ -1,7 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
+        <Title>Simple Blazor Grid | Entity Framework</Title>
+        <Description>Entity Framework data source for use with Simple Blazor Grid</Description>
+        <RepositoryUrl>https://github.com/tgothorp/SimpleBlazorGrid</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageProjectUrl>https://simpleblazorgrid.com</PackageProjectUrl>
+        <Authors>tgothorp</Authors>
         <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>SimpleBlazorGrid</RootNamespace>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
 

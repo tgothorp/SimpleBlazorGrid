@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using SimpleBlazorGrid.EntityFramework.Extensions;
 using SimpleBlazorGrid.Extensions;
 using SimpleBlazorGrid.Filters;
@@ -37,6 +38,16 @@ public class EntityFrameworkFilterExpressionBuilder
         foreach (var property in stringFilter.PropertyName.Split('.'))
         {
             propertyAccess = Expression.Property(propertyAccess, property);
+        }
+
+        if (!stringFilter.Exact)
+        {
+            var pattern = Expression.Constant($"%{stringFilter.Value}%");
+            var instance = Expression.Constant(EF.Functions, typeof(DbFunctions));
+            var methodInfo = typeof(DbFunctionsExtensions).GetMethod("Like", new[] { typeof(DbFunctions), typeof(string), typeof(string) });
+            
+            var like = Expression.Call(null, methodInfo!, instance, propertyAccess, pattern);
+            return Expression.Lambda<Func<T, bool>>(like, parameter);
         }
 
         if (stringFilter.IgnoreCase)
