@@ -24,12 +24,12 @@
 
 @code {
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public required RenderFragment ChildContent { get; set; }
 
     [Parameter]
     public bool ShowButtonsAtBottomOfContent { get; set; } = false;
 
-    public TabPage ActivePage { get; set; }
+    public TabPage ActivePage { get; set; } = null!;
 
     private List<TabPage> TabPages { get; set; } = new();
 

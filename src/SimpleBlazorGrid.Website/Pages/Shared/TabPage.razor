@@ -5,13 +5,13 @@
 
 @code {
     [CascadingParameter]
-    public TabControl Parent { get; set; }
+    public required TabControl Parent { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public required RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    public string TabName { get; set; }
+    public required string TabName { get; set; }
 
     protected override void OnInitialized()
     {
