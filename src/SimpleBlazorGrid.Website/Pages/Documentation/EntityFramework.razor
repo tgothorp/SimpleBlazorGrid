@@ -6,6 +6,37 @@
 
 @inject NavBarService NavBarService
 
+<h1>Entity Framework</h1>
+<br/>
+<p>Simple Blazor Grid provides Entity Framework support as a separate package (see installation for instructions on getting started). The package provides Entity Framework specific implementations of searching and sorting that are either incompatible or not as performance as the core implementation however, all features that are provided by the core package (searching, sorting etc.) are all available to be used by Entity Framework.</p>
+<br/>
+
+<h2>Installation</h2>
+<br/>
+<p></p>
+<br/>
+
+<h2>The <code>SimpleGridEntityFrameworkDataSource&lt;T&gt;</code></h2>
+<br/>
+<p>The <code>SimpleGridEntityFrameworkDataSource&lt;T&gt;</code> powers the Simple Blazor Grid / Entity Framework integration. A new instance should be passed as the <code>DataSource</code> to your <code>SimpleGrid</code> component. It takes a single parameter of <code>IQueryable&lt;T&gt;</code> which should be taken from your database context. The example below shows how this should be used, be sure to include any relevant <code>.Include()</code>s where required.</p>
+<br/>
+<EntityFrameworkExample/>
+<br/>
+
+<h2>Entity Framework Implementations</h2>
+<br/>
+<p>This section details the different implementations between the Core package and the Entity Framework package</p>
+<br/>
+
+<h3>Searching</h3>
+<br/>
+<p>When using the search box, the core package will call <code>.Contains(query)</code> on the target property/properties to determine if the current object should be returned as part of the search query. The Entity Framework version of the search will instead call the <code>EF.Functions.Like(property, pattern)</code> method. This avoid any client side execution are results in a much more performance query.</p>
+<br/>
+
+<h3>Simple String Filter</h3>
+
+
+
 @code {
     protected override void OnInitialized()
     {

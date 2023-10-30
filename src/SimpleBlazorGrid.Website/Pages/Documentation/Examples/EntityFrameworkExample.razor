@@ -1,0 +1,23 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+@inject IJSRuntime Js;
+
+<pre class="code" style="font-size: var(--fs--1); width: 100%">
+<code class="razor">
+&lt;SimpleGrid TType=&quot;Order&quot;
+            Title=&quot;Orders&quot;
+            SimpleGridDataSource=&quot;@@(new SimpleGridEntityFrameworkDataSource&lt;Order&gt;(Context.Orders.Include(x =&gt; x.Customer).AsQueryable()))&quot;&gt;
+&lt;/SimpleGrid&gt;
+</code>
+</pre>
+
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("highlightSnippet");
+    }
+
+}
