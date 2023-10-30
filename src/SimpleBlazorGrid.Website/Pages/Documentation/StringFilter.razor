@@ -1,12 +1,103 @@
 @page "/documentation/filters/string"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
 
+<PageTitle>Simple Blazor Grid | String Filter</PageTitle>
+
+<h1>Simple String Filter</h1>
+<br/>
+<p>The <code>SimpleStringFilter&lt;T&gt;</code> filter can only be applied to <code>string</code> properties, the filter can be configured to be either case sensitive or case insensitive as well as being able to either exact or partial matches against the filter value provided by the user.</p>
+<br/>
+<p>The table below demonstrates the different way a string filter can be used, The first two columns will only match if the input string is exactly the same as the target property (eg. <code>"Gordon Freeman" == "Gordon Freeman"</code>). The second two columns will match if the input appears as a substring of the target property (eg. <code>"Gordon Freeman".Contains("ee")</code>).</p>
+<br/>
+
+<TabControl>
+    <TabPage TabName="Table">
+        <SimpleGrid TType="StringFilterData" SimpleGridDataSource="new SimpleGridEnumerableDataSource<StringFilterData>(Data)">
+            <Filters>
+                <SimpleStringFilter TType="StringFilterData" For="@(x => x.Name)" ForHeading="Exact, Case Sensitive" />
+                <SimpleStringFilter TType="StringFilterData" For="@(x => x.Name)" ForHeading="Exact, Case Insensitive" IgnoreCase="true" />
+                <SimpleStringFilter TType="StringFilterData" For="@(x => x.Name)" ForHeading="Partial, Case Sensitive" Exact="false" />
+                <SimpleStringFilter TType="StringFilterData" For="@(x => x.Name)" ForHeading="Partial, Case Insensitive" IgnoreCase="true" Exact="false" />
+            </Filters>
+            <Columns>
+                <SimpleColumn TType="StringFilterData" For="@(x => x.Name)" Heading="Exact, Case Sensitive" />
+                <SimpleColumn TType="StringFilterData" For="@(x => x.Name)" Heading="Exact, Case Insensitive" />
+                <SimpleColumn TType="StringFilterData" For="@(x => x.Name)" Heading="Partial, Case Sensitive" />
+                <SimpleColumn TType="StringFilterData" For="@(x => x.Name)" Heading="Partial, Case Insensitive" />
+            </Columns>
+        </SimpleGrid>
+    </TabPage>
+    <TabPage TabName="Code">
+        <StringFilterExample/>
+    </TabPage>
+</TabControl>
+
+<h3>Parameters</h3>
+<p>The following parameters can be set for each <code>SimpleStringFilter&lt;T&gt;</code></p>
+<table>
+    <thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>DefaultValue</code></td>
+        <td><code>string</code></td>
+        <td>❌</td>
+        <td>If set, this filter wil be active when the table loads and will filter the target property with the provided value</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>IgnoreCase</code></td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>Case will be ignored when comparing the input string to the target property</td>
+        <td><code>false</code></td>
+    </tr>
+    <tr>
+        <td><code>Exact</code></td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>Instead of attempting to match the input string to the target property exactly, the filter will check to see if the input string exists as a substring of the target property. <i>Note: This can have a noticeable effect on performance on large data sets.</i></td>
+        <td><code>true</code></td>
+    </tr>
+    </tbody>
+</table>
+
+
 @code {
+
+    public class StringFilterData
+    {
+        public StringFilterData(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; private set; }
+    }
+
+    private List<StringFilterData> Data = new()
+    {
+        new StringFilterData("Gordon Freeman"),
+        new StringFilterData("Alyx Vance"),
+        new StringFilterData("Issac Kleiner"),
+        new StringFilterData("Eli Vance"),
+        new StringFilterData("Barney Calhoun"),
+        new StringFilterData("Wallace Breen"),
+    };
+
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);

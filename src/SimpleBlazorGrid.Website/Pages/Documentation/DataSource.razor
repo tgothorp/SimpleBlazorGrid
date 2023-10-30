@@ -1,12 +1,93 @@
 @page "/documentation/simple-grid/data-source"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
 
+<PageTitle>Simple Blazor Grid | DataSource</PageTitle>
+
+<h1>ISimpleGridDataSource&lt;T&gt;</h1>
+<br/>
+<p>The <code>ISimpleGridDataSource&lt;T&gt;</code> interface is what powers the Simple Blazor Grid, it is responsible for performing all filtering, sorting, searching and pagination of the data. A <code>ISimpleGridDataSource&lt;T&gt;</code> <strong>must</strong> be provided to the <code>SimpleGridDataSource</code> parameter on all Simple Blazor Grids.</p>
+<br/>
+<p>This interface allows for different implementations of searching / filtering etc. depending on the source of the data (IEnumerable&lt;T&gt; / Entity Framework etc.) Simple Blazor Grid Core comes with an implementation of <code>ISimpleGridDataSource&lt;T&gt;</code> in the form of <code>SimpleGridEnumerableDataSource&lt;T&gt;</code>.</p>
+<br/>
+<p>To use <code>SimpleGridEnumerableDataSource&lt;T&gt;</code>, simply create a new instance passing in your data to the constructor and use it as the <code>SimpleGridDataSource</code> parameter on your grid, see the example below for more details</p>
+<br/>
+<TabControl>
+    <TabPage TabName="Code">
+        <SimpleGridExample/>
+    </TabPage>
+    <TabPage TabName="Table">
+        <SimpleGrid
+            TType="Data"
+            SimpleGridDataSource="new SimpleGridEnumerableDataSource<Data>(_data)">
+            <Columns>
+                <SimpleColumn TType="Data" For="@(x => x.Id)" />
+                <SimpleColumn TType="Data" For="@(x => x.Name)" />
+            </Columns>
+        </SimpleGrid>
+    </TabPage>
+</TabControl>
+<br/>
+
+<h2>Entity Framework</h2>
+<br/>
+<p>A separate package is provided for Entity Framework, it provides <code>SimpleGridEntityFrameworkDataSource&lt;T&gt;</code> as the implementation of <code>ISimpleGridDataSource&lt;T&gt;</code> by replacing some features with more database friendly implementations. For further details, see the dedicated <a href="/documentation/entity-framework">Entity Framework page.</a></p>
+<br/>
+
+<h2>Available Sources</h2>
+<br/>
+<p>The table below lists all data sources and their packages</p>
+<br/>
+<table>
+    <thead>
+    <tr>
+        <th>Package</th>
+        <th>Implementation</th>
+        <th>Details</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>SimpleBlazorGrid.Core</td>
+        <td><code>SimpleGridEnumerableDataSource&lt;T&gt;</code></td>
+        <td>The default implementation for filtering data contained in a list / array inheriting from <code>IEnumerable</code></td>
+    </tr>
+    <tr>
+        <td>SimpleBlazorGrid.EntityFramework</td>
+        <td><code>SimpleGridEntityFrameworkDataSource&lt;T&gt;</code></td>
+        <td>Entity Framework specific implementation designed to take in an <code>IQueryable&lt;T&gt;</code></td>
+    </tr>
+    </tbody>
+</table>
+
 @code {
+    
+    public class Data
+    {
+        public Data(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public int Id { get; }
+        public string Name { get; }
+    }
+
+    private readonly List<Data> _data = new()
+    {
+        new(1, "Fred Jones"),
+        new(2, "Daphne Blake"),
+        new(3, "Velma Dinkley"),
+        new(4, "Shaggy Rodgers"),
+        new(5, "Scoobert 'Scooby' Doo"),
+    };
+    
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);

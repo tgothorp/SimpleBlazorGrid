@@ -1,5 +1,11 @@
 @use "base";
 
+table.sdg-table:not(:has(tr:nth-child(5))) {
+  .sdg-filter-container {
+    top: 0;
+  }
+}
+
 table.sdg-table {
   position: relative;
   width: 100%;

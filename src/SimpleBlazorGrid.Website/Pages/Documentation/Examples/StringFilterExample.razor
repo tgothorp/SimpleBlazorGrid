@@ -1,0 +1,33 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+@inject IJSRuntime Js;
+
+<pre class="code" style="font-size: var(--fs--1); width: 100%">
+<code class="razor">
+&lt;SimpleGrid TType=&quot;StringFilterData&quot; SimpleGridDataSource=&quot;new SimpleGridEnumerableDataSource&lt;StringFilterData&gt;(Data)&quot;&gt;
+    &lt;Filters&gt;
+        &lt;SimpleStringFilter TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; ForHeading=&quot;Exact, Case Sensitive&quot; /&gt;
+        &lt;SimpleStringFilter TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; ForHeading=&quot;Exact, Case Insensitive&quot; IgnoreCase=&quot;true&quot; /&gt;
+        &lt;SimpleStringFilter TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; ForHeading=&quot;Partial, Case Sensitive&quot; Exact=&quot;false&quot; /&gt;
+        &lt;SimpleStringFilter TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; ForHeading=&quot;Partial, Case Insensitive&quot; IgnoreCase=&quot;true&quot; Exact=&quot;false&quot; /&gt;
+    &lt;/Filters&gt;
+    &lt;Columns&gt;
+        &lt;SimpleColumn TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; Heading=&quot;Exact, Case Sensitive&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; Heading=&quot;Exact, Case Insensitive&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; Heading=&quot;Partial, Case Sensitive&quot; /&gt;
+        &lt;SimpleColumn TType=&quot;StringFilterData&quot; For=&quot;@@(x =&gt; x.Name)&quot; Heading=&quot;Partial, Case Insensitive&quot; /&gt;
+    &lt;/Columns&gt;
+&lt;/SimpleGrid&gt;
+</code>
+</pre>
+
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("highlightSnippet");
+    }
+
+}

@@ -11,6 +11,11 @@
   src: url('font/IBMPlexSansCondensed-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'IBMPlexMono';
+  src: url('font/IBMPlexMono-Regular.ttf') format('truetype');
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -58,4 +63,12 @@ img, picture, svg, video {
 
 input, textarea, button, select {
   font: inherit;
+}
+
+code {
+  font-family: 'IBMPlexMono', sans-serif ;
+}
+
+pre {
+  font-family: 'IBMPlexMono', sans-serif ;
 }

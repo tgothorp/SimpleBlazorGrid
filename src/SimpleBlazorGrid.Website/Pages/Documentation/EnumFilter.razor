@@ -1,12 +1,117 @@
 @page "/documentation/filters/enum"
 
 @using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
 
 @layout DocumentationLayout
 
 @inject NavBarService NavBarService
 
+<PageTitle>Simple Blazor Grid | Enum Filter</PageTitle>
+
+<h1>Simple Enum Filter</h1>
+<br/>
+<p>The <code>SimpleEnumFilter&lt;T&gt;</code> filter allows (as the name suggests) for your table to be filtered by enum properties. This filter can only be applied to properties that have an <code>Enum</code> as their type. The filter allows for individual or multiple enum values to act as the filter as well as the ability to only permit certain enum values in the event you need to lock down certain options.</p>
+<br/>
+<p>The table below demonstrates how the enum filter can be used to either filter by individual values, multiple values or a restricted selection of multiple values.</p>
+<br/>
+<TabControl>
+    <TabPage TabName="Table">
+        <SimpleGrid TType="EnumFilterData" SimpleGridDataSource="new SimpleGridEnumerableDataSource<EnumFilterData>(Data)">
+            <Filters>
+                <SimpleEnumFilter TType="EnumFilterData" TEnum="EnumFilterExample" For="@(x => x.EnumValue)" ForHeading="Filter (Multiple)" AllowMultiple="true"  />
+                <SimpleEnumFilter TType="EnumFilterData" TEnum="EnumFilterExample" For="@(x => x.EnumValue)" ForHeading="Filter (Multiple, Restricted)" AllowMultiple="true" PermittedValues="@(new List<EnumFilterExample> { EnumFilterExample.North , EnumFilterExample.South})"  />
+                <SimpleEnumFilter TType="EnumFilterData" TEnum="EnumFilterExample" For="@(x => x.EnumValue)" ForHeading="Filter (Single)" />
+            </Filters>
+            <Columns>
+                <SimpleColumn TType="EnumFilterData" For="@(x => x.Id)" Heading="Id" />
+                <SimpleColumn TType="EnumFilterData" For="@(x => x.EnumValue)" Heading="No Filter" />
+                <SimpleColumn TType="EnumFilterData" For="@(x => x.EnumValue)" Heading="Filter (Multiple)" />
+                <SimpleColumn TType="EnumFilterData" For="@(x => x.EnumValue)" Heading="Filter (Multiple, Restricted)" />
+                <SimpleColumn TType="EnumFilterData" For="@(x => x.EnumValue)" Heading="Filter (Single)" />
+            </Columns>
+        </SimpleGrid>
+    </TabPage>
+    <TabPage TabName="Code">
+        <EnumFilterExample />
+    </TabPage>
+</TabControl>
+
+<br/>
+<h3>Parameters</h3>
+<p>The following parameters can be set for each <code>SimpleEnumFilter&lt;T&gt;</code>.</p>
+<table>
+    <thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>TEnum</code></td>
+        <td><i>type parameter</i></td>
+        <td>✅</td>
+        <td>This is a mandatory type parameter and must be same enum as the target property</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>PermittedValues</code></td>
+        <td><code>List&lt;TEnum&gt;</code></td>
+        <td>❌</td>
+        <td>If set, then only the values provided can be selected by this filter. If this is not set then all possible enum values can be used in the filter</td>
+        <td><i>All enum values</i></td>
+    </tr>
+    <tr>
+        <td><code>DefaultValues</code></td>
+        <td><code>List&lt;TEnum&gt;</code></td>
+        <td>❌</td>
+        <td>If set, then this filter will be active when the table loads with the provided values applied.</td>
+        <td><code>null</code></td>
+    </tr>
+    <tr>
+        <td><code>AllowMultiple</code></td>
+        <td><code>bool</code></td>
+        <td>❌</td>
+        <td>Allows for multiple emum values to be selected</td>
+        <td><code>false</code></td>
+    </tr>
+    </tbody>
+</table>
+
 @code {
+    
+    public class EnumFilterData
+    {
+        public EnumFilterData(EnumFilterExample enumValue, int id)
+        {
+            EnumValue = enumValue;
+            Id = id;
+        }
+
+        public int Id { get; }
+        public EnumFilterExample EnumValue { get; }
+    }
+    
+    public enum EnumFilterExample
+    {
+        North,
+        South,
+        East,
+        West,
+    }
+
+    public List<EnumFilterData> Data = new()
+    {
+        new EnumFilterData(EnumFilterExample.North, 1),
+        new EnumFilterData(EnumFilterExample.South, 2),
+        new EnumFilterData(EnumFilterExample.East, 3),
+        new EnumFilterData(EnumFilterExample.West, 4),
+    };
+    
     protected override void OnInitialized()
     {
         NavBarService.SetNavBarSection(NavSection.Documentation);

@@ -296,6 +296,25 @@
 .documentation-wrapper pre .small {
   font-size: var(--fs--1);
 }
+.documentation-wrapper code:not(.razor) {
+  background: white;
+  color: black;
+  word-wrap: break-word;
+  box-decoration-break: clone;
+  padding: 0.1rem 0.3rem 0.2rem;
+  border-radius: 0.2rem;
+}
+.documentation-wrapper ul {
+  font-size: var(--fs--1);
+  padding-left: 2em;
+}
+.documentation-wrapper ul li {
+  margin-top: 10px;
+  padding-left: 2em;
+}
+.documentation-wrapper ul li::marker {
+  color: #ff0a54;
+}
 .documentation-wrapper table {
   width: 100%;
   text-align: left;
@@ -330,6 +349,39 @@
   }
 }
 
+.border-glow {
+  border: 2px solid blue;
+  animation: 4s infinite glow;
+}
+
+@keyframes glow {
+  0% {
+    border-color: red;
+  }
+  25% {
+    border-color: blue;
+  }
+  75% {
+    border-color: yellow;
+  }
+  100% {
+    border-color: purple;
+  }
+}
+@-webkit-keyframes glow {
+  0% {
+    border-color: red;
+  }
+  25% {
+    border-color: blue;
+  }
+  75% {
+    border-color: yellow;
+  }
+  100% {
+    border-color: purple;
+  }
+}
 .sidebar {
   width: 250px;
   position: fixed;
@@ -425,6 +477,10 @@
   font-family: "IBMPlexSansCondensed";
   src: url("font/IBMPlexSansCondensed-Regular.ttf") format("truetype");
 }
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("font/IBMPlexMono-Regular.ttf") format("truetype");
+}
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -472,6 +528,14 @@ img, picture, svg, video {
 
 input, textarea, button, select {
   font: inherit;
+}
+
+code {
+  font-family: "IBMPlexMono", sans-serif;
+}
+
+pre {
+  font-family: "IBMPlexMono", sans-serif;
 }
 
 /*# sourceMappingURL=site.css.map */
