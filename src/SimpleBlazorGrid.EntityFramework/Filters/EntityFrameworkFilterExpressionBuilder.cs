@@ -21,7 +21,7 @@ public class EntityFrameworkFilterExpressionBuilder
             SimpleNumericRangeFilter<T> numericRangeFilter => _enumerableFilterExpression.NumericRangeFilterExpression(numericRangeFilter),
             SimpleDateFilter<T> dateFilter => _enumerableFilterExpression.DateFilterExpression(dateFilter),
             SimpleDateRangeFilter<T> dateRangeFilter => _enumerableFilterExpression.DateRangeFilterExpression(dateRangeFilter),
-            SimpleEnumFilter<T, Enum> simpleEnumFilter => _enumerableFilterExpression.EnumFilterExpression(simpleEnumFilter),
+            EnumFilter<T> simpleEnumFilter => _enumerableFilterExpression.EnumFilterExpression(simpleEnumFilter),
             _ => throw new ArgumentException($"There is no appropriate method to handle generation of a filter expression for the provided filter", nameof(filter))
         };
     }
