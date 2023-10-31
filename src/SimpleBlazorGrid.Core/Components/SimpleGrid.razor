@@ -3,6 +3,7 @@
 
 @using SimpleBlazorGrid.Configuration
 @using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Editing
 @using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Helpers
@@ -234,5 +235,10 @@
 
         Loading = false;
         StateHasChanged();
+    }
+
+    internal void UpdateRow(TType data, IEnumerable<EditAction<TType>> edits)
+    {
+        
     }
 }

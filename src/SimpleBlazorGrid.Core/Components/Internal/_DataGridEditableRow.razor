@@ -1,0 +1,117 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@using SimpleBlazorGrid.Editing
+@using SimpleBlazorGrid.Formatting
+
+@inject SimpleDataGridFormatter SimpleDataGridFormatter
+
+@typeparam TType
+
+<tr class="@(Selected ? "sdg-selectable-selected" : "")">
+
+    @if (Selectable)
+    {
+        <td class="sdg-selectable">
+            <input type="checkbox" @bind="Selected" @onclick="@(async () => await ItemSelected())"/>
+        </td>
+    }
+
+    @foreach (var column in Columns)
+    {
+        <td class="@(column.Hidden ? "hidden" : "")">
+            @if (column.SimpleColumnTemplate is not null)
+            {
+                @column.SimpleColumnTemplate(Data)
+            }
+            else if (RowIsBeingEdited && column.Editable)
+            {
+                <input value="@GetRowDataForColumn(column)" @oninput="(e) => DataEdited(column, e))"/>
+            }
+            else
+            {
+                @GetRowDataForColumn(column)
+            }
+        </td>
+    }
+
+    <td>
+        @if (RowIsBeingEdited)
+        {
+            <button @onclick="@(SaveRow)">Save</button>
+        }
+        else
+        {
+            <button @onclick="@(EditRow)">Edit</button>
+        }
+    </td>
+</tr>
+
+@code {
+    [Parameter]
+    public List<SimpleColumn<TType>> Columns { get; set; }
+
+    [Parameter]
+    public TType Data { get; set; }
+
+    [Parameter]
+    public bool Selectable { get; set; }
+
+    [Parameter]
+    public bool Selected { get; set; }
+
+    [Parameter]
+    public EventCallback<TType> OnSelected { get; set; }
+
+    private bool RowIsBeingEdited { get; set; }
+    private Dictionary<string, EditAction<TType>> _editActions = new();
+
+    private string GetRowDataForColumn(SimpleColumn<TType> column)
+    {
+        try
+        {
+            var obj = column.For.Compile().Invoke(Data);
+            return SimpleDataGridFormatter.FormatProperty(obj, column.Format);
+        }
+        catch (NullReferenceException)
+        {
+            return "null";
+        }
+    }
+
+    private async Task ItemSelected()
+    {
+        Selected = !Selected;
+        await OnSelected.InvokeAsync(Data);
+    }
+
+    private void DataEdited(SimpleColumn<TType> column, ChangeEventArgs e)
+    {
+        var editAction = new EditAction<TType>
+        {
+            Property = column.For,
+            NewValue = e.Value
+        };
+
+        if (_editActions.ContainsKey(column.Heading))
+        {
+            _editActions.Add(column.Heading, editAction);
+        }
+        else
+        {
+            _editActions[column.Heading] = editAction;
+        }
+    }
+
+    private void EditRow()
+    {
+        _editActions = new();
+        RowIsBeingEdited = !RowIsBeingEdited;
+    }
+
+    private void SaveRow()
+    {
+        throw new NotImplementedException();
+    }
+
+}
