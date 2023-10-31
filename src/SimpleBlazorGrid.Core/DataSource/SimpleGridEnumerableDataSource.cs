@@ -22,17 +22,6 @@ namespace SimpleBlazorGrid.DataSource
             FilterExpressionBuilder = new EnumerableFilterExpressionBuilder();
         }
 
-        public Task<T[]> Items(ref TableState<T> tableState, CancellationToken cancellationToken = default)
-        {
-            var items = Source;
-
-            items = ApplyFiltering(tableState.ActiveFilters, items);
-            items = ApplySearch(tableState.SearchQuery, tableState.SearchColumns, items);
-            items = ApplySorting(tableState.SortProperty, tableState.SortAscending, items);
-            
-            return Task.FromResult(ApplyPaging(tableState, items));
-        }
-
         public Task LoadItems(ref TableState<T> tableState, CancellationToken cancellationToken = default)
         {
             var items = Source;
