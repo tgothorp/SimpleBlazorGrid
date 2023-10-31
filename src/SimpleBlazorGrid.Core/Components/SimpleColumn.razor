@@ -1,20 +1,43 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid
+
 @using System.Linq.Expressions
+@using System.Text
+@using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Formatting
 @using SimpleBlazorGrid.Helpers
+@using SimpleBlazorGrid.Internal
 
 @typeparam TType
 
+<th style="@(ColumnWidth())">
+    <div class="sdg-heading-container @(Hidden ? "sdg-heading-container-hidden" : "")">
+
+        @if (Filter is not null)
+        {
+            <div class="sdg-heading-filter" @onclick="ShowSimpleFilter">
+                <_DataGridFilterGlyph Active="Filter.FilterActive"/>
+            </div>
+        }
+
+        <div class="sdg-heading-text" @onclick="Sort">
+            <span>@ColumnHeading()</span>
+        </div>
+    </div>
+</th>
+
+
 @code {
+
     [CascadingParameter]
-    public SimpleGrid<TType> DataGrid { get; set; }
+    public SimpleGrid<TType> SimpleGrid { get; set; }
 
     [Parameter]
     public Expression<Func<TType, object>> For { get; set; }
 
     // Cache property name
     private string _propertyName = null;
+
     public string PropertyName
     {
         get => _propertyName ?? GetPropertyName();
@@ -26,7 +49,7 @@
 
     [Parameter]
     public Format Format { get; set; } = Format.None;
-    
+
     [Parameter]
     public RenderFragment<TType> SimpleColumnTemplate { get; set; }
 
@@ -42,9 +65,13 @@
     [Parameter]
     public bool Hidden { get; set; }
 
+    private Filter<TType> Filter { get; set; }
+
     protected override void OnInitialized()
     {
-        DataGrid.AddColumn(this);
+        SimpleGrid.AddColumn(this);
+        Filter ??= GetFilter();
+
         base.OnInitialized();
     }
 
@@ -62,5 +89,50 @@
     {
         _propertyName = ExpressionHelper.GetPropertyName(For);
         return _propertyName;
+    }
+    
+    private string ColumnWidth()
+    {
+        return Width == null ? null : $"width: {Width}%";
+    }
+
+    private Filter<TType> GetFilter()
+    {
+        var filterCountForColumnProperty = SimpleGrid.SimpleFilters.Count(x => x.PropertyName == PropertyName);
+        return filterCountForColumnProperty switch
+        {
+            1 => SimpleGrid.SimpleFilters.Single(x => x.PropertyName == PropertyName),
+            > 1 => SimpleGrid.SimpleFilters.FirstOrDefault(x => x.PropertyName == PropertyName && x.ForHeading == Heading),
+            _ => null
+        };
+    }
+    
+    private MarkupString ColumnHeading()
+    {
+        var sb = new StringBuilder();
+        sb.Append(Heading);
+        
+        switch (Sortable)
+        {
+            case true when SimpleGrid.TableState.SortProperty == PropertyName:
+                sb.Append(SimpleGrid.TableState.SortAscending ? "&nbsp;⥥" : "&nbsp;⥣");
+                break;
+            case true:
+                sb.Append("&nbsp;⥯");
+                break;
+        }
+
+        return new MarkupString(sb.ToString());
+    }
+    
+    private void ShowSimpleFilter()
+    {
+        SimpleGrid.EditSimpleFilter(Filter);
+    }
+    
+    private async Task Sort()
+    {
+        SimpleGrid.TableState.UpdateSortProperty(PropertyName);
+        await SimpleGrid.ReloadData();
     }
 }

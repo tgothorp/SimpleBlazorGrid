@@ -15,10 +15,6 @@
 <_DataGridErrorBoundry TType="TType">
     <CascadingValue Value="this">
 
-        @Columns
-
-        @if (DataGridColumns.Any())
-        {
             <div>
                 <div class="sdg-table-heading">
                     @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
@@ -55,67 +51,56 @@
                                 <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
                             </th>
                         }
+                        
+                        @Columns
 
-                        @foreach (var column in DataGridColumns)
-                        {
-                            var filterCountForColumnProperty = SimpleFilters.Count(x => x.PropertyName == column.PropertyName);
-                            var simpleFilter = filterCountForColumnProperty switch
-                            {
-                                1 => SimpleFilters.Single(x => x.PropertyName == column.PropertyName),
-                                > 1 => SimpleFilters.FirstOrDefault(x => x.PropertyName == column.PropertyName && x.ForHeading == column.Heading),
-                                _ => null
-                                };
-
-                            <_DataGridHeading TType="TType"
-                                              Column="column"
-                                              Width="@column.Width"
-                                              SimpleFilter="simpleFilter"
-                                              Hidden="@column.Hidden"/>
-                        }
                     </tr>
                     </thead>
-                    <tbody>
-                    @if (Loading)
+                    
+                    @if (DataGridColumns.Any())
                     {
-                        <tr>
-                            <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                <div class="sdg-loading">
-                                    <h2>Loading</h2>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        @if (TableState.Items.Any())
-                        {
-                            @foreach (var item in TableState.Items)
-                            {
-                                <_DataGridRow TType="TType" Data="item" />
-                            }
-                        }
-                        else
+                        <tbody>
+                        @if (Loading)
                         {
                             <tr>
                                 <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                    <div class="sdg-no-data">
-                                        <h2>No records!</h2>
+                                    <div class="sdg-loading">
+                                        <h2>Loading</h2>
                                     </div>
                                 </td>
                             </tr>
                         }
+                        else
+                        {
+                            @if (TableState.Items.Any())
+                            {
+                                @foreach (var item in TableState.Items)
+                                {
+                                    <_DataGridRow TType="TType" Data="item"/>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
+                                        <div class="sdg-no-data">
+                                            <h2>No records!</h2>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
+                                <_DataGridPagingControls TType="TType"/>
+                            </td>
+                        </tr>
+                        </tfoot>
                     }
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
-                            <_DataGridPagingControls TType="TType"/>
-                        </td>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
-        }
     </CascadingValue>
 </_DataGridErrorBoundry>
 
