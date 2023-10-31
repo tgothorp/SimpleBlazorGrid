@@ -316,7 +316,10 @@
         if (SearchOptions.Query == query)
             return;
 
+        // Go back to the first page when sorting
+        PageOptions.CurrentPage = 0;
         SearchOptions.Query = query;
+
         await ReloadData();
     }
 }
