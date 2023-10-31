@@ -91,13 +91,7 @@
                         {
                             @foreach (var item in TableState.Items)
                             {
-                                var selected = TableState.SelectedItems.Contains(item);
-                                <_DataGridRow TType="TType" 
-                                              Selectable="@Selectable" 
-                                              Data="item" 
-                                              Columns="DataGridColumns" 
-                                              OnSelected="OnItemSelected" 
-                                              Selected="selected"/>
+                                <_DataGridRow TType="TType" Data="item" />
                             }
                         }
                         else
@@ -197,7 +191,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        TableState = new TableState<TType>(ItemsPerPage);
+        TableState ??= new TableState<TType>(ItemsPerPage);
 
         await ReloadData();
         await base.OnParametersSetAsync();
@@ -225,16 +219,7 @@
             EverythingSelected = true;
 
         OnSelectionChanged.InvokeAsync(TableState.SelectedItems);
-    }
-
-    private void OnItemSelected(TType item)
-    {
-        if (TableState.SelectedItems.Contains(item))
-            TableState.Select(item);
-        else
-            TableState.Deselect(item);
-
-        OnSelectionChanged.InvokeAsync(TableState.SelectedItems);
+        StateHasChanged();
     }
 
     public Task AddSimpleFilter(Filter<TType> filter)

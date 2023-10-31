@@ -10,10 +10,11 @@ public class TableState<T>
     public TableState(int itemsPerPage)
     {
         ItemsPerPage = itemsPerPage;
+        SelectedItems = new List<T>();
     }
 
     public T[] Items { get; protected set; } = Array.Empty<T>();
-    public List<T> SelectedItems { get; protected set; } = new();
+    public List<T> SelectedItems { get; protected set; }
 
     // Paging
     public int ItemsPerPage { get; protected set; }
@@ -44,6 +45,7 @@ public class TableState<T>
     internal void SelectNothing() => SelectedItems = new List<T>();
     internal void Select(T item) => SelectedItems.Add(item);
     internal void Deselect(T item) => SelectedItems.Remove(item);
+    internal bool IsSelected(T item) => SelectedItems.Contains(item);
 
     internal void UpdateSearchQuery(string searchQuery)
     {

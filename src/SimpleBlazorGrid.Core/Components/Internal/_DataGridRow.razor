@@ -9,16 +9,23 @@
 
 @typeparam TType
 
-<tr class="@(Selected ? "sdg-selectable-selected" : "")">
+<tr class="@(SimpleGrid.TableState.IsSelected(Data) ? "sdg-selectable-selected" : "")">
 
-    @if (Selectable)
+    @if (SimpleGrid.Selectable)
     {
         <td class="sdg-selectable">
-            <input type="checkbox" @bind="Selected" @onclick="@(async () => await ItemSelected())"/>
+            @if (SimpleGrid.TableState.IsSelected(Data))
+            {
+                <input type="checkbox" checked="checked" @onclick="ItemSelected"/>
+            }
+            else
+            {
+                <input type="checkbox" @onclick="ItemSelected"/>
+            }
         </td>
     }
 
-    @foreach (var column in Columns)
+    @foreach (var column in SimpleGrid.DataGridColumns)
     {
         <td class="@(column.Hidden ? "hidden" : "")">
             @if (column.SimpleColumnTemplate is not null)
@@ -34,20 +41,12 @@
 </tr>
 
 @code {
-    [Parameter]
-    public List<SimpleColumn<TType>> Columns { get; set; }
+
+    [CascadingParameter]
+    public SimpleGrid<TType> SimpleGrid { get; set; }
 
     [Parameter]
     public TType Data { get; set; }
-
-    [Parameter]
-    public bool Selectable { get; set; }
-
-    [Parameter]
-    public bool Selected { get; set; }
-    
-    [Parameter]
-    public EventCallback<TType> OnSelected { get; set; }
 
     private string GetRowDataForColumn(SimpleColumn<TType> column)
     {
@@ -62,9 +61,18 @@
         }
     }
 
-    private async Task ItemSelected()
+    private void ItemSelected()
     {
-        Selected = !Selected;
-        await OnSelected.InvokeAsync(Data);
+        if (SimpleGrid.TableState.SelectedItems.Contains(Data))
+        {
+            SimpleGrid.TableState.Deselect(Data);
+        }
+        else
+        {
+            SimpleGrid.TableState.Select(Data);
+        }
+
+        SimpleGrid.OnSelectionChanged.InvokeAsync(SimpleGrid.TableState.SelectedItems);
+        StateHasChanged();
     }
 }
