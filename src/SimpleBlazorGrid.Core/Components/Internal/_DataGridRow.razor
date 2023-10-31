@@ -51,8 +51,15 @@
 
     private string GetRowDataForColumn(SimpleColumn<TType> column)
     {
-        var obj = column.For.Compile().Invoke(Data);
-        return SimpleDataGridFormatter.FormatProperty(obj, column.Format);
+        try
+        {
+            var obj = column.For.Compile().Invoke(Data);
+            return SimpleDataGridFormatter.FormatProperty(obj, column.Format);
+        }
+        catch (NullReferenceException)
+        {
+            return "null";
+        }
     }
 
     private async Task ItemSelected()
