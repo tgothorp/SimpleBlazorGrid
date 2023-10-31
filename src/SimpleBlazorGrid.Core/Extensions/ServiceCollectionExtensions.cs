@@ -23,8 +23,19 @@ namespace SimpleBlazorGrid.Extensions
             var configuration = new SimpleDataGridConfiguration();
             
             config.Invoke(configuration);
+            
             configuration.PrimaryColour ??= defaultOptions.PrimaryColour;
+            if (!configuration.PrimaryColour.StartsWith("#"))
+                configuration.PrimaryColour = $"#{configuration.PrimaryColour}";
+            
             configuration.SecondaryColour ??= defaultOptions.SecondaryColour;
+            if (!configuration.SecondaryColour.StartsWith("#"))
+                configuration.SecondaryColour = $"#{configuration.SecondaryColour}";
+
+            configuration.GlyphColour ??= defaultOptions.GlyphColour;
+            if (!configuration.GlyphColour.StartsWith("#"))
+                configuration.GlyphColour = $"#{configuration.GlyphColour}";
+            
             configuration.CurrencySymbol ??= defaultOptions.CurrencySymbol;
             configuration.LongDateFormat ??= defaultOptions.LongDateFormat;
             configuration.ShortDateFormat ??= defaultOptions.ShortDateFormat;
