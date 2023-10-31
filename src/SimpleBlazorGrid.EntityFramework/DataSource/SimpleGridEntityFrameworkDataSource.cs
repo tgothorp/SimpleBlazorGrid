@@ -2,29 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SimpleBlazorGrid.DataSource;
 using SimpleBlazorGrid.EntityFramework.Extensions;
 using SimpleBlazorGrid.EntityFramework.Filters;
 using SimpleBlazorGrid.Extensions;
-using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Helpers;
-using SimpleBlazorGrid.Options;
 
-namespace SimpleBlazorGrid.EntityFramework.DataSource
+namespace SimpleBlazorGrid.DataSource
 {
     public class SimpleGridEntityFrameworkDataSource<T> : ISimpleGridDataSource<T> where T : class
     {
         private IQueryable<T> _queryable;
-
-        public SortOptions SortOptions { get; set; } = new();
-        public PageOptions PageOptions { get; set; } = new();
-        public SearchOptions SearchOptions { get; set; } = new();
-        public IEnumerable<Filter<T>> Filters { get; set; }
-        public EntityFrameworkFilterExpressionBuilder FilterExpressionBuilder { get; }
+        private EntityFrameworkFilterExpressionBuilder FilterExpressionBuilder { get; }
 
         public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable)
         {
@@ -32,15 +23,14 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
             FilterExpressionBuilder = new EntityFrameworkFilterExpressionBuilder();
         }
 
-
-        public async Task<T[]> Items(CancellationToken cancellationToken = default)
+        public Task LoadItems(ref TableState<T> tableState, CancellationToken cancellationToken = default)
         {
             var query = _queryable;
 
             // Filter
-            if (Filters.Any())
+            if (tableState.ActiveFilters.Any())
             {
-                var filters = Filters
+                var filters = tableState.ActiveFilters
                     .Select(x => FilterExpressionBuilder.GetFilterExpression(x));
 
                 var combined = filters.Aggregate((left, right) => left.And(right));
@@ -51,31 +41,31 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
             }
 
             // Search + Sort
-            query = ApplySearch(query);
-            query = ApplySort(query);
+            query = ApplySearch(tableState.SearchQuery, tableState.SearchColumns, query);
+            query = ApplySort(tableState.SortProperty, tableState.SortAscending, query);
 
             // Page
-            PageOptions.TotalItemCount = await query.CountAsync(cancellationToken);
-            PageOptions.MaxPage = (int)Math.Ceiling((decimal)PageOptions.TotalItemCount / PageOptions.ItemsPerPage);
+            var result = LoadAsync(tableState.CurrentPage, tableState.ItemsPerPage, query, cancellationToken)
+                .GetAwaiter()
+                .GetResult();
+            
+            tableState.SetItems(result.Items, result.TotalItemCount);
 
-            return await query
-                .Skip(PageOptions.CurrentPage * PageOptions.ItemsPerPage)
-                .Take(PageOptions.ItemsPerPage)
-                .ToArrayAsync(cancellationToken);
+            return Task.CompletedTask;
         }
 
-        private IQueryable<T> ApplySearch(IQueryable<T> query)
+        private IQueryable<T> ApplySearch(string searchQuery, HashSet<string> searchColumns, IQueryable<T> query)
         {
-            if (SearchOptions.Query.IsNullOrEmpty() || !SearchOptions.Columns.Any())
+            if (searchQuery.IsNullOrEmpty() || !searchColumns.Any())
                 return query;
 
             var parameter = Expression.Parameter(typeof(T), "x");
-            var pattern = Expression.Constant($"%{SearchOptions.Query}%");
+            var pattern = Expression.Constant($"%{searchQuery}%");
             var instance = Expression.Constant(EF.Functions, typeof(DbFunctions));
             var methodInfo = typeof(DbFunctionsExtensions).GetMethod("Like", new[] { typeof(DbFunctions), typeof(string), typeof(string) });
 
             var checks = new List<MethodCallExpression>();
-            foreach (var column in SearchOptions.Columns)
+            foreach (var column in searchColumns)
             {
                 var property = ExpressionHelper.PropertyAccess<T>(column, parameter);
 
@@ -114,14 +104,14 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
             return query;
         }
         
-        private IQueryable<T> ApplySort(IQueryable<T> query)
+        private IQueryable<T> ApplySort(string sortProperty, bool sortAscending, IQueryable<T> query)
         {
-            if (SortOptions.Property.IsNotNullOrEmpty())
+            if (sortProperty.IsNotNullOrEmpty())
             {
                 var parameterExpression = Expression.Parameter(typeof(T), "obj");
                 Expression propertyAccess = parameterExpression;
 
-                foreach (var property in SortOptions.Property.Split('.'))
+                foreach (var property in sortProperty.Split('.'))
                 {
                     propertyAccess = Expression.Property(propertyAccess, property);
                 }
@@ -130,7 +120,7 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
 
                 var orderByMethod = typeof(Queryable)
                     .GetMethods()
-                    .Where(m => m.Name == (SortOptions.Ascending ? "OrderBy" : "OrderByDescending"))
+                    .Where(m => m.Name == (sortAscending ? "OrderBy" : "OrderByDescending"))
                     .Single(m => m.GetParameters().Length == 2)
                     .MakeGenericMethod(typeof(T), propertyAccess.Type);
 
@@ -138,6 +128,18 @@ namespace SimpleBlazorGrid.EntityFramework.DataSource
             }
 
             return query;
+        }
+
+        private async Task<(T[] Items, int TotalItemCount)> LoadAsync(int currentPage, int itemsPerPage, IQueryable<T> query, CancellationToken cancellationToken)
+        {
+            var itemCount = await query.CountAsync(cancellationToken);
+            
+            var items = await query
+                .Skip(currentPage * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToArrayAsync(cancellationToken);
+
+            return (items, itemCount);
         }
     }
 }

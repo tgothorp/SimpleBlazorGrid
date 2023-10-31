@@ -1,7 +1,6 @@
 @* ReSharper disable once CheckNamespace *@
 @namespace SimpleBlazorGrid.Internal
 
-@using SimpleBlazorGrid.Options
 @using SimpleBlazorGrid.Filters
 @using System.Text
 
@@ -32,12 +31,6 @@
     public SimpleColumn<TType> Column { get; set; }
 
     [Parameter]
-    public SortOptions SortOptions { get; set; }
-
-    [Parameter]
-    public bool SortAscending { get; set; }
-
-    [Parameter]
     public Filter<TType> SimpleFilter { get; set; }
 
     [Parameter]
@@ -48,10 +41,8 @@
 
     private async Task Sort()
     {
-        if (!Column.Sortable)
-            return;
-
-        await SimpleGrid.Sort(Column.PropertyName, SortAscending);
+        SimpleGrid.TableState.UpdateSortProperty(Column.PropertyName);
+        await SimpleGrid.ReloadData();
     }
 
     private int CalculateHeadingWidth()
@@ -77,8 +68,8 @@
         
         switch (Column.Sortable)
         {
-            case true when SortOptions.Property == Column.PropertyName:
-                sb.Append(SortAscending ? "&nbsp;⥥" : "&nbsp;⥣");
+            case true when SimpleGrid.TableState.SortProperty == Column.PropertyName:
+                sb.Append(SimpleGrid.TableState.SortAscending ? "&nbsp;⥥" : "&nbsp;⥣");
                 break;
             case true:
                 sb.Append("&nbsp;⥯");

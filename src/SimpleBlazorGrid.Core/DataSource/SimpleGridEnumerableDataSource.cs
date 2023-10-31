@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using SimpleBlazorGrid.Extensions;
 using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Helpers;
-using SimpleBlazorGrid.Options;
 
 namespace SimpleBlazorGrid.DataSource
 {
@@ -17,10 +15,6 @@ namespace SimpleBlazorGrid.DataSource
     {
         private IEnumerable<T> Source { get; }
         private EnumerableFilterExpressionBuilder FilterExpressionBuilder { get; }
-        public IEnumerable<Filter<T>> Filters { get; set; }
-        public SortOptions SortOptions { get; set; } = new();
-        public PageOptions PageOptions { get; set; } = new();
-        public SearchOptions SearchOptions { get; set; } = new();
 
         public SimpleGridEnumerableDataSource(IEnumerable<T> source)
         {
@@ -28,22 +22,38 @@ namespace SimpleBlazorGrid.DataSource
             FilterExpressionBuilder = new EnumerableFilterExpressionBuilder();
         }
 
-        public Task<T[]> Items(CancellationToken cancellationToken = default)
+        public Task<T[]> Items(ref TableState<T> tableState, CancellationToken cancellationToken = default)
         {
             var items = Source;
-            items = ApplyFiltering(items);
-            items = ApplySearch(items);
-            items = ApplySorting(items);
-            items = ApplyPaging(items);
 
-            return Task.FromResult(items.ToArray());
+            items = ApplyFiltering(tableState.ActiveFilters, items);
+            items = ApplySearch(tableState.SearchQuery, tableState.SearchColumns, items);
+            items = ApplySorting(tableState.SortProperty, tableState.SortAscending, items);
+            
+            return Task.FromResult(ApplyPaging(tableState, items));
         }
 
-        private IEnumerable<T> ApplyFiltering(IEnumerable<T> items)
+        public Task LoadItems(ref TableState<T> tableState, CancellationToken cancellationToken = default)
         {
-            if (Filters is not null && Filters.Any())
+            var items = Source;
+
+            items = ApplyFiltering(tableState.ActiveFilters, items);
+            items = ApplySearch(tableState.SearchQuery, tableState.SearchColumns, items);
+            items = ApplySorting(tableState.SortProperty, tableState.SortAscending, items);
+
+            var totalItemCount = items.Count();
+            var array = ApplyPaging2(tableState, items);
+
+            tableState.SetItems(array, totalItemCount);
+
+            return Task.CompletedTask;
+        }
+
+        private IEnumerable<T> ApplyFiltering(List<Filter<T>> activeFilters, IEnumerable<T> items)
+        {
+            if (activeFilters is not null && activeFilters.Any())
             {
-                var filters = Filters
+                var filters = activeFilters
                     .Select(x => FilterExpressionBuilder.GetFilterExpression(x));
 
                 items = filters.Aggregate(items, (current, filter) => current.Where(filter.Compile()));
@@ -52,17 +62,17 @@ namespace SimpleBlazorGrid.DataSource
             return items;
         }
 
-        private IEnumerable<T> ApplySearch(IEnumerable<T> items)
+        private IEnumerable<T> ApplySearch(string searchQuery, HashSet<string> searchColumns, IEnumerable<T> items)
         {
-            if (SearchOptions.Query.IsNullOrEmpty() || SearchOptions.Columns.Count == 0)
+            if (searchQuery.IsNullOrEmpty() || searchColumns.Count == 0)
                 return items;
 
             var parameter = Expression.Parameter(typeof(T), "x");
-            var query = Expression.Constant(SearchOptions.Query, typeof(string));
+            var query = Expression.Constant(searchQuery, typeof(string));
             var comparison = Expression.Constant(StringComparison.OrdinalIgnoreCase, typeof(StringComparison));
 
             var checks = new List<ConditionalExpression>();
-            foreach (var column in SearchOptions.Columns)
+            foreach (var column in searchColumns)
             {
                 var property = ExpressionHelper.PropertyAccess<T>(column, parameter);
                 var propertyIsNotNull = Expression.NotEqual(property, Expression.Constant(null));
@@ -103,7 +113,7 @@ namespace SimpleBlazorGrid.DataSource
             return items;
         }
 
-        private IEnumerable<T> ApplySorting(IEnumerable<T> items)
+        private IEnumerable<T> ApplySorting(string sortProperty, bool sortAscending, IEnumerable<T> items)
         {
             object GetValueByPropertyChain(object obj, string[] propertyNames)
             {
@@ -116,9 +126,9 @@ namespace SimpleBlazorGrid.DataSource
                 return obj;
             }
 
-            if (SortOptions.Property.IsNotNullOrEmpty())
+            if (sortProperty.IsNotNullOrEmpty())
             {
-                string[] propertyNames = SortOptions.Property.Split('.');
+                string[] propertyNames = sortProperty.Split('.');
                 Type targetType = typeof(T);
                 PropertyInfo property = null;
 
@@ -135,7 +145,7 @@ namespace SimpleBlazorGrid.DataSource
                     targetType = property.PropertyType;
                 }
 
-                return SortOptions.Ascending 
+                return sortAscending 
                     ? items.OrderBy(x => GetValueByPropertyChain(x, propertyNames)) 
                     : items.OrderByDescending(x => GetValueByPropertyChain(x, propertyNames));
             }
@@ -143,14 +153,26 @@ namespace SimpleBlazorGrid.DataSource
             return items;
         }
 
-        private IEnumerable<T> ApplyPaging(IEnumerable<T> items)
+        private T[] ApplyPaging(TableState<T> tableState, IEnumerable<T> items)
         {
-            PageOptions.TotalItemCount = items.Count();
-            PageOptions.MaxPage = (int)Math.Ceiling((decimal)PageOptions.TotalItemCount / PageOptions.ItemsPerPage); 
-                
+            var array = items.ToArray();
+            
+            tableState.UpdatePagingValues(array.Length);
+            
+            array = array
+                .Skip(tableState.CurrentPage * tableState.ItemsPerPage)
+                .Take(tableState.ItemsPerPage)
+                .ToArray();
+
+            return array;
+        }
+        
+        private T[] ApplyPaging2(TableState<T> tableState, IEnumerable<T> items)
+        {
             return items
-                .Skip(PageOptions.CurrentPage * PageOptions.ItemsPerPage)
-                .Take(PageOptions.ItemsPerPage);
+                .Skip(tableState.CurrentPage * tableState.ItemsPerPage)
+                .Take(tableState.ItemsPerPage)
+                .ToArray();
         }
     }
 }

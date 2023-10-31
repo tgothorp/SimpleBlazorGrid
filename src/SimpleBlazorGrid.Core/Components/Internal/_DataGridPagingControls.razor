@@ -3,28 +3,23 @@
 
 @typeparam TType
 
-@using SimpleBlazorGrid.Options
-
 <div class="sdg-table-paging-container">
     <div>
-        <small>Displaying Page: @(PageOptions.CurrentPage + 1) of @PageOptions.MaxPage (@PageOptions.TotalItemCount total records)</small>
+        <small>Displaying Page: @(SimpleGrid.TableState.CurrentPage + 1) of @SimpleGrid.TableState.TotalPageCount (@SimpleGrid.TableState.TotalItemCount total records)</small>
     </div>
 
-    @if (SimpleGrid.PageOptions != null)
-    {
-        <div class="sdg-table-paging-controls">
+    <div class="sdg-table-paging-controls">
 
-            <_DataGridPagingGlyph PageIndex="0" Selected="@(SimpleGrid.PageOptions.CurrentPage == 0)" Glyph="_DataGridPagingGlyph.PageGlyph.First" OnChangePage="ChangePage"/>
+        <_DataGridPagingGlyph PageIndex="0" Selected="@(SimpleGrid.TableState.CurrentPage == 0)" Glyph="_DataGridPagingGlyph.PageGlyph.First" OnChangePage="ChangePage"/>
 
-            @foreach (var page in Pages())
-            {
-                <_DataGridPagingGlyph PageIndex="page" Selected="@(page == SimpleGrid.PageOptions.CurrentPage)" Glyph="_DataGridPagingGlyph.PageGlyph.None" OnChangePage="ChangePage"/>
-            }
+        @foreach (var page in Pages())
+        {
+            <_DataGridPagingGlyph PageIndex="page" Selected="@(page == SimpleGrid.TableState.CurrentPage)" Glyph="_DataGridPagingGlyph.PageGlyph.None" OnChangePage="ChangePage"/>
+        }
 
-            <_DataGridPagingGlyph PageIndex="@(SimpleGrid.PageOptions.MaxPage - 1)" Selected="@(SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)" Glyph="_DataGridPagingGlyph.PageGlyph.Last" OnChangePage="ChangePage"/>
+        <_DataGridPagingGlyph PageIndex="@(SimpleGrid.TableState.TotalPageCount - 1)" Selected="@(SimpleGrid.TableState.CurrentPage == SimpleGrid.TableState.TotalPageCount - 1)" Glyph="_DataGridPagingGlyph.PageGlyph.Last" OnChangePage="ChangePage"/>
 
-        </div>
-    }
+    </div>
 </div>
 
 @code {
@@ -32,42 +27,36 @@
     [CascadingParameter]
     public SimpleGrid<TType> SimpleGrid { get; set; }
 
-    [Parameter]
-    public PageOptions PageOptions { get; set; }
-
-    [Parameter]
-    public EventCallback<int> PageChanged { get; set; }
-
     private List<int> Pages()
     {
         var result = new List<int>();
 
-        if (SimpleGrid.PageOptions.CurrentPage > 0)
+        if (SimpleGrid.TableState.CurrentPage > 0)
         {
-    // If we are on the very last page we should add the page before the previous if possible
-            if (SimpleGrid.PageOptions.CurrentPage == SimpleGrid.PageOptions.MaxPage - 1)
+            // If we are on the very last page we should add the page before the previous if possible
+            if (SimpleGrid.TableState.CurrentPage == SimpleGrid.TableState.TotalPageCount - 1)
             {
-                var twoPagesBackIndex = SimpleGrid.PageOptions.CurrentPage - 2;
+                var twoPagesBackIndex = SimpleGrid.TableState.CurrentPage - 2;
                 if (twoPagesBackIndex >= 0)
                 {
                     result.Add(twoPagesBackIndex);
                 }
             }
 
-    // Add previous page if we are not on the first page
-            result.Add(SimpleGrid.PageOptions.CurrentPage - 1);
+            // Add previous page if we are not on the first page
+            result.Add(SimpleGrid.TableState.CurrentPage - 1);
         }
 
-    // Add the curent page
-        result.Add(SimpleGrid.PageOptions.CurrentPage);
+        // Add the current page
+        result.Add(SimpleGrid.TableState.CurrentPage);
 
-    // Add the next page where possible
-        if (SimpleGrid.PageOptions.CurrentPage < SimpleGrid.PageOptions.MaxPage - 1)
+        // Add the next page where possible
+        if (SimpleGrid.TableState.CurrentPage < SimpleGrid.TableState.TotalPageCount - 1)
         {
-            result.Add(SimpleGrid.PageOptions.CurrentPage + 1);
+            result.Add(SimpleGrid.TableState.CurrentPage + 1);
 
-    // If we are on the very first page then add the third page if possible
-            if (SimpleGrid.PageOptions.CurrentPage == 0 && SimpleGrid.PageOptions.MaxPage - 1 >= 2)
+            // If we are on the very first page then add the third page if possible
+            if (SimpleGrid.TableState.CurrentPage == 0 && SimpleGrid.TableState.TotalPageCount - 1 >= 2)
             {
                 result.Add(2);
             }
@@ -78,10 +67,7 @@
 
     private async Task ChangePage(int newPage)
     {
-        if (SimpleGrid.PageOptions.CurrentPage == newPage)
-            return;
-
-        await PageChanged.InvokeAsync(newPage);
+        SimpleGrid.TableState.ChangePage(newPage);
+        await SimpleGrid.ReloadData();
     }
-
 }

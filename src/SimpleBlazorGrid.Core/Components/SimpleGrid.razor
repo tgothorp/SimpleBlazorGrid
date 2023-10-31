@@ -6,7 +6,6 @@
 @using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Helpers
-@using SimpleBlazorGrid.Options
 @using SimpleBlazorGrid.Internal
 
 @inject SimpleDataGridConfiguration Configuration
@@ -38,7 +37,7 @@
 
                     @if (Searchable)
                     {
-                        <_DataGridSearch OnSearch="SearchTable"/>
+                        <_DataGridSearch TType="TType"/>
                     }
                 </div>
 
@@ -69,8 +68,6 @@
 
                             <_DataGridHeading TType="TType"
                                               Column="column"
-                                              SortAscending="SortAscending"
-                                              SortOptions="SortOptions"
                                               Width="@column.Width"
                                               SimpleFilter="simpleFilter"
                                               Hidden="@column.Hidden"/>
@@ -90,12 +87,17 @@
                     }
                     else
                     {
-                        @if (Items.Any())
+                        @if (TableState.Items.Any())
                         {
-                            @foreach (var item in Items)
+                            @foreach (var item in TableState.Items)
                             {
-                                var selected = SelectedItems.Contains(item);
-                                <_DataGridRow TType="TType" Selectable="@Selectable" Data="item" Columns="DataGridColumns" OnSelected="OnItemSelected" Selected="selected"/>
+                                var selected = TableState.SelectedItems.Contains(item);
+                                <_DataGridRow TType="TType" 
+                                              Selectable="@Selectable" 
+                                              Data="item" 
+                                              Columns="DataGridColumns" 
+                                              OnSelected="OnItemSelected" 
+                                              Selected="selected"/>
                             }
                         }
                         else
@@ -113,7 +115,7 @@
                     <tfoot>
                     <tr>
                         <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
-                            <_DataGridPagingControls TType="TType" PageOptions="SimpleGridDataSource.PageOptions" PageChanged="OnPageChanged"/>
+                            <_DataGridPagingControls TType="TType"/>
                         </td>
                     </tr>
                     </tfoot>
@@ -176,7 +178,7 @@
     [Parameter]
     public bool Searchable { get; set; }
 
-    ///<summary>
+    /// <summary>
     /// Callback fired whenever a new row is selected or deselected, will contain a list of all selected rows 
     /// </summary>
     /// <remarks>
@@ -185,31 +187,19 @@
     [Parameter]
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
 
-    // Table Data
-    public List<SimpleColumn<TType>> DataGridColumns { get; set; } = new();
-    private TType[] Items { get; set; } = { };
-    private List<Filter<TType>> SimpleFilters { get; set; } = new();
-
-    // Filtering etc
-    public PageOptions PageOptions { get; set; } = new();
-    public SortOptions SortOptions { get; set; } = new();
-    public SearchOptions SearchOptions { get; set; } = new();
-    private List<Filter<TType>> AllSimpleFilters { get; set; }
-    private List<Filter<TType>> ActiveSimpleFilters { get; set; } = new();
-    private Filter<TType> ActiveSimpleFilter { get; set; } = null;
+    internal TableState<TType> TableState;
+    internal List<SimpleColumn<TType>> DataGridColumns { get; set; } = new();
+    internal List<Filter<TType>> SimpleFilters { get; set; } = new();
 
     // UI & internal junk
-    private List<TType> SelectedItems { get; set; } = new();
-    private bool SortAscending { get; set; } = true;
     private bool EverythingSelected { get; set; } = false;
-
-    private bool Loading { get; set; }
+    private bool Loading { get; set; } = false;
 
     protected override async Task OnParametersSetAsync()
     {
-        PageOptions.ItemsPerPage = ItemsPerPage;
-        await ReloadData();
+        TableState = new TableState<TType>(ItemsPerPage);
 
+        await ReloadData();
         await base.OnParametersSetAsync();
     }
 
@@ -218,61 +208,33 @@
         DataGridColumns.Add(column);
 
         if (column.Searchable)
-        {
-            Searchable = true;
-            SearchOptions.Columns.Add(column.PropertyName);
-        }
-
+            TableState.AddSearchableColumn(column.PropertyName);
+        
         StateHasChanged();
         return Task.CompletedTask;
     }
 
-    public async Task Sort(string property, bool sortAscending)
-    {
-        SortOptions.Property = property;
-        SortOptions.Ascending = sortAscending;
-        SortAscending = !SortAscending;
-
-        // Go back to the first page when sorting
-        PageOptions.CurrentPage = 0;
-
-        SelectedItems = new List<TType>();
-        EverythingSelected = false;
-
-        await OnSelectionChanged.InvokeAsync(SelectedItems);
-        await ReloadData();
-    }
-
-    private async Task OnPageChanged(int newPage)
-    {
-        PageOptions.CurrentPage = newPage;
-
-        SelectedItems = new List<TType>();
-        EverythingSelected = false;
-        await OnSelectionChanged.InvokeAsync(SelectedItems);
-        await ReloadData();
-    }
-
     private void OnSelectAll(bool selectAll)
     {
-        SelectedItems = selectAll
-            ? Items.ToList()
-            : new List<TType>();
-
-        if (SelectedItems.Any())
+        if (selectAll)
+            TableState.SelectEverything();
+        else
+            TableState.SelectNothing();
+        
+        if (TableState.SelectedItems.Any())
             EverythingSelected = true;
 
-        OnSelectionChanged.InvokeAsync(SelectedItems);
+        OnSelectionChanged.InvokeAsync(TableState.SelectedItems);
     }
 
     private void OnItemSelected(TType item)
     {
-        if (SelectedItems.Contains(item))
-            SelectedItems.Remove(item);
+        if (TableState.SelectedItems.Contains(item))
+            TableState.Select(item);
         else
-            SelectedItems.Add(item);
+            TableState.Deselect(item);
 
-        OnSelectionChanged.InvokeAsync(SelectedItems);
+        OnSelectionChanged.InvokeAsync(TableState.SelectedItems);
     }
 
     public Task AddSimpleFilter(Filter<TType> filter)
@@ -298,25 +260,9 @@
         Loading = true;
         StateHasChanged();
 
-        SimpleGridDataSource.SortOptions = SortOptions;
-        SimpleGridDataSource.PageOptions = PageOptions;
-        SimpleGridDataSource.SearchOptions = SearchOptions;
-
-        SimpleGridDataSource.Filters = SimpleFilters
-            .Where(x => x.FilterActive);
-
-        Items = await SimpleGridDataSource.Items();
+        await SimpleGridDataSource.LoadItems(ref TableState);
 
         Loading = false;
         StateHasChanged();
-    }
-
-    private async Task SearchTable(string query)
-    {
-        if (SearchOptions.Query == query)
-            return;
-
-        SearchOptions.Query = query;
-        await ReloadData();
     }
 }

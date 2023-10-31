@@ -7,6 +7,8 @@
 
 @implements IDisposable
 
+@typeparam TType
+
 @inject SimpleDataGridConfiguration Configuration
 
 <div class="sdg-search">
@@ -19,9 +21,9 @@
 </div>
 
 @code {
-
-    [Parameter]
-    public EventCallback<string> OnSearch { get; set; }
+    
+    [CascadingParameter]
+    public SimpleGrid<TType> SimpleGrid { get; set; }
 
     private string Query { get; set; } = string.Empty;
     private Timer Timer = default!;
@@ -43,7 +45,11 @@
 
     private async void Search(object sender, ElapsedEventArgs e)
     {
-        await InvokeAsync(async () => await OnSearch.InvokeAsync(Query));
+        await InvokeAsync(async () =>
+        {
+            SimpleGrid.TableState.UpdateSearchQuery(Query);
+            await SimpleGrid.ReloadData();
+        });
     }
 
     public void Dispose()

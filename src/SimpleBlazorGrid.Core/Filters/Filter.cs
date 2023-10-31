@@ -107,8 +107,7 @@ public abstract class Filter<T> : ComponentBase
         FilterActive = true;
         ShowFilter(false);
 
-        // Reset to first page when applying / removing a filter
-        SimpleGrid.PageOptions.CurrentPage = 0;
+        SimpleGrid.TableState.AddFilter(this);
         await SimpleGrid.ReloadData();
     }
 
@@ -117,8 +116,7 @@ public abstract class Filter<T> : ComponentBase
         FilterActive = false;
         ShowFilter(false);
 
-        // Reset to first page when applying / removing a filter
-        SimpleGrid.PageOptions.CurrentPage = 0;
+        SimpleGrid.TableState.RemoveFilter(this);        
         await SimpleGrid.ReloadData();
     }
 }
