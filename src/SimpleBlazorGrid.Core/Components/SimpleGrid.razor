@@ -230,7 +230,7 @@
         Loading = true;
         StateHasChanged();
 
-        await SimpleGridDataSource.LoadItems(ref TableState);
+        TableState = await SimpleGridDataSource.LoadItems(TableState);
 
         Loading = false;
         StateHasChanged();

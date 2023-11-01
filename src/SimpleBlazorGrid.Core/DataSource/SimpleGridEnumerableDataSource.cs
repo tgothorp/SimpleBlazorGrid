@@ -22,7 +22,7 @@ namespace SimpleBlazorGrid.DataSource
             FilterExpressionBuilder = new EnumerableFilterExpressionBuilder();
         }
 
-        public Task LoadItems(ref TableState<T> tableState, CancellationToken cancellationToken = default)
+        public Task<TableState<T>> LoadItems(TableState<T> tableState, CancellationToken cancellationToken = default)
         {
             var items = Source;
 
@@ -35,7 +35,7 @@ namespace SimpleBlazorGrid.DataSource
 
             tableState.SetItems(array, totalItemCount);
 
-            return Task.CompletedTask;
+            return Task.FromResult(tableState);
         }
 
         private IEnumerable<T> ApplyFiltering(List<Filter<T>> activeFilters, IEnumerable<T> items)

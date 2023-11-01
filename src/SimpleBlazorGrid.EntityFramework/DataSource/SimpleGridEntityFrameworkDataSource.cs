@@ -23,7 +23,7 @@ namespace SimpleBlazorGrid.DataSource
             FilterExpressionBuilder = new EntityFrameworkFilterExpressionBuilder();
         }
 
-        public Task LoadItems(ref TableState<T> tableState, CancellationToken cancellationToken = default)
+        public async Task<TableState<T>> LoadItems(TableState<T> tableState, CancellationToken cancellationToken = default)
         {
             var query = _queryable;
 
@@ -45,13 +45,10 @@ namespace SimpleBlazorGrid.DataSource
             query = ApplySort(tableState.SortProperty, tableState.SortAscending, query);
 
             // Page
-            var result = LoadAsync(tableState.CurrentPage, tableState.ItemsPerPage, query, cancellationToken)
-                .GetAwaiter()
-                .GetResult();
+            var result = await LoadAsync(tableState.CurrentPage, tableState.ItemsPerPage, query, cancellationToken);
             
             tableState.SetItems(result.Items, result.TotalItemCount);
-
-            return Task.CompletedTask;
+            return tableState;
         }
 
         private IQueryable<T> ApplySearch(string searchQuery, HashSet<string> searchColumns, IQueryable<T> query)

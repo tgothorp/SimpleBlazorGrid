@@ -5,6 +5,6 @@ namespace SimpleBlazorGrid.DataSource
 {
     public interface ISimpleGridDataSource<T>
     {
-        public Task LoadItems(ref TableState<T> tableState, CancellationToken cancellationToken = default);
+        public Task<TableState<T>> LoadItems(TableState<T> tableState, CancellationToken cancellationToken = default);
     }
 }
