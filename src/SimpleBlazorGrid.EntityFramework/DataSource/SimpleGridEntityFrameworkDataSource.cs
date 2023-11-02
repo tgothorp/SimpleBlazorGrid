@@ -15,12 +15,21 @@ namespace SimpleBlazorGrid.DataSource
     public class SimpleGridEntityFrameworkDataSource<T> : ISimpleGridDataSource<T> where T : class
     {
         private IQueryable<T> _queryable;
+        private readonly Expression<Func<T, object>> _primaryKey;
+        private readonly DbContext _context;
         private EntityFrameworkFilterExpressionBuilder FilterExpressionBuilder { get; }
 
         public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable)
         {
             _queryable = queryable;
             FilterExpressionBuilder = new EntityFrameworkFilterExpressionBuilder();
+        }
+
+        public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable, Expression<Func<T, object>> primaryKey, DbContext context)
+        {
+            _queryable = queryable;
+            _primaryKey = primaryKey;
+            _context = context;
         }
 
         public async Task<TableState<T>> LoadItems(TableState<T> tableState, CancellationToken cancellationToken = default)
@@ -48,6 +57,32 @@ namespace SimpleBlazorGrid.DataSource
             var result = await LoadAsync(tableState.CurrentPage, tableState.ItemsPerPage, query, cancellationToken);
             
             tableState.SetItems(result.Items, result.TotalItemCount);
+            return tableState;
+        }
+
+        public async Task<TableState<T>> UpdateItem(TableState<T> tableState, T item, CancellationToken cancellationToken = default)
+        {
+            // Load item from the database
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var primaryKeyValue = Expression.Constant(_primaryKey.Compile().Invoke(item));
+            var propertyAccess = ExpressionHelper.PropertyAccess<T>(ExpressionHelper.GetPropertyName(_primaryKey), parameter);
+            
+            var equals = Expression.Equal(propertyAccess, primaryKeyValue);
+            var equalsFunc = Expression.Lambda<Func<T, bool>>(equals, parameter);
+
+            var itemFromDatabase = await _queryable.Where(equalsFunc).SingleOrDefaultAsync(cancellationToken);
+            if (itemFromDatabase is not null)
+            {
+                _context.Entry(itemFromDatabase);
+
+                foreach (var editAction in tableState.ItemPropertiesToEdit)
+                {
+                    editAction.Apply(ref itemFromDatabase);
+                }
+                
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+
             return tableState;
         }
 

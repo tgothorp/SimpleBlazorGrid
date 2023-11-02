@@ -3,6 +3,7 @@
 
 @using SimpleBlazorGrid.Configuration
 @using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Editing
 @using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Helpers
@@ -76,7 +77,8 @@
                             {
                                 @foreach (var item in TableState.Items)
                                 {
-                                    <_DataGridRow TType="TType" Data="item"/>
+                                    @* <_DataGridRow TType="TType" Data="item"/> *@
+                                    <_DataGridEditableRow TType="TType" Data="item"  />
                                 }
                             }
                             else
@@ -234,5 +236,10 @@
 
         Loading = false;
         StateHasChanged();
+    }
+
+    internal async Task UpdateRow(TType data)
+    {
+        TableState = await SimpleGridDataSource.UpdateItem(TableState, data);
     }
 }

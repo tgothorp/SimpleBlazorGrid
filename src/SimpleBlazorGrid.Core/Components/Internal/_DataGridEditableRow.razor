@@ -1,0 +1,127 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@using SimpleBlazorGrid.Editing
+@using SimpleBlazorGrid.Formatting
+
+@inject SimpleDataGridFormatter SimpleDataGridFormatter
+
+@typeparam TType
+
+<tr class="@(SimpleGrid.TableState.IsSelected(Data) ? "sdg-selectable-selected" : "")">
+
+    @if (SimpleGrid.Selectable)
+    {
+        <td class="sdg-selectable">
+            @if (SimpleGrid.TableState.IsSelected(Data))
+            {
+                <input type="checkbox" checked="checked" @onclick="ItemSelected"/>
+            }
+            else
+            {
+                <input type="checkbox" @onclick="ItemSelected"/>
+            }
+        </td>
+    }
+
+    @foreach (var column in SimpleGrid.DataGridColumns)
+    {
+        <td class="@(column.Hidden ? "hidden" : "")">
+            @if (column.SimpleColumnTemplate is not null)
+            {
+                @column.SimpleColumnTemplate(Data)
+            }
+            else if (RowIsBeingEdited && column.Editable)
+            {
+                <input value="@GetRowDataForColumn(column)" @oninput="(e) => DataEdited(column, e)"/>
+            }
+            else
+            {
+                @GetRowDataForColumn(column)
+            }
+        </td>
+    }
+
+    <td>
+        @if (RowIsBeingEdited)
+        {
+            <button @onclick="@(SaveRow)">Save</button>
+        }
+        else
+        {
+            <button @onclick="@(EditRow)">Edit</button>
+        }
+    </td>
+</tr>
+
+@code {
+
+    [CascadingParameter]
+    public SimpleGrid<TType> SimpleGrid { get; set; }
+
+    [Parameter]
+    public TType Data { get; set; }
+
+    private bool RowIsBeingEdited { get; set; }
+    private Dictionary<string, EditAction<TType>> _editActions = new();
+
+    private string GetRowDataForColumn(SimpleColumn<TType> column)
+    {
+        try
+        {
+            var obj = column.For.Compile().Invoke(Data);
+            return SimpleDataGridFormatter.FormatProperty(obj, column.Format);
+        }
+        catch (NullReferenceException)
+        {
+            return "null";
+        }
+    }
+
+    private void ItemSelected()
+    {
+        if (SimpleGrid.TableState.SelectedItems.Contains(Data))
+        {
+            SimpleGrid.TableState.Deselect(Data);
+        }
+        else
+        {
+            SimpleGrid.TableState.Select(Data);
+        }
+
+        SimpleGrid.OnSelectionChanged.InvokeAsync(SimpleGrid.TableState.SelectedItems);
+        StateHasChanged();
+    }
+
+    private void DataEdited(SimpleColumn<TType> column, ChangeEventArgs e)
+    {
+        var editAction = new EditAction<TType>
+        {
+            Property = column.For,
+            NewValue = e.Value
+        };
+
+        if (!_editActions.ContainsKey(column.Heading))
+        {
+            _editActions.Add(column.Heading, editAction);
+        }
+        else
+        {
+            _editActions[column.Heading] = editAction;
+        }
+    }
+
+    private void EditRow()
+    {
+        _editActions = new Dictionary<string, EditAction<TType>>();
+        RowIsBeingEdited = !RowIsBeingEdited;
+    }
+    
+    private async Task SaveRow()
+    {
+        SimpleGrid.TableState.UpdateEditActions(_editActions.Select(x => x.Value).ToList());
+        await SimpleGrid.UpdateRow(Data);
+
+        RowIsBeingEdited = false;
+    }
+}
