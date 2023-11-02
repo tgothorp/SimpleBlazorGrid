@@ -101,7 +101,7 @@
             NewValue = e.Value
         };
 
-        if (_editActions.ContainsKey(column.Heading))
+        if (!_editActions.ContainsKey(column.Heading))
         {
             _editActions.Add(column.Heading, editAction);
         }
@@ -117,7 +117,11 @@
         RowIsBeingEdited = !RowIsBeingEdited;
     }
     
-    private void SaveRow()
+    private async Task SaveRow()
     {
+        SimpleGrid.TableState.UpdateEditActions(_editActions.Select(x => x.Value).ToList());
+        await SimpleGrid.UpdateRow(Data);
+
+        RowIsBeingEdited = false;
     }
 }

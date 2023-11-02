@@ -8,12 +8,12 @@
             Title="Orders"
             Selectable="true"
             Searchable="true"
-            SimpleGridDataSource="@(new SimpleGridEntityFrameworkDataSource<Order>(Context.Orders.Include(x => x.Customer).AsQueryable()))">
+            SimpleGridDataSource="new SimpleGridEntityFrameworkDataSource<Order>(Context.Orders.Include(x => x.Customer).AsQueryable(), x => x.OrderId, Context)">
     <Columns>
         <SimpleColumn TType="Order" For="@(x => x.OrderId)"/>
         <SimpleColumn TType="Order" For="@(x => x.CustomerId)"/>
         <SimpleColumn TType="Order" For="@(x => x.Customer.CompanyName)" Sortable="@true" Heading="Company" Searchable="true"/>
-        <SimpleColumn TType="Order" For="@(x => x.Customer.ContactName)" Sortable="@true" Heading="Contact" Searchable="true"/>
+        <SimpleColumn TType="Order" For="@(x => x.Customer.ContactName)" Sortable="@true" Heading="Contact" Searchable="true" Editable="true"/>
     </Columns>
 </SimpleGrid>
 

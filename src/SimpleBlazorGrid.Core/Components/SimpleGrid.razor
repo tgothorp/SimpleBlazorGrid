@@ -77,7 +77,8 @@
                             {
                                 @foreach (var item in TableState.Items)
                                 {
-                                    <_DataGridRow TType="TType" Data="item"/>
+                                    @* <_DataGridRow TType="TType" Data="item"/> *@
+                                    <_DataGridEditableRow TType="TType" Data="item"  />
                                 }
                             }
                             else
@@ -237,8 +238,8 @@
         StateHasChanged();
     }
 
-    internal void UpdateRow(TType data, IEnumerable<EditAction<TType>> edits)
+    internal async Task UpdateRow(TType data)
     {
-        
+        TableState = await SimpleGridDataSource.UpdateItem(TableState, data);
     }
 }

@@ -6,12 +6,11 @@
 <SimpleGrid TType="Customer"
             Title="Customers"
             Selectable="@true"
-            SimpleGridDataSource="@(new SimpleGridEntityFrameworkDataSource<Customer>(Context.Customers.AsQueryable()))">
-    <Filters>
-        @* <SimpleFilter TType="Customer" Property="@nameof(Customer.CustomerId)"/> *@
-    </Filters>
+            SimpleGridDataSource="new SimpleGridEntityFrameworkDataSource<Customer>(Context.Customers.AsQueryable(), x=> x.CustomerId, Context)">
     <Columns>
         <SimpleColumn TType="Customer" For="@(x => x.CustomerId)" Sortable="true" Heading="Id"/>
+        <SimpleColumn TType="Customer" For="@(x => x.CompanyName)" Sortable="true"/>
+        <SimpleColumn TType="Customer" For="@(x => x.ContactName)" Sortable="true" Editable="true"/>
     </Columns>
 </SimpleGrid>
 
