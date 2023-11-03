@@ -9,6 +9,9 @@
             Selectable="true"
             Searchable="true"
             SimpleGridDataSource="new SimpleGridEntityFrameworkDataSource<Order>(Context.Orders.Include(x => x.Customer).AsQueryable(), x => x.OrderId, Context)">
+    <Filters>
+        <SimpleStringFilter TType="Order" For="@(x => x.Customer.CompanyName)" IgnoreCase="false" />
+    </Filters>
     <Columns>
         <SimpleColumn TType="Order" For="@(x => x.OrderId)"/>
         <SimpleColumn TType="Order" For="@(x => x.CustomerId)"/>

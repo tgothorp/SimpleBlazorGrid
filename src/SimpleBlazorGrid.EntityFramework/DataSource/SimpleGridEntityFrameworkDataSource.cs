@@ -22,6 +22,7 @@ namespace SimpleBlazorGrid.DataSource
         public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable)
         {
             _queryable = queryable;
+
             FilterExpressionBuilder = new EntityFrameworkFilterExpressionBuilder();
         }
 
@@ -30,6 +31,8 @@ namespace SimpleBlazorGrid.DataSource
             _queryable = queryable;
             _primaryKey = primaryKey;
             _context = context;
+
+            FilterExpressionBuilder = new EntityFrameworkFilterExpressionBuilder();
         }
 
         public async Task<TableState<T>> LoadItems(TableState<T> tableState, CancellationToken cancellationToken = default)
