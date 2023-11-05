@@ -47,7 +47,7 @@
                 </SimpleColumnTemplate>
             </SimpleColumn>
             <SimpleColumn TType="Product" For="@(x => x.Manufacturer)" Searchable="@true"/>
-            <SimpleColumn TType="Product" For="@(x => x.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true" Editable="true"/>
         </Columns>
     </SimpleGrid>
 </div>

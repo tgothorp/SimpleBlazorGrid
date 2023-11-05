@@ -2,7 +2,9 @@
 @namespace SimpleBlazorGrid.Internal
 
 @using SimpleBlazorGrid.Editing
+@using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Formatting
+@using SimpleBlazorGrid.Helpers
 
 @inject SimpleDataGridFormatter SimpleDataGridFormatter
 
@@ -27,23 +29,25 @@
     @foreach (var column in SimpleGrid.DataGridColumns)
     {
         <td class="@(column.Hidden ? "hidden" : "")">
-            @if (column.SimpleColumnTemplate is not null)
+
+            @if (_rowIsBeingEdited && column.Editable)
+            {
+                <_DataGridEditableRowInput TType="TType" Column="column" RowData="Data" InputEdited="ItemEdited"/>
+            }
+            else if (column.SimpleColumnTemplate is not null)
             {
                 @column.SimpleColumnTemplate(Data)
-            }
-            else if (RowIsBeingEdited && column.Editable)
-            {
-                <input value="@GetRowDataForColumn(column)" @oninput="(e) => DataEdited(column, e)"/>
             }
             else
             {
                 @GetRowDataForColumn(column)
             }
+
         </td>
     }
 
     <td>
-        @if (RowIsBeingEdited)
+        @if (_rowIsBeingEdited)
         {
             <button @onclick="@(SaveRow)">Save</button>
         }
@@ -62,7 +66,7 @@
     [Parameter]
     public TType Data { get; set; }
 
-    private bool RowIsBeingEdited { get; set; }
+    private bool _rowIsBeingEdited = false;
     private Dictionary<string, EditAction<TType>> _editActions = new();
 
     private string GetRowDataForColumn(SimpleColumn<TType> column)
@@ -93,35 +97,23 @@
         StateHasChanged();
     }
 
-    private void DataEdited(SimpleColumn<TType> column, ChangeEventArgs e)
+    private void ItemEdited(EditAction<TType> editAction)
     {
-        var editAction = new EditAction<TType>
-        {
-            Property = column.For,
-            NewValue = e.Value
-        };
-
-        if (!_editActions.ContainsKey(column.Heading))
-        {
-            _editActions.Add(column.Heading, editAction);
-        }
-        else
-        {
-            _editActions[column.Heading] = editAction;
-        }
+        _editActions[editAction.Column.Heading] = editAction;
     }
 
     private void EditRow()
     {
         _editActions = new Dictionary<string, EditAction<TType>>();
-        RowIsBeingEdited = !RowIsBeingEdited;
+        _rowIsBeingEdited = !_rowIsBeingEdited;
     }
-    
+
     private async Task SaveRow()
     {
         SimpleGrid.TableState.UpdateEditActions(_editActions.Select(x => x.Value).ToList());
         await SimpleGrid.UpdateRow(Data);
 
-        RowIsBeingEdited = false;
+        _rowIsBeingEdited = false;
     }
+
 }

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Linq.Expressions;
 using SimpleBlazorGrid.Extensions;
+using SimpleBlazorGrid.Helpers;
 
 namespace SimpleBlazorGrid.Editing;
 
 public class EditAction<T>
 {
-    public Expression<Func<T, object>> Property { get; set; }
+    public SimpleColumn<T> Column { get; set; }
     public object NewValue { get; set; }
 
     public void Apply(ref T instance)
     {
-        Property.GetPropertyInfo().SetValue(instance, NewValue);
+        var propertyInfo = ExpressionHelper.GetPropertyInfo(Column.For);
+        propertyInfo.SetValue(instance, NewValue);
     }
 }

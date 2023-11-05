@@ -1,0 +1,142 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@using SimpleBlazorGrid.Extensions
+@using SimpleBlazorGrid.Editing
+@using SimpleBlazorGrid.Formatting
+@using SimpleBlazorGrid.Helpers
+
+@inject SimpleDataGridFormatter SimpleDataGridFormatter
+
+@typeparam TType
+
+@if (_isCheckbox)
+{
+    if (_data is true)
+    {
+        <input type="checkbox" checked="checked" @onclick="RowDataEditedBool" />
+    }
+    else
+    {
+        <input type="checkbox" @onclick="RowDataEditedBool" />
+    }
+}
+else if (_isEnum)
+{
+    
+}
+else
+{
+    <input @attributes="@_attributes" @oninput="RowDataEdited" />
+}
+
+@code {
+
+    [Parameter]
+    public TType RowData { get; set; }
+
+    [Parameter]
+    public SimpleColumn<TType> Column { get; set; }
+
+    [Parameter]
+    public EventCallback<EditAction<TType>> InputEdited { get; set; }
+
+    private Type _columnType = null;
+    private object _data = null;
+    private Dictionary<string, object> _attributes = new();
+    private bool _isCheckbox = false;
+    private bool _isEnum = false;
+
+    protected override void OnParametersSet()
+    {
+        var type = ExpressionHelper.GetPropertyInfo(Column.For).PropertyType;
+        _columnType = Nullable.GetUnderlyingType(type) ?? type;
+
+        try
+        {
+            _data = Column.For.Compile().Invoke(RowData);
+        }
+        catch (NullReferenceException)
+        {
+            _data = "null";
+        }
+
+        if (_columnType == typeof(bool))
+        {
+            _isCheckbox = true;
+        }
+        else if (_columnType.IsEnum)
+        {
+            _isEnum = true;
+        }
+        else
+        {
+            _attributes = BuildInputAttributes(_columnType);
+        }
+
+        base.OnParametersSet();
+    }
+
+    private Dictionary<string, object> BuildInputAttributes(Type propertyType)
+    {
+        var result = new Dictionary<string, object> { { "value", SimpleDataGridFormatter.FormatProperty(_data, Column.Format) } };
+
+        var propertyTypeCode = Type.GetTypeCode(propertyType);
+        switch (propertyTypeCode)
+        {
+            case TypeCode.Int16:
+            case TypeCode.UInt16:
+            case TypeCode.Int32:
+            case TypeCode.UInt32:
+            case TypeCode.Int64:
+            case TypeCode.UInt64:
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
+            case TypeCode.Single:
+            case TypeCode.Double:
+            case TypeCode.Decimal:
+                result.Add("type", "number");
+                break;
+            case TypeCode.DateTime:
+                result["value"] = _data switch
+                {
+                    DateTime dateTime => $"{dateTime:yyyy-MM-dd}T{dateTime:hh:mm}",
+                    DateOnly dateOnly => $"{dateOnly:yyyy-MM-dd}T{dateOnly:hh:mm}",
+                    _ => result["value"]
+                };
+
+                result.Add("type", propertyType == typeof(DateOnly) ? "date" : "datetime-local");
+                break;
+            case TypeCode.Char:
+            case TypeCode.String:
+                result.Add("type", "text");
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return result;
+    }
+
+    private async void RowDataEdited(ChangeEventArgs e)
+    {
+        var action = new EditAction<TType>
+        {
+            Column = Column,
+            NewValue = CastObject(e.Value)
+        };
+
+        await InputEdited.InvokeAsync(action);
+    }
+
+    private void RowDataEditedBool(MouseEventArgs obj)
+    {
+        throw new NotImplementedException();
+    }
+
+    private object CastObject(object value)
+    {
+        throw new NotImplementedException();
+    }
+}
