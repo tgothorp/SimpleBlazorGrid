@@ -124,18 +124,13 @@ else
         var action = new EditAction<TType>
         {
             Column = Column,
-            NewValue = CastObject(e.Value)
+            NewValue = Convert.ChangeType(e.Value, _columnType)
         };
 
         await InputEdited.InvokeAsync(action);
     }
 
     private void RowDataEditedBool(MouseEventArgs obj)
-    {
-        throw new NotImplementedException();
-    }
-
-    private object CastObject(object value)
     {
         throw new NotImplementedException();
     }
