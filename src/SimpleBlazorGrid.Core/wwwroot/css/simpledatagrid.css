@@ -86,6 +86,18 @@ table.sdg-table th.sdg-selectable input[type=checkbox]:hover {
   width: 50px;
 }
 
+.sdg-editable {
+  width: 75px;
+  text-align: center !important;
+}
+
+td.sdg-editable:hover {
+  cursor: pointer;
+}
+td.sdg-editable:hover svg {
+  fill: var(--secondary-colour);
+}
+
 div.sdg-table-heading {
   display: flex;
   align-items: flex-end;

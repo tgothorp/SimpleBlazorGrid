@@ -105,6 +105,19 @@ table.sdg-table {
   width: 50px;
 }
 
+.sdg-editable {
+  width: 75px;
+  text-align: center !important;
+}
+
+td.sdg-editable:hover {
+  cursor: pointer;
+  
+  svg {
+    fill: var(--secondary-colour);
+  }
+}
+
 div.sdg-table-heading {
   display: flex;
   align-items: flex-end;

@@ -102,7 +102,7 @@ else
                 result["value"] = _data switch
                 {
                     DateTime dateTime => $"{dateTime:yyyy-MM-dd}T{dateTime:hh:mm}",
-                    DateOnly dateOnly => $"{dateOnly:yyyy-MM-dd}T{dateOnly:hh:mm}",
+                    DateOnly dateOnly => $"{dateOnly:yyyy-MM-dd}",
                     _ => result["value"]
                 };
 

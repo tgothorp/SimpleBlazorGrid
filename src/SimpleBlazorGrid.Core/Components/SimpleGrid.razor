@@ -54,6 +54,13 @@
                         }
                         
                         @Columns
+                        
+                        @if (Editable)
+                        {
+                            <th class="sdg-editable">
+                                <span>Edit</span>
+                            </th>
+                        }
 
                     </tr>
                     </thead>
@@ -157,6 +164,15 @@
     /// </remarks>
     [Parameter]
     public bool Searchable { get; set; }
+
+    /// <summary>
+    /// Enables editing controls that allow for editing of data in the table
+    /// </summary>
+    /// <remarks>
+    /// Individual columns will still need to be marked as editable, see the documentation for more info 
+    /// </remarks>
+    [Parameter]
+    public bool Editable { get; set; }
 
     /// <summary>
     /// Callback fired whenever a new row is selected or deselected, will contain a list of all selected rows 

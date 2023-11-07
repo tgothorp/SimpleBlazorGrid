@@ -6,8 +6,7 @@
 
 <SimpleGrid TType="Order"
             Title="Orders"
-            Selectable="true"
-            Searchable="true"
+            Editable="true"
             SimpleGridDataSource="new SimpleGridEntityFrameworkDataSource<Order>(Context.Orders.Include(x => x.Customer).AsQueryable(), x => x.OrderId, Context)">
     <Filters>
         <SimpleStringFilter TType="Order" For="@(x => x.Customer.CompanyName)" IgnoreCase="false" />
@@ -15,8 +14,8 @@
     <Columns>
         <SimpleColumn TType="Order" For="@(x => x.OrderId)"/>
         <SimpleColumn TType="Order" For="@(x => x.CustomerId)"/>
-        <SimpleColumn TType="Order" For="@(x => x.Customer.CompanyName)" Sortable="@true" Heading="Company" Searchable="true"/>
-        <SimpleColumn TType="Order" For="@(x => x.Customer.ContactName)" Sortable="@true" Heading="Contact" Searchable="true" Editable="true"/>
+        <SimpleColumn TType="Order" For="@(x => x.OrderDate)" Editable="true" />
+        <SimpleColumn TType="Order" For="@(x=> x.Freight)" Editable="true"/>
     </Columns>
 </SimpleGrid>
 
