@@ -24,7 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SimpleBlazorGrid.Core.Tests.Common\SimpleBlazorGrid.Core.Tests.Common.csproj" />
       <ProjectReference Include="..\SimpleBlazorGrid.Core\SimpleBlazorGrid.Core.csproj" />
+
     </ItemGroup>
 
 
