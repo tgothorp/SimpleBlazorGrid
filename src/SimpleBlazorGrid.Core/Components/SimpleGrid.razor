@@ -194,9 +194,19 @@
     protected override async Task OnParametersSetAsync()
     {
         TableState ??= new TableState<TType>(ItemsPerPage);
+        Loading = true;
 
-        await ReloadData();
         await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ReloadData();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     public Task AddColumn(SimpleColumn<TType> column)

@@ -19,6 +19,8 @@ namespace SimpleBlazorGrid.DataSource
         private readonly DbContext _context;
         private EntityFrameworkFilterExpressionBuilder FilterExpressionBuilder { get; }
 
+        public event EventHandler<IQueryable<T>> QueryExecuted;
+
         public SimpleGridEntityFrameworkDataSource(IQueryable<T> queryable)
         {
             _queryable = queryable;
@@ -168,10 +170,14 @@ namespace SimpleBlazorGrid.DataSource
         private async Task<(T[] Items, int TotalItemCount)> LoadAsync(int currentPage, int itemsPerPage, IQueryable<T> query, CancellationToken cancellationToken)
         {
             var itemCount = await query.CountAsync(cancellationToken);
+
+            query = query
+                .Skip(currentPage * itemsPerPage)
+                .Take(itemsPerPage);
+            
+            QueryExecuted?.Invoke(this, query);
             
             var items = await query
-                .Skip(currentPage * itemsPerPage)
-                .Take(itemsPerPage)
                 .ToArrayAsync(cancellationToken);
 
             return (items, itemCount);
