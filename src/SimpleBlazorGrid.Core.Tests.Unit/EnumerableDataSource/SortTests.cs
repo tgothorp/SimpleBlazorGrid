@@ -11,7 +11,7 @@ public class SortTests
     {
         await SortByProperty(nameof(TestObject.ByteProperty), x => x.ByteProperty, true);
         await SortByProperty(nameof(TestObject.ByteProperty), x => x.ByteProperty, false);
-        await SortByProperty(nameof(TestObject.NullableByteProperty), x => x.NullableByteProperty, true);
+        await SortByProperty(nameof(TestObject.NullableByteProperty), x => x.NullableByteProperty!, true);
         await SortByProperty(nameof(TestObject.NullableByteProperty), x => x.NullableByteProperty, false);
     }
     
