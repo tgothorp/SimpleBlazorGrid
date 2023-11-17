@@ -1,0 +1,30 @@
+@using SimpleBlazorGrid.Core.Tests.Common.Dto
+@using SimpleBlazorGrid.Configuration
+@using SimpleBlazorGrid.DataSource
+
+@inherits TestContext
+
+@code {
+
+    protected SimpleGrid<TestObject> SimpleGrid { get; private set; } = null!;
+
+    protected List<TestObject> Data { get; set; } = null!;
+
+    protected void Setup()
+    {
+        SetupServices();
+        
+        Data = TestObjectFactory.CreateMany();
+
+        var dataSource = new SimpleGridEnumerableDataSource<TestObject>(Data);
+
+        SimpleGrid = RenderComponent<SimpleGrid<TestObject>>(parameters => parameters
+            .Add(x => x.SimpleGridDataSource, dataSource))
+            .Instance;
+    }
+
+    private void SetupServices()
+    {
+        Services.AddSingleton<SimpleDataGridConfiguration>(new DefaultConfiguration());
+    }
+}

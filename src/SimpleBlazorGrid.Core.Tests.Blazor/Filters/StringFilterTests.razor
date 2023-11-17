@@ -1,0 +1,73 @@
+@using SimpleBlazorGrid.Core.Tests.Common.Dto
+@using Shouldly
+@using SimpleBlazorGrid.Exceptions
+@using System.Linq.Expressions
+@using AngleSharp.Html.Dom
+@using SimpleBlazorGrid.Core.Tests.Blazor.Extensions
+
+@inherits SimpleBlazorGridTestContext
+
+@code {
+
+    [Fact]
+    public void StringFilter_NoDefaultValueProvided_RendersCorrectly()
+    {
+        // Arrange
+        Setup();
+        
+        // Act
+        var renderedComponent = RenderComponent<SimpleStringFilter<TestObject>>(parameters => parameters
+            .Add(x => x.For, o => o.StringProperty)
+            .Add(x => x.SimpleGrid, SimpleGrid));
+        
+        renderedComponent.Instance.ShowFilter(true);
+        renderedComponent.Render();
+        
+        // Assert
+        renderedComponent.Instance.Value.ShouldBeNull();
+        renderedComponent.Instance.DefaultValue.ShouldBeNull();
+        renderedComponent.Instance.Exact.ShouldBeTrue();
+        renderedComponent.Instance.PropertyName.ShouldBe("StringProperty");
+
+        var allNodes = renderedComponent.FetchAllChildNodesRecursively();
+        var inputElement = allNodes.SingleOrDefault(x => x is IHtmlInputElement);
+        inputElement.ShouldNotBeNull();
+        
+        var inputElementCast = (IHtmlInputElement)inputElement;
+        inputElementCast.Type.ShouldBe("text");
+        inputElementCast.Placeholder.ShouldBe("StringProperty");
+        inputElementCast.Value.ShouldBeNullOrEmpty();
+    }
+
+    [Theory]
+    [ClassData(typeof(StringFilterTestsData.StringFilterPropertyIsStringData))]
+    public void StringFilter_ProvidedPropertyIsNotAString_ThrowsFilterException(Expression<Func<TestObject, object>> @for, bool shouldThrow)
+    {
+        // Arrange
+        Setup();
+
+        // Act + Assert
+        if (shouldThrow)
+        {
+            var exception = Should.Throw<SimpleGridFilterException<TestObject>>(() =>
+            {
+                RenderComponent<SimpleStringFilter<TestObject>>(parameters => parameters
+                    .Add(x => x.For, @for)
+                    .Add(x => x.SimpleGrid, SimpleGrid));
+            });
+
+            exception.Message.ShouldStartWith("Cannot apply string filter to property");
+            exception.Message.ShouldEndWith("as is not a string!");
+        }
+        else
+        {
+            Should.NotThrow(() =>
+            {
+                RenderComponent<SimpleStringFilter<TestObject>>(parameters => parameters
+                    .Add(x => x.For, @for)
+                    .Add(x => x.SimpleGrid, SimpleGrid));
+            });
+        }
+    }
+
+}

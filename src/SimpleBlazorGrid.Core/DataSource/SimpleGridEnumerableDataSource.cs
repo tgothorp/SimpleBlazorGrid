@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using SimpleBlazorGrid.Exceptions;
 using SimpleBlazorGrid.Extensions;
 using SimpleBlazorGrid.Filters;
 using SimpleBlazorGrid.Helpers;
@@ -81,6 +82,9 @@ namespace SimpleBlazorGrid.DataSource
             foreach (var column in searchColumns)
             {
                 var property = ExpressionHelper.PropertyAccess<T>(column, parameter);
+                if (property.Type != typeof(string))
+                    throw new SimpleGridException($"Cannot apply search to property {property} as the target property is not a string!");
+
                 var propertyIsNotNull = Expression.NotEqual(property, Expression.Constant(null));
 
                 var contains = Expression.Condition(
