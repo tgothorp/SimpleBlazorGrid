@@ -182,6 +182,12 @@
     [Parameter]
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
 
+    /// <summary>
+    /// Callback fired whenever an individual item is editied 
+    /// </summary>
+    [Parameter]
+    public EventCallback<TType> OnItemEdited { get; set; }
+
     internal TableState<TType> TableState;
     internal List<SimpleColumn<TType>> DataGridColumns { get; set; } = new();
     internal List<Filter<TType>> SimpleFilters { get; set; } = new();
@@ -264,6 +270,7 @@
     internal async Task UpdateRow(TType data)
     {
         TableState = await SimpleGridDataSource.UpdateItem(TableState, data);
+        await OnItemEdited.InvokeAsync(data);
     }
 
 }

@@ -14,11 +14,11 @@
 {
     if (_data is true)
     {
-        <input type="checkbox" checked="checked" @onclick="RowDataEditedBool" />
+        <input type="checkbox" checked="checked" @onclick="@(() => RowDataEditedBool(false))" />
     }
     else
     {
-        <input type="checkbox" @onclick="RowDataEditedBool" />
+        <input type="checkbox" @onclick="@(() => RowDataEditedBool(true))" />
     }
 }
 else if (_isEnum)
@@ -152,8 +152,11 @@ else
         await DataEdited.InvokeAsync(new ValueTuple<string, EditAction<TType>>(Column.Heading, action));
     }
 
-    private void RowDataEditedBool(MouseEventArgs obj)
+    private async void RowDataEditedBool(bool value)
     {
-        throw new NotImplementedException();
+        _data = value;
+
+        var action = new EditAction<TType>(Column.For, value);
+        await DataEdited.InvokeAsync(new ValueTuple<string, EditAction<TType>>(Column.Heading, action));
     }
 }

@@ -3,6 +3,7 @@ namespace SimpleBlazorGrid.Sandbox.Data;
 public class Product
 {
     public long Id { get; protected set; }
+    public bool InStock { get; protected set; }
     public string? Name { get; protected set; }
     public string? Code { get; protected set; }
     public int InStockCount { get; protected set; }

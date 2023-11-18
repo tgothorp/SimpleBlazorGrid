@@ -26,6 +26,7 @@
         </Filters>
         <Columns>
             <SimpleColumn TType="Product" For="@(x => x.Id)" Width="10"/>
+            <SimpleColumn TType="Product" For="@(x => x.InStock)" Editable="true" Heading="Available"/>
             <SimpleColumn TType="Product" For="@(x => x.Name)" Sortable="@true" Heading="Name" Searchable="true" Editable="true"/>
             <SimpleColumn TType="Product" For="@(x => x.CostInGbp)" Heading="Price (GBP)" Format="Format.Money" Sortable="true"/>
             <SimpleColumn TType="Product" For="@(x => x.LocalCurrency)" Heading="Local Currency"/>
