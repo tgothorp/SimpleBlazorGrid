@@ -72,6 +72,19 @@
     private bool _rowIsBeingEdited = false;
     private Dictionary<string, EditAction<TType>> _editActions = new();
 
+    protected override void OnParametersSet()
+    {
+        SimpleGrid.TableState.DiscardActiveEdits += DiscardActiveEdits;
+
+        base.OnParametersSet();
+    }
+
+    private void DiscardActiveEdits(object sender, EventArgs e)
+    {
+        _rowIsBeingEdited = false;
+        _editActions = new();
+    }
+
     private string GetRowDataForColumn(SimpleColumn<TType> column)
     {
         try

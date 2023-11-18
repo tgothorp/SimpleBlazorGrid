@@ -36,9 +36,12 @@ public class TableState<T>
     
     // Editing
     public List<EditAction<T>> ItemPropertiesToEdit { get; protected set; } = new();
+    public EventHandler DiscardActiveEdits { get; internal set; }
+    
 
     public void SetItems(T[] items, int totalItemCount)
     {
+        DiscardActiveEdits?.Invoke(this, EventArgs.Empty);
         Items = items;
 
         TotalItemCount = totalItemCount;

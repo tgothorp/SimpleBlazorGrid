@@ -193,7 +193,6 @@
     protected override async Task OnParametersSetAsync()
     {
         TableState ??= new TableState<TType>(ItemsPerPage);
-        Loading = true;
 
         await base.OnParametersSetAsync();
     }
