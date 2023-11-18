@@ -1,0 +1,75 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Website.Pages.Documentation
+
+@inject IJSRuntime Js;
+
+<pre class="code" style="font-size: var(--fs--1); width: 100%">
+<code class="razor">
+&lt;SimpleGrid 
+TType=&quot;EditingData&quot; 
+SimpleGridDataSource=&quot;new SimpleGridEnumerableDataSource&lt;EditingData&gt;(Data)&quot; 
+Editable=&quot;true&quot; 
+OnItemEdited=&quot;ItemEdited&quot;&gt;
+    &lt;Columns&gt;
+        &lt;SimpleColumn TType=&quot;EditingData&quot; For=&quot;@@(x =&gt; x.Id)&quot; Sortable=&quot;true&quot;/&gt;
+        &lt;SimpleColumn TType=&quot;EditingData&quot; For=&quot;@@(x =&gt; x.Name)&quot; Sortable=&quot;true&quot; Editable=&quot;true&quot;/&gt;
+        &lt;SimpleColumn TType=&quot;EditingData&quot; For=&quot;@@(x =&gt; x.Price)&quot; Sortable=&quot;true&quot; Editable=&quot;true&quot;/&gt;
+        &lt;SimpleColumn TType=&quot;EditingData&quot; For=&quot;@@(x =&gt; x.InStock)&quot; Sortable=&quot;true&quot; Editable=&quot;true&quot;/&gt;
+    &lt;/Columns&gt;
+&lt;/SimpleGrid&gt;
+&lt;br/&gt;
+@@if (LatestItemEdited.IsNotNullOrEmpty())
+{
+    &lt;span&gt;Last item edited: @@LatestItemEdited&lt;/span&gt;
+}
+
+@@code {
+    
+    public class EditingData
+    {
+        public EditingData(int id, 
+            string name, 
+            decimal price, 
+            bool inStock)
+        {
+            Id = id;
+            Name = name;
+            Price = price;
+            InStock = inStock;
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public bool InStock { get; set; }
+    }
+
+    private readonly List&lt;EditingData&gt; Data = new()
+    {
+        new EditingData(11311, &quot;USB Drive&quot;, 8.99m, true),
+        new EditingData(11312, &quot;Keyboard&quot;, 30.50m, true),
+        new EditingData(11313, &quot;Mouse&quot;, 20m, true),
+        new EditingData(11316, &quot;Mouse Mat&quot;, 15m, true),
+        new EditingData(11315, &quot;Nvidia GTX 4090&quot;, 899.99m, false),
+    };
+
+    public string LatestItemEdited { get; set; } = null;
+    
+    private void ItemEdited(EditingData obj)
+    {
+        LatestItemEdited = $&quot;Id: {obj.Id}, Name: {obj.Name}, Price: {obj.Price}, In Stock: {obj.InStock.ToString()}&quot;;
+    }
+
+}
+</code>
+</pre>
+
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("highlightSnippet");
+    }
+
+}

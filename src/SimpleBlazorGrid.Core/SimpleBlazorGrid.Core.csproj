@@ -25,6 +25,7 @@
       <None Include="Icon\icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
+
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
       <Exec Command="sass $(ProjectDir)Css\_main.scss:$(ProjectDir)wwwroot\css\simpledatagrid.css" />
     </Target>

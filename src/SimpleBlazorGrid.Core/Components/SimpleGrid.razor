@@ -3,6 +3,8 @@
 
 @using SimpleBlazorGrid.Configuration
 @using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Editing
+@using SimpleBlazorGrid.Exceptions
 @using SimpleBlazorGrid.Extensions
 @using SimpleBlazorGrid.Filters
 @using SimpleBlazorGrid.Helpers
@@ -12,97 +14,102 @@
 
 @typeparam TType
 
-<_DataGridErrorBoundry TType="TType">
-    <CascadingValue Value="this">
 
-            <div>
-                <div class="sdg-table-heading">
-                    @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
-                    {
-                        <div class="sdg-table-title-container">
-                            @if (!string.IsNullOrEmpty(Title))
-                            {
-                                <h1>@Title</h1>
-                            }
-                            @if (!string.IsNullOrEmpty(Subtitle))
-                            {
-                                <p>@Subtitle</p>
-                            }
-                        </div>
-                    }
+<CascadingValue Value="this">
 
-                    @if (Searchable)
-                    {
-                        <_DataGridSearch TType="TType"/>
-                    }
-                </div>
+    <div class="sdg-table-heading">
+        @if (!string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Subtitle))
+        {
+            <div class="sdg-table-title-container">
+                @if (!string.IsNullOrEmpty(Title))
+                {
+                    <h1>@Title</h1>
+                }
+                @if (!string.IsNullOrEmpty(Subtitle))
+                {
+                    <p>@Subtitle</p>
+                }
+            </div>
+        }
 
-                <table class="sdg-table" style="--primary-colour: @Configuration.PrimaryColour; 
+        @if (Searchable)
+        {
+            <_DataGridSearch TType="TType"/>
+        }
+    </div>
+
+    <table class="sdg-table" style="--primary-colour: @Configuration.PrimaryColour; 
             --secondary-colour: @Configuration.SecondaryColour; 
             --glyph-colour: @Configuration.GlyphColour ">
 
-                    @Filters
+        @Filters
 
-                    <thead>
-                    <tr>
-                        @if (Selectable)
-                        {
-                            <th class="sdg-selectable">
-                                <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
-                            </th>
-                        }
-                        
-                        @Columns
+        <thead>
+        <tr>
+            @if (Selectable)
+            {
+                <th class="sdg-selectable">
+                    <input type="checkbox" @onchange="@(e => OnSelectAll((bool)e.Value!))" checked=@EverythingSelected/>
+                </th>
+            }
 
-                    </tr>
-                    </thead>
-                    
-                    @if (DataGridColumns.Any())
+            @Columns
+
+            @if (Editable)
+            {
+                <th class="sdg-editable">
+                    <span>Edit</span>
+                </th>
+            }
+
+        </tr>
+        </thead>
+
+        @if (DataGridColumns.Any())
+        {
+            <tbody>
+            @if (Loading)
+            {
+                <tr>
+                    <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
+                        <div class="sdg-loading">
+                            <h2>Loading</h2>
+                        </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @if (TableState.Items.Any())
+                {
+                    @foreach (var item in TableState.Items)
                     {
-                        <tbody>
-                        @if (Loading)
-                        {
-                            <tr>
-                                <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                    <div class="sdg-loading">
-                                        <h2>Loading</h2>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                        else
-                        {
-                            @if (TableState.Items.Any())
-                            {
-                                @foreach (var item in TableState.Items)
-                                {
-                                    <_DataGridRow TType="TType" Data="item"/>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
-                                        <div class="sdg-no-data">
-                                            <h2>No records!</h2>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
-                                <_DataGridPagingControls TType="TType"/>
-                            </td>
-                        </tr>
-                        </tfoot>
+                        <_DataGridEditableRow TType="TType" Data="item"/>
                     }
-                </table>
-            </div>
-    </CascadingValue>
-</_DataGridErrorBoundry>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="@(DataGridColumns.Count + (Selectable ? 1 : 0))">
+                            <div class="sdg-no-data">
+                                <h2>No records!</h2>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="@(Selectable ? DataGridColumns.Count + 1 : DataGridColumns.Count)">
+                    <_DataGridPagingControls TType="TType"/>
+                </td>
+            </tr>
+            </tfoot>
+        }
+    </table>
+</CascadingValue>
+
 
 @code {
 
@@ -158,6 +165,15 @@
     public bool Searchable { get; set; }
 
     /// <summary>
+    /// Enables editing controls that allow for editing of data in the table
+    /// </summary>
+    /// <remarks>
+    /// Individual columns will still need to be marked as editable, see the documentation for more info 
+    /// </remarks>
+    [Parameter]
+    public bool Editable { get; set; }
+
+    /// <summary>
     /// Callback fired whenever a new row is selected or deselected, will contain a list of all selected rows 
     /// </summary>
     /// <remarks>
@@ -165,6 +181,12 @@
     /// </remarks>
     [Parameter]
     public EventCallback<List<TType>> OnSelectionChanged { get; set; }
+
+    /// <summary>
+    /// Callback fired whenever an individual item is editied 
+    /// </summary>
+    [Parameter]
+    public EventCallback<TType> OnItemEdited { get; set; }
 
     internal TableState<TType> TableState;
     internal List<SimpleColumn<TType>> DataGridColumns { get; set; } = new();
@@ -178,8 +200,17 @@
     {
         TableState ??= new TableState<TType>(ItemsPerPage);
 
-        await ReloadData();
         await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ReloadData();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     public Task AddColumn(SimpleColumn<TType> column)
@@ -188,7 +219,7 @@
 
         if (column.Searchable)
             TableState.AddSearchableColumn(column.PropertyName);
-        
+
         StateHasChanged();
         return Task.CompletedTask;
     }
@@ -199,7 +230,7 @@
             TableState.SelectEverything();
         else
             TableState.SelectNothing();
-        
+
         if (TableState.SelectedItems.Any())
             EverythingSelected = true;
 
@@ -235,4 +266,11 @@
         Loading = false;
         StateHasChanged();
     }
+
+    internal async Task UpdateRow(TType data)
+    {
+        TableState = await SimpleGridDataSource.UpdateItem(TableState, data);
+        await OnItemEdited.InvokeAsync(data);
+    }
+
 }

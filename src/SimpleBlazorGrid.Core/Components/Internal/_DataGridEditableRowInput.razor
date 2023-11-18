@@ -1,0 +1,162 @@
+@* ReSharper disable once CheckNamespace *@
+@namespace SimpleBlazorGrid.Internal
+
+@using SimpleBlazorGrid.Extensions
+@using SimpleBlazorGrid.Editing
+@using SimpleBlazorGrid.Formatting
+@using SimpleBlazorGrid.Helpers
+
+@inject SimpleDataGridFormatter SimpleDataGridFormatter
+
+@typeparam TType
+
+@if (_isCheckbox)
+{
+    if (_data is true)
+    {
+        <input type="checkbox" checked="checked" @onclick="@(() => RowDataEditedBool(false))" />
+    }
+    else
+    {
+        <input type="checkbox" @onclick="@(() => RowDataEditedBool(true))" />
+    }
+}
+else if (_isEnum)
+{
+    
+}
+else
+{
+    <input class="sdg-editing" @attributes="@_attributes" @oninput="RowDataEdited" />
+}
+
+@code {
+
+    [Parameter]
+    public TType RowData { get; set; }
+
+    [Parameter]
+    public SimpleColumn<TType> Column { get; set; }
+
+    [Parameter]
+    public EventCallback<(string Column, EditAction<TType>)> DataEdited { get; set; }
+
+    private Type _columnType = null;
+    private object _data = null;
+    private Dictionary<string, object> _attributes = new();
+    private bool _isCheckbox = false;
+    private bool _isEnum = false;
+
+    protected override void OnParametersSet()
+    {
+        var type = ExpressionHelper.GetPropertyInfo(Column.For).PropertyType;
+        _columnType = Nullable.GetUnderlyingType(type) ?? type;
+
+        try
+        {
+            _data = Column.For.Compile().Invoke(RowData);
+        }
+        catch (NullReferenceException)
+        {
+            _data = "null";
+        }
+
+        if (_columnType == typeof(bool))
+        {
+            _isCheckbox = true;
+        }
+        else if (_columnType.IsEnum)
+        {
+            _isEnum = true;
+        }
+        else
+        {
+            _attributes = BuildInputAttributes(_columnType);
+        }
+
+        base.OnParametersSet();
+    }
+
+    private Dictionary<string, object> BuildInputAttributes(Type propertyType)
+    {
+        var result = new Dictionary<string, object> { { "value", SimpleDataGridFormatter.FormatProperty(_data, Column.Format) } };
+
+        var propertyTypeCode = Type.GetTypeCode(propertyType);
+        switch (propertyTypeCode)
+        {
+            case TypeCode.Int16:
+                result.Add("min", Int16.MinValue);
+                result.Add("max", Int16.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
+            case TypeCode.UInt16:
+                result.Add("min", UInt16.MinValue);
+                result.Add("max", UInt16.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
+            case TypeCode.Int32:
+                result.Add("min", Int32.MinValue);
+                result.Add("max", Int32.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
+            case TypeCode.UInt32:
+                result.Add("min", UInt32.MinValue);
+                result.Add("max", UInt32.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
+            case TypeCode.Int64:
+                result.Add("min", Int64.MinValue);
+                result.Add("max", Int64.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
+            case TypeCode.UInt64:
+                result.Add("min", UInt64.MinValue);
+                result.Add("max", UInt64.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
+            case TypeCode.Single:
+            case TypeCode.Double:
+            case TypeCode.Decimal:
+                result.Add("type", "number");
+                break;
+            case TypeCode.DateTime:
+                result["value"] = _data switch
+                {
+                    DateTime dateTime => $"{dateTime:yyyy-MM-dd}T{dateTime:hh:mm}",
+                    DateOnly dateOnly => $"{dateOnly:yyyy-MM-dd}",
+                    _ => result["value"]
+                };
+
+                result.Add("type", propertyType == typeof(DateOnly) ? "date" : "datetime-local");
+                break;
+            case TypeCode.Char:
+            case TypeCode.String:
+                result.Add("type", "text");
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return result;
+    }
+
+    private async void RowDataEdited(ChangeEventArgs e)
+    {
+        var action = new EditAction<TType>(Column.For, e.Value);
+        await DataEdited.InvokeAsync(new ValueTuple<string, EditAction<TType>>(Column.Heading, action));
+    }
+
+    private async void RowDataEditedBool(bool value)
+    {
+        _data = value;
+
+        var action = new EditAction<TType>(Column.For, value);
+        await DataEdited.InvokeAsync(new ValueTuple<string, EditAction<TType>>(Column.Heading, action));
+    }
+}

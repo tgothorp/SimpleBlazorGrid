@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using SimpleBlazorGrid.Filters;
 
 namespace SimpleBlazorGrid.Helpers
@@ -28,6 +29,14 @@ namespace SimpleBlazorGrid.Helpers
             return propertyAccess;
         }
 
+        public static PropertyInfo GetPropertyInfo<T>(Expression<Func<T, object>> expression)
+        {
+            var member = ExtractMemberExpression(expression);
+            var property = member.Member as PropertyInfo;
+
+            return property;
+        }
+
         public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
         {
             if (expression is null)
@@ -39,16 +48,13 @@ namespace SimpleBlazorGrid.Helpers
 
         private static MemberExpression ExtractMemberExpression(Expression expression)
         {
-            if (expression is UnaryExpression unaryExpression)
+            return expression switch
             {
-                return ExtractMemberExpression(unaryExpression.Operand);
-            }
-            else if (expression is MemberExpression memberExpression)
-            {
-                return memberExpression;
-            }
-
-            return null;
+                UnaryExpression unaryExpression => ExtractMemberExpression(unaryExpression.Operand),
+                LambdaExpression lambdaExpression => ExtractMemberExpression(lambdaExpression.Body),
+                MemberExpression memberExpression => memberExpression,
+                _ => null
+            };
         }
 
         private static string GetPropertyPathFromExpression(MemberExpression memberExpression)

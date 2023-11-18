@@ -33,6 +33,7 @@ public enum DocumentationNavSection
     Overview,
     GettingStarted,
     Configuration,
+    Editing,
     SimpleGrid,
     SimpleGridDataSource,
     SimpleColumn,

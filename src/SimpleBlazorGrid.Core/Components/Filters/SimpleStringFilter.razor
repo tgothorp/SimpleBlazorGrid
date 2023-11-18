@@ -63,7 +63,7 @@
     protected override async Task OnInitializedAsync()
     {
         if (PropertyType != typeof(string))
-            throw new SimpleGridFilterException<TType>(this, $"Cannot apply string filter to property '{typeof(TType)}.{PropertyName}' as is not a string!");
+            throw new SimpleGridException($"Cannot apply string filter to property '{typeof(TType)}.{PropertyName}' as is not a string!");
 
         if (DefaultValue.IsNotNullOrEmpty())
         {

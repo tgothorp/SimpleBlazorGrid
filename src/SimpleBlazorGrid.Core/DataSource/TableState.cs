@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SimpleBlazorGrid.Editing;
 using SimpleBlazorGrid.Filters;
 
 namespace SimpleBlazorGrid.DataSource;
@@ -32,9 +33,15 @@ public class TableState<T>
 
     // Filtering
     public List<Filter<T>> ActiveFilters { get; protected set; } = new();
+    
+    // Editing
+    public List<EditAction<T>> ItemPropertiesToEdit { get; protected set; } = new();
+    public EventHandler DiscardActiveEdits { get; internal set; }
+    
 
     public void SetItems(T[] items, int totalItemCount)
     {
+        DiscardActiveEdits?.Invoke(this, EventArgs.Empty);
         Items = items;
 
         TotalItemCount = totalItemCount;
@@ -88,5 +95,15 @@ public class TableState<T>
     internal void ChangePage(int pageIndex)
     {
         CurrentPage = pageIndex;
+    }
+
+    internal void UpdateEditActions(List<EditAction<T>> editActions)
+    {
+        ItemPropertiesToEdit = editActions;
+    }
+
+    internal void ClearEditActions()
+    {
+        ItemPropertiesToEdit = new();
     }
 }

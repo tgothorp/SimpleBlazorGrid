@@ -1,0 +1,93 @@
+@page "/documentation/editing"
+
+@using SimpleBlazorGrid.Website.Pages.Shared
+@using SimpleBlazorGrid.DataSource
+@using SimpleBlazorGrid.Extensions
+
+@layout DocumentationLayout
+
+@inject NavBarService NavBarService
+
+<PageTitle>Simple Blazor Grid | Editing (Experimental)</PageTitle>
+
+<h1>Editing (Experimental)</h1>
+<br/>
+<p>From version 0.2, Simple Blazor Grid has experimental support for inline editing of data. Editing is supported for both the enumerable data source and the entity framework data source on nearly all value/primitive types though the following limitations apply;</p>
+<br/>
+<h3>Limitations</h3>
+<ul>
+    <li>Only works on properties (properties must have a setter)</li>
+    <li>Editing of <code>enum</code> values is not currently supported</li>
+    <li>Editing of nested properties is not supported</li>
+</ul>
+<br/>
+<p>To enable editing for a given column, simply set <code>Enabled="true"</code> on the appropriate <code>SimpleColumn&lt;T&gt;</code> (Ensure that <code>Editable</code> is also set to <code>true</code> on the <code>SimpleGrid</code> as well). The data grid also provides an event callback in the form of <code>OnItemEdited</code> which will be invoked whenever an item with edits is saved. The table below demonstrates editing of table data as well as the callback</p>
+
+<br/>
+<TabControl>
+    <TabPage TabName="Table">
+        <SimpleGrid TType="EditingData" SimpleGridDataSource="new SimpleGridEnumerableDataSource<EditingData>(Data)" Editable="true" OnItemEdited="ItemEdited">
+            <Columns>
+                <SimpleColumn TType="EditingData" For="@(x => x.Id)" Sortable="true"/>
+                <SimpleColumn TType="EditingData" For="@(x => x.Name)" Sortable="true" Editable="true"/>
+                <SimpleColumn TType="EditingData" For="@(x => x.Price)" Sortable="true" Editable="true"/>
+                <SimpleColumn TType="EditingData" For="@(x => x.InStock)" Sortable="true" Editable="true"/>
+            </Columns>
+        </SimpleGrid>
+        <br/>
+        @if (LatestItemEdited.IsNotNullOrEmpty())
+        {
+            <span>Last item edited: @LatestItemEdited</span>
+        }
+    </TabPage>
+    <TabPage TabName="Code">
+        <EditingExample/>
+    </TabPage>
+</TabControl>
+
+
+@code {
+    
+    public class EditingData
+    {
+        public EditingData(int id, 
+            string name, 
+            decimal price, 
+            bool inStock)
+        {
+            Id = id;
+            Name = name;
+            Price = price;
+            InStock = inStock;
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public bool InStock { get; set; }
+    }
+
+    private readonly List<EditingData> Data = new()
+    {
+        new EditingData(11311, "USB Drive", 8.99m, true),
+        new EditingData(11312, "Keyboard", 30.50m, true),
+        new EditingData(11313, "Mouse", 20m, true),
+        new EditingData(11316, "Mouse Mat", 15m, true),
+        new EditingData(11315, "Nvidia GTX 4090", 899.99m, false),
+    };
+
+    public string LatestItemEdited { get; set; } = null;
+    
+    protected override void OnInitialized()
+    {
+        NavBarService.SetNavBarSection(NavSection.Documentation);
+        NavBarService.SetDocumentationNavBarSection(DocumentationNavSection.Editing);
+        base.OnInitialized();
+    }
+
+    private void ItemEdited(EditingData obj)
+    {
+        LatestItemEdited = $"Id: {obj.Id}, Name: {obj.Name}, Price: {obj.Price}, In Stock: {obj.InStock.ToString()}";
+    }
+
+}

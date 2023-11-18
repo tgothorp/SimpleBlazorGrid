@@ -1,0 +1,11 @@
+@use "base";
+
+input.sdg-editing {
+  border-radius: 5px;
+  padding: 0.5rem;
+  border: solid 2px var(--secondary-colour);
+}
+
+input.sdg-editing:focus {
+  outline-color: var(--primary-colour);
+}

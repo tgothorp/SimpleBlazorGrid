@@ -3,19 +3,43 @@
 @using SimpleBlazorGrid.EntityFramework.Sandbox.Core.Infrastructure
 @using SimpleBlazorGrid.DataSource
 
-<SimpleGrid TType="Customer"
-            Title="Customers"
-            Selectable="@true"
-            SimpleGridDataSource="@(new SimpleGridEntityFrameworkDataSource<Customer>(Context.Customers.AsQueryable()))">
-    <Filters>
-        @* <SimpleFilter TType="Customer" Property="@nameof(Customer.CustomerId)"/> *@
-    </Filters>
-    <Columns>
-        <SimpleColumn TType="Customer" For="@(x => x.CustomerId)" Sortable="true" Heading="Id"/>
-    </Columns>
-</SimpleGrid>
+@if (DataSource is not null)
+{
+    <SimpleGrid TType="Customer"
+                Title="Customers"
+                Selectable="true"
+                Editable="true"
+                SimpleGridDataSource="DataSource">
+        <Columns>
+            <SimpleColumn TType="Customer" For="@(x => x.CustomerId)" Sortable="true" Heading="Id"/>
+            <SimpleColumn TType="Customer" For="@(x => x.CompanyName)" Sortable="true"/>
+            <SimpleColumn TType="Customer" For="@(x => x.ContactName)" Sortable="true" Editable="true"/>
+        </Columns>
+    </SimpleGrid>
+    
+    <br/>
+    <span>Query: @ExecutedQuery</span>
+}
 
 @code {
 
     public DatabaseContext Context { get; set; } = DatabaseContextFactory.Create();
+
+    public SimpleGridEntityFrameworkDataSource<Customer> DataSource { get; set; } = null!;
+    public string? ExecutedQuery { get; set; } = null;
+
+    protected override void OnParametersSet()
+    {
+        DataSource = new SimpleGridEntityFrameworkDataSource<Customer>(Context.Customers.AsQueryable(), x => x.CustomerId, Context);
+        DataSource.QueryExecuted += QueryExecuted;
+        
+        base.OnParametersSet();
+    }
+
+    private void QueryExecuted(object? sender, IQueryable<Customer> e)
+    {
+        ExecutedQuery = e.Expression.ToString();
+        StateHasChanged();
+    }
+
 }

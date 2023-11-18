@@ -12,6 +12,7 @@
                 SimpleGridDataSource="@(new SimpleGridEnumerableDataSource<Product>(Products))"
                 Searchable="true"
                 Selectable="true"
+                Editable="true"
                 ItemsPerPage="15"
                 OnSelectionChanged="SelectedItemsChanged"
                 Title="2024 Product Catalogue"
@@ -25,11 +26,11 @@
         </Filters>
         <Columns>
             <SimpleColumn TType="Product" For="@(x => x.Id)" Width="10"/>
-            <SimpleColumn TType="Product" For="@(x => x.Name)" Sortable="@true" Heading="Name" Searchable="true"/>
-            <SimpleColumn TType="Product" For="@(x => x.Name)" Sortable="@true" Heading="Name2"/>
-            <SimpleColumn TType="Product" For="@(x => x.CostInGbp)" Heading="Price (GBP)" Format="Format.Money" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.InStock)" Editable="true" Heading="Available"/>
+            <SimpleColumn TType="Product" For="@(x => x.Name)" Sortable="@true" Heading="Name" Searchable="true" Editable="true"/>
+            <SimpleColumn TType="Product" For="@(x => x.CostInGbp)" Heading="Price (GBP)" Format="Format.Money" Sortable="true"/>
             <SimpleColumn TType="Product" For="@(x => x.LocalCurrency)" Heading="Local Currency"/>
-            <SimpleColumn TType="Product" For="@(x => x.CostInLocalCurrency)" Heading="Price">
+            <SimpleColumn TType="Product" For="@(x => x.CostInLocalCurrency)" Heading="Price"  Editable="true">
                 <SimpleColumnTemplate Context="item">
                     @switch (item.LocalCurrency)
                     {
@@ -48,7 +49,7 @@
                 </SimpleColumnTemplate>
             </SimpleColumn>
             <SimpleColumn TType="Product" For="@(x => x.Manufacturer)" Searchable="@true"/>
-            <SimpleColumn TType="Product" For="@(x => x.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true"/>
+            <SimpleColumn TType="Product" For="@(x => x.LastOrderedOn)" Heading="Last Ordered" Format="Format.ShortDate" Sortable="@true" Editable="true"/>
         </Columns>
     </SimpleGrid>
 </div>
