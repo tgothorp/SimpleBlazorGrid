@@ -33,7 +33,7 @@ public class TestObject
     public byte? NullableByteProperty { get; set; }
 
     public char? NullableCharProperty { get; set; }
-    public string? NullableStringProperty { get; set; }
+    public string NullableStringProperty { get; set; }
     
     public short? NullableShortProperty { get; set; }
     public ushort? NullableUShortProperty { get; set; }

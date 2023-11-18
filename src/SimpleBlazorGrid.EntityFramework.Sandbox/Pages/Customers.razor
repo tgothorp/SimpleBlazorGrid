@@ -25,7 +25,7 @@
 
     public DatabaseContext Context { get; set; } = DatabaseContextFactory.Create();
 
-    public SimpleGridEntityFrameworkDataSource<Customer> DataSource { get; set; } = null;
+    public SimpleGridEntityFrameworkDataSource<Customer> DataSource { get; set; } = null!;
     public string? ExecutedQuery { get; set; } = null;
 
     protected override void OnParametersSet()

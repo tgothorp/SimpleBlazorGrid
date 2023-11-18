@@ -39,7 +39,7 @@ else
     public SimpleColumn<TType> Column { get; set; }
 
     [Parameter]
-    public EventCallback<EditAction<TType>> InputEdited { get; set; }
+    public EventCallback<(string Column, EditAction<TType>)> DataEdited { get; set; }
 
     private Type _columnType = null;
     private object _data = null;
@@ -85,11 +85,38 @@ else
         switch (propertyTypeCode)
         {
             case TypeCode.Int16:
+                result.Add("min", Int16.MinValue);
+                result.Add("max", Int16.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
             case TypeCode.UInt16:
+                result.Add("min", UInt16.MinValue);
+                result.Add("max", UInt16.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
             case TypeCode.Int32:
+                result.Add("min", Int32.MinValue);
+                result.Add("max", Int32.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
             case TypeCode.UInt32:
+                result.Add("min", UInt32.MinValue);
+                result.Add("max", UInt32.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
             case TypeCode.Int64:
+                result.Add("min", Int64.MinValue);
+                result.Add("max", Int64.MaxValue);
+                result.Add("type", "number");
+                result.Add("step", "1");
+                break;
             case TypeCode.UInt64:
+                result.Add("min", UInt64.MinValue);
+                result.Add("max", UInt64.MaxValue);
                 result.Add("type", "number");
                 result.Add("step", "1");
                 break;
@@ -121,13 +148,8 @@ else
 
     private async void RowDataEdited(ChangeEventArgs e)
     {
-        var action = new EditAction<TType>
-        {
-            Column = Column,
-            NewValue = Convert.ChangeType(e.Value, _columnType)
-        };
-
-        await InputEdited.InvokeAsync(action);
+        var action = new EditAction<TType>(Column.For, e.Value);
+        await DataEdited.InvokeAsync(new ValueTuple<string, EditAction<TType>>(Column.Heading, action));
     }
 
     private void RowDataEditedBool(MouseEventArgs obj)

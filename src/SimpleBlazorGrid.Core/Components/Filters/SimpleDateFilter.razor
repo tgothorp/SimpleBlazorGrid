@@ -73,7 +73,7 @@
     protected override async Task OnInitializedAsync()
     {
         if (!PropertyType.IsDateType())
-            throw new SimpleGridFilterException<TType>(this, $"Cannot apply date filter to property '{typeof(TType)}.{PropertyName}' as is not a DateTime/DateOnly"); 
+            throw new SimpleGridException($"Cannot apply date filter to property '{typeof(TType)}.{PropertyName}' as is not a DateTime/DateOnly"); 
         
         if ((Nullable.GetUnderlyingType(PropertyType) ?? PropertyType) == typeof(DateOnly))
             IncludeTime = false;

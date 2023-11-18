@@ -12,7 +12,7 @@ public class SortTests
         await SortByProperty(nameof(TestObject.ByteProperty), x => x.ByteProperty, true);
         await SortByProperty(nameof(TestObject.ByteProperty), x => x.ByteProperty, false);
         await SortByProperty(nameof(TestObject.NullableByteProperty), x => x.NullableByteProperty!, true);
-        await SortByProperty(nameof(TestObject.NullableByteProperty), x => x.NullableByteProperty, false);
+        await SortByProperty(nameof(TestObject.NullableByteProperty), x => x.NullableByteProperty!, false);
     }
     
     [Fact]
@@ -20,8 +20,8 @@ public class SortTests
     {
         await SortByProperty(nameof(TestObject.CharProperty), x => x.CharProperty, true);
         await SortByProperty(nameof(TestObject.CharProperty), x => x.CharProperty, false);
-        await SortByProperty(nameof(TestObject.NullableCharProperty), x => x.NullableCharProperty, true);
-        await SortByProperty(nameof(TestObject.NullableCharProperty), x => x.NullableCharProperty, false);
+        await SortByProperty(nameof(TestObject.NullableCharProperty), x => x.NullableCharProperty!, true);
+        await SortByProperty(nameof(TestObject.NullableCharProperty), x => x.NullableCharProperty!, false);
     }
     
     [Fact]
@@ -40,10 +40,10 @@ public class SortTests
         await SortByProperty(nameof(TestObject.ShortProperty), x => x.ShortProperty, true);
         await SortByProperty(nameof(TestObject.UShortProperty), x => x.UShortProperty, true);
         await SortByProperty(nameof(TestObject.UShortProperty), x => x.UShortProperty, false);
-        await SortByProperty(nameof(TestObject.NullableShortProperty), x => x.NullableShortProperty, true);
-        await SortByProperty(nameof(TestObject.NullableShortProperty), x => x.NullableShortProperty, false);
-        await SortByProperty(nameof(TestObject.NullableUShortProperty), x => x.NullableUShortProperty, false);
-        await SortByProperty(nameof(TestObject.NullableUShortProperty), x => x.NullableUShortProperty, false);
+        await SortByProperty(nameof(TestObject.NullableShortProperty), x => x.NullableShortProperty!, true);
+        await SortByProperty(nameof(TestObject.NullableShortProperty), x => x.NullableShortProperty!, false);
+        await SortByProperty(nameof(TestObject.NullableUShortProperty), x => x.NullableUShortProperty!, false);
+        await SortByProperty(nameof(TestObject.NullableUShortProperty), x => x.NullableUShortProperty!, false);
     }
 
     [Fact]
@@ -53,10 +53,10 @@ public class SortTests
         await SortByProperty(nameof(TestObject.IntProperty), x => x.IntProperty, true);
         await SortByProperty(nameof(TestObject.UIntProperty), x => x.UIntProperty, true);
         await SortByProperty(nameof(TestObject.UIntProperty), x => x.UIntProperty, false);
-        await SortByProperty(nameof(TestObject.NullableIntProperty), x => x.NullableIntProperty, true);
-        await SortByProperty(nameof(TestObject.NullableIntProperty), x => x.NullableIntProperty, false);
-        await SortByProperty(nameof(TestObject.NullableUIntProperty), x => x.NullableUIntProperty, false);
-        await SortByProperty(nameof(TestObject.NullableUIntProperty), x => x.NullableUIntProperty, false);
+        await SortByProperty(nameof(TestObject.NullableIntProperty), x => x.NullableIntProperty!, true);
+        await SortByProperty(nameof(TestObject.NullableIntProperty), x => x.NullableIntProperty!, false);
+        await SortByProperty(nameof(TestObject.NullableUIntProperty), x => x.NullableUIntProperty!, false);
+        await SortByProperty(nameof(TestObject.NullableUIntProperty), x => x.NullableUIntProperty!, false);
     }
     
     [Fact]
@@ -66,10 +66,10 @@ public class SortTests
         await SortByProperty(nameof(TestObject.LongProperty), x => x.LongProperty, true);
         await SortByProperty(nameof(TestObject.ULongProperty), x => x.ULongProperty, true);
         await SortByProperty(nameof(TestObject.ULongProperty), x => x.ULongProperty, false);
-        await SortByProperty(nameof(TestObject.NullableLongProperty), x => x.NullableLongProperty, true);
-        await SortByProperty(nameof(TestObject.NullableLongProperty), x => x.NullableLongProperty, false);
-        await SortByProperty(nameof(TestObject.NullableULongProperty), x => x.NullableULongProperty, false);
-        await SortByProperty(nameof(TestObject.NullableULongProperty), x => x.NullableULongProperty, false);
+        await SortByProperty(nameof(TestObject.NullableLongProperty), x => x.NullableLongProperty!, true);
+        await SortByProperty(nameof(TestObject.NullableLongProperty), x => x.NullableLongProperty!, false);
+        await SortByProperty(nameof(TestObject.NullableULongProperty), x => x.NullableULongProperty!, false);
+        await SortByProperty(nameof(TestObject.NullableULongProperty), x => x.NullableULongProperty!, false);
     }
 
     private async Task SortByProperty(string propertyName, Func<TestObject, object> property, bool ascending)

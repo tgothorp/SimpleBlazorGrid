@@ -49,7 +49,7 @@
         // Act + Assert
         if (shouldThrow)
         {
-            var exception = Should.Throw<SimpleGridFilterException<TestObject>>(() =>
+            var exception = Should.Throw<SimpleGridException>(() =>
             {
                 RenderComponent<SimpleStringFilter<TestObject>>(parameters => parameters
                     .Add(x => x.For, @for)

@@ -32,7 +32,7 @@
 
             @if (_rowIsBeingEdited && column.Editable)
             {
-                <_DataGridEditableRowInput TType="TType" Column="column" RowData="Data" InputEdited="ItemEdited"/>
+                <_DataGridEditableRowInput TType="TType" Column="column" RowData="Data" DataEdited="DataEdited"/>
             }
             else if (column.SimpleColumnTemplate is not null)
             {
@@ -100,9 +100,9 @@
         StateHasChanged();
     }
 
-    private void ItemEdited(EditAction<TType> editAction)
+    private void DataEdited((string Column, EditAction<TType> EditAction) editDetails)
     {
-        _editActions[editAction.Column.Heading] = editAction;
+        _editActions[editDetails.Column] = editDetails.EditAction;
     }
 
     private async Task SaveOrEditRow()
@@ -119,5 +119,4 @@
 
         _rowIsBeingEdited = !_rowIsBeingEdited;
     }
-
 }

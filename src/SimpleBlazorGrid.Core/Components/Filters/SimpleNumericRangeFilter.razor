@@ -85,7 +85,7 @@
     protected override async Task OnInitializedAsync()
     {
         if (!PropertyType.IsNumericType())
-            throw new SimpleGridFilterException<TType>(this, $"Cannot apply numeric range filter to property '{typeof(TType)}.{PropertyName}' as is not a numeric type!");
+            throw new SimpleGridException($"Cannot apply numeric range filter to property '{typeof(TType)}.{PropertyName}' as is not a numeric type!");
         
         if (DefaultStartValue.IsNotNullOrEmpty() && DefaultEndValue.IsNotNullOrEmpty())
         {
